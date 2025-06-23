@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using BackEnd_Api.Helpers;
 namespace BackEnd_Api.Controllers
 {
     [Route("api/[controller]")]
@@ -16,11 +17,13 @@ namespace BackEnd_Api.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IConfiguration _config;
+        private readonly JwtTokenHelper _jwtHelper;
 
-        public AuthController(UserManager<ApplicationUser> userManager, IConfiguration config)
+        public AuthController(UserManager<ApplicationUser> userManager, IConfiguration config, JwtTokenHelper jwtHelper)
         {
             _userManager = userManager;
             _config = config;
+            _jwtHelper = jwtHelper;
         }
 
         [HttpPost("register")]
@@ -72,29 +75,25 @@ namespace BackEnd_Api.Controllers
             return Ok(new { message = "Logged out successfully. Please remove the token on client side." });
         }
 
-        [Authorize]
+  
         [HttpGet("profile")]
-        public async Task<IActionResult> GetUserProfile()
+        public async Task<IActionResult> GetUserProfile(string token)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = _jwtHelper.GetUserIdFromToken(token);
 
-            if (userId == null)
+            var userExist = await _userManager.FindByIdAsync(userId);
+
+            if (userExist == null)
             {
                 return Unauthorized("User ID not found in token.");
             }
 
-            var user = await _userManager.FindByIdAsync(userId);
-
-            if (user == null)
-            {
-                return NotFound("User not found.");
-            }
 
             var userProfile = new UserProfileDto
             {
-                Id = user.Id,
-                Username = user.UserName,
-                Email = user.Email
+                Id = userExist.Id,
+                Username = userExist.UserName,
+                Email = userExist.Email
                 
             };
 

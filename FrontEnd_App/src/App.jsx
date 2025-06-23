@@ -2,19 +2,20 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/login";
 import Home from "./pages/home";
+import ProfilePage from "./pages/profile";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { getCurrentUser, getUserProfile } from './services/accountservice';
+import { getCurrentUser, getUserProfile } from './service/accountservice';
 
 // A PrivateRoute component to protect routes that require login
 const PrivateRoute = ({ children }) => {
-  const currentUser = getCurrentUser();
-  // THÊM LOG ĐỂ KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP
-  console.log("PrivateRoute: currentUser check -", currentUser ? "Logged in" : "Not logged in");
-  return currentUser ? children : <Navigate to="/" />;
+    const currentUser = getCurrentUser();
+    // THÊM LOG ĐỂ KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP
+    console.log("PrivateRoute: currentUser check -", currentUser ? "Logged in" : "Not logged in");
+    return currentUser ? children : <Navigate to="/" />;
 };
 
 const App = () => {
-  const [userProfile, setUserProfile] = React.useState(null);
+    const [userProfile, setUserProfile] = React.useState(null);
 
   React.useEffect(() => {
     const fetchProfile = async () => {
@@ -48,7 +49,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+               <Route path="/" element={<LoginPage />} />
         <Route
           path="/home"
           element={
@@ -60,6 +61,7 @@ const App = () => {
           }
         />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

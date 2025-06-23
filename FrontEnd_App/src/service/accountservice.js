@@ -1,28 +1,27 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 
 const BASE_URL = "https://localhost:7064/api";
 
 
 export const loginAccount = async (email, password) => {
+    //const url = "https://193a-14-186-91-164.ngrok-free.app/api/Auth/login";
+    const url = "https://localhost:7064/api/Auth/login";
+
     try {
-        const response = await axios.post(`${BASE_URL}/Auth/login`, {
-            email,
-            password,
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }), //account, result đọc account header nên lỗi
         });
 
-        const token = response.data.token;
-        return { token, email };
-    } catch (error) {
-        if (error.response) {
-            // Error from the server (e.g., 401 Unauthorized, 400 Bad Request)
-            throw new Error(error.response.data.message || "Login failed. Please check your Email and Password.");
-        } else if (error.request) {
-            // Request was made but no response was received
-            throw new Error("Cannot connect to the server. Please try again later.");
-        } else {
-            // Other error during request setup
-            throw new Error("An unexpected error occurred during login.");
+        if (!response.ok) {
+            throw new Error("Invalid email or password");
         }
+
+        const account = await response.json();
+        return account;
+    } catch (error) {
+        throw error;
     }
 };
 
@@ -75,10 +74,11 @@ export const authHeader = () => {
 export const getUserProfile = async () => {
     try {
         const headers = authHeader();
+        const account = getCurrentUser();
         if (Object.keys(headers).length === 0) {
             throw new Error("No authentication token found. Please log in.");
         }
-        const response = await axios.get(`${BASE_URL}/Auth/profile`, { headers });
+        const response = await axios.get(`${BASE_URL}/Auth/profile?token=${account.token}`, { headers });
         return response.data;
     } catch (error) {
         if (error.response) {
