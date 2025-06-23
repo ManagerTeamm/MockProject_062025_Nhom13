@@ -1,5 +1,6 @@
 export const loginAccount = async (email, password) => {
-  const url = "https://193a-14-186-91-164.ngrok-free.app/api/Auth/login";
+  //const url = "https://193a-14-186-91-164.ngrok-free.app/api/Auth/login";
+  const url = "https://localhost:7064/api/Auth/login";
 
   try {
     const response = await fetch(url, {

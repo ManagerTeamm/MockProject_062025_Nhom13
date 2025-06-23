@@ -1,5 +1,8 @@
 
+using BackEnd_Api.Helpers;
 using BackEnd_Api.Models;
+using BackEnd_Api.Services;
+using BackEnd_Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +36,10 @@ namespace BackEnd_Api
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+            //Services
+            builder.Services.AddScoped<JwtTokenHelper>();
+            builder.Services.AddScoped<IProfile, ProfilleService>();
 
             builder.Services.AddAuthentication(options =>
             {
