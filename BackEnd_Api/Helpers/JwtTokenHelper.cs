@@ -10,17 +10,17 @@ namespace BackEnd_Api.Helpers
     public class JwtTokenHelper
     {
         private readonly IConfiguration _config;
-        public JwtTokenHelper( IConfiguration config)
+        public JwtTokenHelper(IConfiguration config)
         {
             _config = config;
         }
-        private string GenerateJwtToken(ApplicationUser user)
+        public string GenerateJwtToken(ApplicationUser user)
         {
             var claims = new[]
             {
             new Claim(ClaimTypes.Name, user.UserName),
             new Claim(ClaimTypes.NameIdentifier, user.Id)
-        };
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -31,6 +31,29 @@ namespace BackEnd_Api.Helpers
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public string? GetUserIdFromToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
+
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false, // Set true nếu có Issuer
+                    ValidateAudience = false, // Set true nếu có Audience
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                return principal.FindFirst(ClaimTypes.NameIdentifier)?.Value; // user.Id
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
