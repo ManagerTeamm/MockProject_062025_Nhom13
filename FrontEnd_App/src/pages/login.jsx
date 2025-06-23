@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { loginAccount } from "../service/accountservice";
+import { loginAccount } from "../services/accountservice"; // Ensure the path is correct
 const images = [
   "/images/slide1.jpg",
   "/images/slide2.jpg",
@@ -27,12 +27,13 @@ const LoginPage = () => {
       const account = await loginAccount(email, password);
       console.log("Login success:", account);
 
+      // Store the entire account object (containing token and email) in localStorage
       localStorage.setItem("account", JSON.stringify(account));
 
       navigate("/home");
     } catch (err) {
       console.error(err.message);
-      alert("Login failed: " + err.message);
+      alert("Login failed: " + err.message); // Display a more detailed error message
     }
   };
 
