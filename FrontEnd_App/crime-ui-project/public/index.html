@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header-tabs">
+            <div class="tab active" data-tab="preliminary-investigation">Preliminary Investigation</div>
+            <div class="tab" data-tab="crime-reporting">Crime Detection and Reporting</div>
+            <div class="tab" data-tab="follow-up-investigation">Follow-up Investigation</div>
+        </div>
+
+        <div class="main-content">
+            <div id="preliminary-investigation-section" class="content-section active">
+                <div class="sidebar">
+                    <div class="sidebar-section active" data-section="initial-response">
+                        <span class="arrow">></span> Initial Response
+                    </div>
+                    <div class="sidebar-section" data-section="scene-information">
+                        <span class="arrow">></span> Scene Information
+                    </div>
+                    <div class="sidebar-section" data-section="initial-investigation-report">
+                        <span class="arrow">></span> Initial Investigation Report
+                    </div>
+                </div>
+
+                <div class="content-area">
+                    <input type="hidden" id="currentCrimeId" value="">
+
+                    <div id="initial-response-form" class="form-section active">
+                        <h2>INITIAL RESPONSE</h2>
+                        <label for="dispatchTime">Time of dispatching forces to the scene</label>
+                        <input type="datetime-local" id="dispatchTime">
+
+                        <label for="officersAssigned">List of officers assigned to scene</label>
+                        <textarea id="officersAssigned" rows="4"></textarea>
+
+                        <label for="preliminaryAssessment">Preliminary assessment of the scene situation</label>
+                        <textarea id="preliminaryAssessment" rows="4"></textarea>
+
+                        <label for="scenePreservation">Scene preservation measures taken</label>
+                        <textarea id="scenePreservation" rows="4"></textarea>
+
+                        <label for="medicalSupport">Information on medical/rescue support provided</label>
+                        <textarea id="medicalSupport" rows="4"></textarea>
+
+                        <div class="form-actions">
+                            <button class="cancel-btn">Cancel</button>
+                            <button class="save-btn" data-form="initialResponse">Save</button>
+                        </div>
+                    </div>
+
+                    <div id="scene-information-form" class="form-section">
+                        <h2>Scene Information</h2>
+                        <label for="sceneDescription">Scene description</label>
+                        <textarea id="sceneDescription" rows="6"></textarea>
+
+                        <label for="victimsWitnesses">Names of victims/witnesses</label>
+                        <textarea id="victimsWitnesses" rows="4"></textarea>
+
+                        <label for="lightingConditions">Lighting conditions</label>
+                        <input type="text" id="lightingConditions">
+
+                        <label for="weatherConditions">Weather conditions</label>
+                        <input type="text" id="weatherConditions">
+
+                        <div class="form-actions">
+                            <button class="cancel-btn">Cancel</button>
+                            <button class="save-btn" data-form="sceneInformation">Save</button>
+                        </div>
+                    </div>
+
+                    <div id="initial-investigation-report-form" class="form-section">
+                        <h2>INITIAL INVESTIGATION REPORT</h2>
+                        <label for="investigationLocation">Location of investigation</label>
+                        <input type="text" id="investigationLocation">
+
+                        <label for="investigatingOfficers">Investigating officers</label>
+                        <textarea id="investigatingOfficers" rows="4"></textarea>
+
+                        <label for="actionsTaken">Actions taken</label>
+                        <textarea id="actionsTaken" rows="6"></textarea>
+
+                        <label for="evidence">Evidence</label>
+                        <textarea id="evidence" rows="6"></textarea>
+
+                        <label for="typeOfCrime">Type of Crime</label>
+                        <select id="typeOfCrime">
+                            <option value="Unspecified">Unspecified</option>
+                            <option value="Violent Crimes">Violent Crimes</option>
+                            <option value="Property Crimes">Property Crimes</option>
+                            <option value="Drug Offenses">Drug Offenses</option>
+                            <option value="Cybercrimes">Cybercrimes</option>
+                            <option value="White-Collar Crimes">White-Collar Crimes</option>
+                            <option value="Public Order Crimes">Public Order Crimes</option>
+                        </select>
+
+                        <label for="levelOfSeverity">Level of Severity</label>
+                        <select id="levelOfSeverity">
+                            <option value="Unspecified">Unspecified</option>
+                            <option value="Misdemeanor">Misdemeanor</option>
+                            <option value="3rd Degree Felony">3rd Degree Felony</option>
+                            <option value="2nd Degree Felony">2nd Degree Felony</option>
+                            <option value="1st Degree Felony">1st Degree Felony</option>
+                        </select>
+
+                        <label for="receivingUnit">Receiving Unit</label>
+                        <select id="receivingUnit">
+                            <option value="Local PD">Local PD</option>
+                            <option value="Local PD - Investigation Division">Local PD - Investigation Division</option>
+                            <option value="Violent Crimes Unit (PD)">Violent Crimes Unit (PD)</option>
+                            <option value="Economic Crimes Division (PD)">Economic Crimes Division (PD)</option>
+                            <option value="ATF">ATF</option>
+                            <option value="State Bureau of Investigation (SBI)">State Bureau of Investigation (SBI)</option>
+                            <option value="FBI">FBI</option>
+                        </select>
+
+                        <label for="status">Status</label>
+                        <select id="status">
+                            <option value="Under Investigation">Under Investigation</option>
+                            <option value="Awaiting Prosecution">Awaiting Prosecution</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+
+                        <div class="form-actions">
+                            <button class="cancel-btn">Cancel</button>
+                            <button class="save-btn" data-form="initialInvestigationReport">Save</button>
+                            <button id="finalSaveCrime" class="final-save-btn">Final Save Crime</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="crime-reporting-section" class="content-section">
+                <h2>Crime Detection and Reporting</h2>
+                <div class="table-controls">
+                    <label for="showEntries">Show</label>
+                    <select id="showEntries">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                    <span>entries</span>
+                    <input type="search" id="searchCrimes" placeholder="Search...">
+                </div>
+                <table class="crimes-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Type of Crime</th>
+                            <th>Level of Severity</th>
+                            <th>Date</th>
+                            <th>Receiving Unit</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="crimesTableBody">
+                    </tbody>
+                </table>
+                <div class="pagination">
+                </div>
+            </div>
+
+            <div id="follow-up-investigation-section" class="content-section">
+                <h2>Follow-up Investigation</h2>
+                <p>Content for Follow-up Investigation will go here.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
