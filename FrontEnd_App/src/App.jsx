@@ -4,6 +4,7 @@ import LoginPage from "./pages/login";
 import Home from "./pages/home";
 import ProfilePage from "./pages/profile";
 import CaseFile from "./pages/casefile";
+import InmateAdmissions from "./pages/inmateadmission";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/home" element={<Home />} />
          <Route path="/profile" element={<ProfilePage />} />
          <Route path="/casefile" element={<CaseFile/>} />
+         <Route path="/inmateadmission" element={<InmateAdmissions/>} />
       </Routes>
     </Router>
   );
