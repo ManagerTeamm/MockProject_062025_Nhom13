@@ -1,0 +1,437 @@
+/* Tổng quan Body và Container */
+body {
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Font hiện đại hơn */
+    margin: 0;
+    padding: 0;
+    background-color: #eef2f7; /* Nền nhẹ nhàng hơn */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 30px; /* Thêm khoảng cách trên cùng */
+    color: #333; /* Màu chữ mặc định */
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 95%; /* Tăng chiều rộng để tối ưu không gian */
+    max-width: 1500px; /* Tăng chiều rộng tối đa */
+    background-color: #ffffff;
+    border-radius: 12px; /* Góc bo tròn hơn */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Bóng đổ mềm mại hơn */
+    overflow: hidden;
+    min-height: 80vh; /* Đảm bảo chiều cao tối thiểu */
+}
+
+/* Các Tab Header */
+.header-tabs {
+    display: flex;
+    border-bottom: 1px solid #e0e6ed; /* Đường kẻ dưới nhẹ nhàng */
+    background-color: #f7f9fc; /* Nền tab sáng hơn */
+    padding: 0 20px; /* Thêm padding ngang */
+}
+
+.header-tabs .tab {
+    padding: 18px 30px; /* Tăng padding */
+    cursor: pointer;
+    font-weight: 600; /* Đậm vừa phải */
+    color: #667085; /* Màu chữ trung tính */
+    border-right: 1px solid #f0f2f5; /* Đường kẻ phân cách tab */
+    transition: all 0.3s ease; /* Chuyển động mượt mà hơn */
+    position: relative;
+    top: 1px; /* Để đường viền dưới của tab active không bị che */
+}
+
+.header-tabs .tab:last-child {
+    border-right: none;
+}
+
+.header-tabs .tab:hover {
+    background-color: #ebf0f5; /* Màu nền khi hover */
+    color: #4a5568;
+}
+
+.header-tabs .tab.active {
+    background-color: #ffffff; /* Nền trắng cho tab active */
+    border-bottom: 3px solid #007bff; /* Đường kẻ dưới màu xanh đậm */
+    color: #007bff; /* Màu chữ xanh cho tab active */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ trên tab active */
+    border-radius: 12px 12px 0 0; /* Bo tròn góc trên của tab active */
+}
+
+/* Nội dung Chính */
+.main-content {
+    display: flex;
+    flex-grow: 1;
+    min-height: 600px;
+}
+
+.content-section {
+    display: none;
+    width: 100%;
+}
+
+.content-section.active {
+    display: flex;
+    flex-direction: row;
+}
+
+#crime-reporting-section.active {
+    flex-direction: column;
+    padding: 30px; /* Tăng padding */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px; /* Chiều rộng sidebar lớn hơn một chút */
+    background-color: #f4f7fa; /* Nền sidebar nhạt hơn */
+    border-right: 1px solid #e0e6ed;
+    padding: 20px 0;
+    box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.02); /* Bóng đổ inset tinh tế */
+}
+
+.sidebar-section {
+    padding: 15px 30px; /* Tăng padding */
+    cursor: pointer;
+    font-weight: 500; /* Font weight trung bình */
+    color: #4a5568;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-left: 4px solid transparent; /* Đường viền bên trái mặc định */
+}
+
+.sidebar-section .arrow {
+    margin-right: 12px;
+    font-size: 1em; /* Kích thước mũi tên hợp lý */
+    transition: transform 0.3s ease;
+    line-height: 1;
+    color: #a0aec0; /* Màu mũi tên mặc định */
+}
+
+.sidebar-section.active .arrow {
+    transform: rotate(90deg);
+    color: #007bff; /* Màu mũi tên khi active */
+}
+
+.sidebar-section:hover {
+    background-color: #e9f0f7;
+    color: #2d3748;
+}
+
+.sidebar-section.active {
+    background-color: #e9f0f7;
+    color: #007bff;
+    font-weight: 600;
+    border-left: 4px solid #007bff; /* Đường viền bên trái nổi bật khi active */
+}
+
+/* Khu vực nội dung chính của form */
+.content-area {
+    flex-grow: 1;
+    padding: 40px; /* Tăng padding tổng thể */
+    background-color: #ffffff;
+}
+
+.form-section {
+    display: none;
+}
+
+.form-section.active {
+    display: block;
+}
+
+.form-section h2 {
+    margin-top: 0;
+    color: #2d3748;
+    border-bottom: 2px solid #e2e8f0; /* Đường kẻ dưới dày hơn */
+    padding-bottom: 18px;
+    margin-bottom: 30px;
+    font-size: 1.8em; /* Tiêu đề lớn hơn */
+    font-weight: 700;
+}
+
+/* Các trường input và textarea */
+.form-section label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 0.95em;
+}
+
+.form-section input[type="text"],
+.form-section input[type="datetime-local"],
+.form-section textarea,
+.form-section select { /* Bao gồm select ở đây */
+    width: calc(100% - 24px); /* Tính toán lại width */
+    padding: 12px; /* Tăng padding input */
+    margin-bottom: 25px; /* Tăng khoảng cách dưới */
+    border: 1px solid #cbd5e0; /* Viền màu dịu hơn */
+    border-radius: 8px; /* Bo tròn hơn */
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-section input[type="text"]:focus,
+.form-section input[type="datetime-local"]:focus,
+.form-section textarea:focus,
+.form-section select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Hiệu ứng focus nổi bật */
+    outline: none;
+}
+
+.form-section textarea {
+    resize: vertical;
+    min-height: 100px; /* Chiều cao tối thiểu lớn hơn */
+}
+
+/* Style cho Select elements */
+.form-section select {
+    background-color: #ffffff; /* Nền trắng */
+    appearance: none; /* Xóa kiểu mặc định của trình duyệt */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232d3748%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-24.6%200L146.2%20188.3%2024.6%2069.4a17.6%2017.6%200%200%200-24.6%2024.6l133.9%20133.9a17.6%2017.6%200%200%200%2024.6%200l133.9-133.9a17.6%2017.6%200%200%200%200-24.6z%22%2F%3E%3C%2Fsvg%3E'); /* Mũi tên tùy chỉnh màu sẫm hơn */
+    background-repeat: no-repeat;
+    background-position: right 15px center; /* Mũi tên nằm giữa dọc */
+    background-size: 10px; /* Kích thước mũi tên nhỏ hơn */
+    padding-right: 35px; /* Đảm bảo chữ không bị che bởi mũi tên */
+}
+
+
+/* Nút hành động Form */
+.form-actions {
+    margin-top: 40px; /* Khoảng cách lớn hơn */
+    text-align: right;
+    display: flex;
+    justify-content: flex-end; /* Căn phải các nút */
+    gap: 15px; /* Khoảng cách giữa các nút */
+}
+
+.form-actions button {
+    padding: 12px 25px; /* Tăng padding nút */
+    border: none;
+    border-radius: 6px; /* Bo tròn vừa phải */
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ cho nút */
+}
+
+.form-actions button:hover {
+    transform: translateY(-2px); /* Hiệu ứng nhấc nhẹ khi hover */
+}
+
+.save-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #0069d9;
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.2);
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+    box-shadow: 0 6px 12px rgba(108, 117, 125, 0.2);
+}
+
+.final-save-btn {
+    background-color: #28a745; /* Màu xanh lá cây nổi bật */
+    color: white;
+    margin-left: 20px;
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+}
+
+.final-save-btn:hover {
+    background-color: #218838;
+    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* Bảng và Điều khiển Bảng */
+.table-controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 20px; /* Khoảng cách lớn hơn */
+    flex-wrap: wrap; /* Cho phép xuống dòng trên màn hình nhỏ */
+}
+
+.table-controls label {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.table-controls select,
+.table-controls input[type="search"] {
+    padding: 10px 15px; /* Tăng padding */
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.95em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.table-controls select:focus,
+.table-controls input[type="search"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.table-controls input[type="search"] {
+    flex-grow: 1; /* Cho phép ô tìm kiếm mở rộng */
+    max-width: 300px; /* Giới hạn chiều rộng tối đa */
+}
+
+.crimes-table {
+    width: 100%;
+    border-collapse: separate; /* Dùng separate để border-radius hoạt động */
+    border-spacing: 0; /* Loại bỏ khoảng cách giữa các ô */
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Bóng đổ cho bảng */
+    border-radius: 10px; /* Bo tròn góc bảng */
+    overflow: hidden; /* Quan trọng để bo tròn góc bảng */
+}
+
+.crimes-table th,
+.crimes-table td {
+    padding: 15px 20px; /* Tăng padding */
+    border-bottom: 1px solid #e2e8f0; /* Chỉ border dưới */
+    text-align: left;
+    font-size: 0.9em; /* Font size nhỏ hơn một chút cho dữ liệu */
+    color: #2d3748;
+}
+
+.crimes-table th {
+    background-color: #edf2f7; /* Nền header bảng */
+    font-weight: 700;
+    color: #4a5568;
+    text-transform: uppercase; /* Chữ hoa cho header */
+    letter-spacing: 0.05em; /* Khoảng cách chữ nhẹ */
+}
+
+/* Bo tròn góc cho các ô header đầu tiên và cuối cùng */
+.crimes-table thead tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+.crimes-table thead tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+
+/* Xóa border dưới cho hàng cuối cùng của tbody */
+.crimes-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.crimes-table tbody tr:nth-child(even) {
+    background-color: #fcfdfe; /* Nền nhạt hơn cho hàng chẵn */
+}
+
+.crimes-table tbody tr:hover {
+    background-color: #e6f0fa; /* Hiệu ứng hover nổi bật hơn */
+    transition: background-color 0.2s ease;
+}
+
+/* Status Badges */
+.crimes-table .status-under-investigation,
+.crimes-table .status-awaiting-prosecution,
+.crimes-table .status-closed {
+    padding: 6px 10px; /* Tăng padding */
+    border-radius: 20px; /* Hình oval */
+    font-size: 0.8em; /* Font size nhỏ */
+    font-weight: 700;
+    text-transform: uppercase; /* Chữ hoa */
+    letter-spacing: 0.05em;
+    display: inline-block; /* Để padding và radius hoạt động */
+    min-width: 90px; /* Đảm bảo độ rộng tối thiểu */
+    text-align: center;
+}
+
+.crimes-table .status-under-investigation {
+    background-color: #e0f2fe; /* Màu xanh da trời nhạt */
+    color: #2196f3; /* Màu xanh da trời đậm */
+}
+
+.crimes-table .status-awaiting-prosecution {
+    background-color: #fff3e0; /* Màu cam nhạt */
+    color: #ff9800; /* Màu cam đậm */
+}
+
+.crimes-table .status-closed {
+    background-color: #e8f5e9; /* Màu xanh lá cây nhạt */
+    color: #4caf50; /* Màu xanh lá cây đậm */
+}
+
+/* Nút Edit/Delete trong Bảng */
+.crimes-table .edit-btn,
+.crimes-table .delete-btn {
+    padding: 8px 15px; /* Tăng padding */
+    border-radius: 6px; /* Bo tròn */
+    cursor: pointer;
+    font-size: 0.85em; /* Kích thước chữ nhỏ hơn */
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08); /* Bóng đổ nhẹ */
+}
+
+.crimes-table .edit-btn {
+    background-color: #17a2b8; /* Màu xanh ngọc */
+    color: white;
+}
+
+.crimes-table .edit-btn:hover {
+    background-color: #138496;
+    transform: translateY(-1px);
+}
+
+.crimes-table .delete-btn {
+    background-color: #dc3545; /* Màu đỏ */
+    color: white;
+    margin-left: 10px; /* Khoảng cách giữa edit và delete */
+}
+
+.crimes-table .delete-btn:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+/* Phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px; /* Khoảng cách lớn hơn */
+    gap: 8px; /* Khoảng cách giữa các nút */
+}
+
+.pagination button {
+    padding: 10px 18px; /* Tăng padding */
+    border: 1px solid #dcdfe6; /* Viền nút phân trang */
+    border-radius: 6px;
+    background-color: #ffffff;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #4a5568;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Bóng đổ nhẹ */
+}
+
+.pagination button.active,
+.pagination button:hover {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
