@@ -1,8 +1,6 @@
 
 using BackEnd_Api.Helpers;
 using BackEnd_Api.Models;
-using BackEnd_Api.Services;
-using BackEnd_Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,16 +28,11 @@ namespace BackEnd_Api
                                       .AllowAnyHeader());
             });
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
 
             //Services
             builder.Services.AddScoped<JwtTokenHelper>();
-            builder.Services.AddScoped<IProfile, ProfilleService>();
 
             builder.Services.AddAuthentication(options =>
             {
@@ -60,6 +53,12 @@ namespace BackEnd_Api
             });
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                Seeder.Seed(dbContext);
+            }
 
             app.UseCors("AllowAllOrigins");
 
