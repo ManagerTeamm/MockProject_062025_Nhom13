@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/login";
 import Home from "./pages/home";
-import ProfilePage from "./pages/profile";
+import ReportPage from "./pages/report";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/home" element={<Home />} />
-         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/report-manager" element={<ReportPage />} />
       </Routes>
     </Router>
   );
