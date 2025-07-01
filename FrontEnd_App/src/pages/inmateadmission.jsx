@@ -22,7 +22,6 @@ const InmateAdmissions = () => {
         />
       </div>
 
-      {/* Table */}
       <table className="table table-bordered table-hover">
         <thead className="table-light">
           <tr>

@@ -1,28 +1,8 @@
-import axiosClient from "../api/client";
-import Cookies from "js-cookie";
+import axios from "axios";
 
-export function register({ email, password }) {
-  return axiosClient.post("Auth/register", { email, password });
-}
+const API_URL = "https://localhost:7064/api/Auth";
 
-export async function login({ email, password }) {
-  const response = await axiosClient.post("Auth/login", { email, password });
-  const token = response.data.token;
-
-  if (token) {
-    Cookies.set("token", token, { expires: 0.5 });
-  }
-
-  throw new Error("Login failed.");
-}
-
-export function getProfile() {
-  return axiosClient.get("/users/profile");
-}
-
-//if (token) {
-//    localStorage.setItem("jwtToken", token);
- //   const decoded = jwt_decode(token);
-//localStorage.setItem("user", JSON.stringify(decoded));
- //   return decoded;
-//  }
+export const login = async (email, password) => {
+  const response = await axios.post(`${API_URL}/login`, { email, password });
+  return response.data.token;
+};
