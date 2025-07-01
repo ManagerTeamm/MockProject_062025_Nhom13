@@ -2,8 +2,8 @@
 {
     public class Indictment
     {
-        public int IndictmentId { get; set; }
-        public int ProsecutionId { get; set; }
+        public string IndictmentId { get; set; }
+        public string ProsecutionId { get; set; }
         public Prosecution Prosecution { get; set; }
         public string Content { get; set; }
         public DateTime IssuedAt { get; set; }

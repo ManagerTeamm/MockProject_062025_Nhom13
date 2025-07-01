@@ -4,19 +4,16 @@ using BackEnd_Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace BackEnd_Api.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
-    [Migration("20250629151129_Initial")]
-    partial class Initial
+    [DbContext(typeof(ApplicationDbContext))]
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,97 +22,13 @@ namespace BackEnd_Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BackEnd_Api.Models.ApplicationUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AvatarUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Fullname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
             modelBuilder.Entity("BackEnd_Api.Models.Arrest", b =>
                 {
-                    b.Property<int>("SuspectId")
-                        .HasColumnType("int");
+                    b.Property<string>("SuspectId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("ArrestEndTime")
                         .HasColumnType("datetime2");
@@ -145,15 +58,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Case", b =>
                 {
-                    b.Property<int>("CaseId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CaseId"));
-
-                    b.Property<string>("CaseNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("CaseId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
@@ -184,11 +90,11 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.CaseEvidence", b =>
                 {
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("EvidenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -202,14 +108,12 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.CaseResult", b =>
                 {
-                    b.Property<int>("CaseResultId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("CaseResultId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CaseResultId"));
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("IdentifyMotive")
                         .IsRequired()
@@ -242,10 +146,14 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.DigitalInvest", b =>
                 {
-                    b.Property<int>("EvidenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AnalystTool")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachedFiles")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -256,10 +164,6 @@ namespace BackEnd_Api.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Result")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("EvidenceId");
 
                     b.ToTable("DigitalInvests");
@@ -267,14 +171,12 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Event", b =>
                 {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("EventId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventId"));
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -287,8 +189,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SuspectId")
-                        .HasColumnType("int");
+                    b.Property<string>("SuspectId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("TimeEnd")
                         .HasColumnType("datetime2");
@@ -307,11 +210,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Evidence", b =>
                 {
-                    b.Property<int>("EvidenceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EvidenceId"));
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFile")
                         .IsRequired()
@@ -335,18 +235,22 @@ namespace BackEnd_Api.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MeasureSurveyId")
-                        .HasColumnType("int");
+                    b.Property<string>("MeasureSurveyId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ReportId")
-                        .HasColumnType("int");
+                    b.Property<string>("ReportId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("WarrantResultId")
-                        .HasColumnType("int");
+                    b.Property<string>("TypeEvidence")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WarrantResultId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("EvidenceId");
 
@@ -363,8 +267,12 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.FinancialInvest", b =>
                 {
-                    b.Property<int>("EvidenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AttachedFiles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -380,8 +288,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.ForensicInvest", b =>
                 {
-                    b.Property<int>("EvidenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -393,7 +301,7 @@ namespace BackEnd_Api.Migrations
                     b.Property<DateTime>("ReceivedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Report")
+                    b.Property<string>("ReportFiles")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -408,11 +316,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Indictment", b =>
                 {
-                    b.Property<int>("IndictmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IndictmentId"));
+                    b.Property<string>("IndictmentId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -424,8 +329,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<DateTime>("IssuedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProsecutionId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProsecutionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("IndictmentId");
 
@@ -436,11 +342,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Inmate", b =>
                 {
-                    b.Property<int>("InmateId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InmateId"));
+                    b.Property<string>("InmateId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AssignedFacility")
                         .IsRequired()
@@ -460,8 +363,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("SentenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("SentenceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -479,11 +383,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Interview", b =>
                 {
-                    b.Property<int>("InterviewId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InterviewId"));
+                    b.Property<string>("InterviewId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFile")
                         .IsRequired()
@@ -494,14 +395,14 @@ namespace BackEnd_Api.Migrations
 
                     b.Property<string>("IntervieweeId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InterviewerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("InvestigationPlanId")
-                        .HasColumnType("int");
+                    b.Property<string>("InvestigationPlanId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -519,8 +420,6 @@ namespace BackEnd_Api.Migrations
 
                     b.HasKey("InterviewId");
 
-                    b.HasIndex("IntervieweeId");
-
                     b.HasIndex("InterviewerId");
 
                     b.HasIndex("InvestigationPlanId");
@@ -530,14 +429,12 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.InvestigationPlan", b =>
                 {
-                    b.Property<int>("InvestigationPlanId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("InvestigationPlanId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvestigationPlanId"));
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
@@ -575,11 +472,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.MeasureSurvey", b =>
                 {
-                    b.Property<int>("MeasureSurveyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MeasureSurveyId"));
+                    b.Property<string>("MeasureSurveyId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -603,11 +497,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Permission", b =>
                 {
-                    b.Property<int>("PermissionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionId"));
+                    b.Property<string>("PermissionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -623,8 +514,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.PhysicalInvest", b =>
                 {
-                    b.Property<int>("EvidenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -640,14 +531,12 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Prosecution", b =>
                 {
-                    b.Property<int>("ProsecutionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ProsecutionId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProsecutionId"));
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Decision")
                         .IsRequired()
@@ -678,11 +567,11 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.ProsecutionSuspect", b =>
                 {
-                    b.Property<int>("ProsecutionId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProsecutionId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("SuspectId")
-                        .HasColumnType("int");
+                    b.Property<string>("SuspectId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -696,11 +585,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Question", b =>
                 {
-                    b.Property<int>("QuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuestionId"));
+                    b.Property<string>("QuestionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Answer")
                         .IsRequired()
@@ -714,8 +600,9 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("InterviewId")
-                        .HasColumnType("int");
+                    b.Property<string>("InterviewId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -735,17 +622,15 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.RecordInfo", b =>
                 {
-                    b.Property<int>("RecordInfoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RecordInfoId"));
+                    b.Property<string>("RecordInfoId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("DateCollected")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EvidenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -771,14 +656,12 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Report", b =>
                 {
-                    b.Property<int>("ReportId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ReportId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReportId"));
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CaseLocation")
                         .IsRequired()
@@ -806,7 +689,11 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReporterPhonenumber")
+                    b.Property<string>("ReporterPhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Severity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -825,11 +712,11 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.ReportSuspect", b =>
                 {
-                    b.Property<int>("ReportId")
-                        .HasColumnType("int");
+                    b.Property<string>("ReportId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("SuspectId")
-                        .HasColumnType("int");
+                    b.Property<string>("SuspectId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -843,11 +730,11 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.ReportVictim", b =>
                 {
-                    b.Property<int>("ReportId")
-                        .HasColumnType("int");
+                    b.Property<string>("ReportId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("VictimId")
-                        .HasColumnType("int");
+                    b.Property<string>("VictimId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -859,13 +746,28 @@ namespace BackEnd_Api.Migrations
                     b.ToTable("ReportVictims");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.ReportWitness", b =>
+                {
+                    b.Property<string>("ReportId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("WitnessId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ReportId", "WitnessId");
+
+                    b.HasIndex("WitnessId");
+
+                    b.ToTable("ReportWitness");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.Role", b =>
                 {
-                    b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -881,11 +783,11 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.RolePermission", b =>
                 {
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int");
+                    b.Property<string>("PermissionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -897,26 +799,173 @@ namespace BackEnd_Api.Migrations
                     b.ToTable("RolePermissions");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.SceneDescription", b =>
+                {
+                    b.Property<string>("SceneDescriptionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SceneDescriptionId");
+
+                    b.HasIndex("CaseId");
+
+                    b.HasIndex("Provider");
+
+                    b.ToTable("SceneDescriptions");
+                });
+
+            modelBuilder.Entity("BackEnd_Api.Models.SceneMedia", b =>
+                {
+                    b.Property<string>("SceneMediaId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CapturedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateTaken")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SceneSketchUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SceneMediaId");
+
+                    b.HasIndex("CapturedBy");
+
+                    b.HasIndex("CaseId");
+
+                    b.ToTable("SceneMedias");
+                });
+
+            modelBuilder.Entity("BackEnd_Api.Models.SceneProtection", b =>
+                {
+                    b.Property<string>("SceneProtectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AttachedFiles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LOcationCover")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TimeStart")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SceneProtectionId");
+
+                    b.HasIndex("CaseId");
+
+                    b.ToTable("SceneProtections");
+                });
+
+            modelBuilder.Entity("BackEnd_Api.Models.SceneSuport", b =>
+                {
+                    b.Property<string>("SceneSuportId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AttachedFiles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LocationAssigned")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TypeSuport")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SceneSuportId");
+
+                    b.HasIndex("CaseId");
+
+                    b.ToTable("SceneSuports");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.Sentence", b =>
                 {
-                    b.Property<int>("SentenceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("SentenceId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SentenceId"));
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CaseResultId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseResultId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Condition")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Duration")
-                        .HasColumnType("int");
+                    b.Property<string>("Duration")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -939,18 +988,16 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Suspect", b =>
                 {
-                    b.Property<int>("SuspectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SuspectId"));
+                    b.Property<string>("SuspectId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CatchTime")
                         .HasColumnType("datetime2");
@@ -962,7 +1009,7 @@ namespace BackEnd_Api.Migrations
                     b.Property<DateTime>("Dob")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FingerprintsHash")
+                    b.Property<string>("FingerPrintsHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -982,6 +1029,9 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MugshotUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -994,7 +1044,7 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phonenumber")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1011,11 +1061,11 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.SuspectEvidence", b =>
                 {
-                    b.Property<int>("SuspectId")
-                        .HasColumnType("int");
+                    b.Property<string>("SuspectId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("EvidenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1029,11 +1079,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Timeline", b =>
                 {
-                    b.Property<int>("TimelineId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TimelineId"));
+                    b.Property<string>("TimelineId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Activity")
                         .IsRequired()
@@ -1043,8 +1090,9 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CaseResultId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseResultId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("EndTime")
                         .HasColumnType("datetime2");
@@ -1066,19 +1114,62 @@ namespace BackEnd_Api.Migrations
                     b.ToTable("Timelines");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.User", b =>
+                {
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AvatarUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateAttended")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserName");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.UserCase", b =>
                 {
                     b.Property<string>("OfficerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("Responsible")
-                        .HasColumnType("bit");
+                    b.Property<string>("Responsible")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OfficerId", "CaseId");
 
@@ -1089,14 +1180,12 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Victim", b =>
                 {
-                    b.Property<int>("VictimId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("VictimId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VictimId"));
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Contact")
                         .IsRequired()
@@ -1124,41 +1213,47 @@ namespace BackEnd_Api.Migrations
                     b.ToTable("Victims");
                 });
 
-            modelBuilder.Entity("BackEnd_Api.Models.VictimInterview", b =>
+            modelBuilder.Entity("BackEnd_Api.Models.VictimEvidence", b =>
                 {
-                    b.Property<int>("VictimId")
-                        .HasColumnType("int");
+                    b.Property<string>("VictimId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("InterviewId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.HasKey("VictimId", "InterviewId");
+                    b.HasKey("VictimId", "EvidenceId");
 
-                    b.HasIndex("InterviewId");
+                    b.HasIndex("EvidenceId");
 
-                    b.ToTable("VictimInterviews");
+                    b.ToTable("VictimEvidences");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Warrant", b =>
                 {
-                    b.Property<int>("WarrantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WarrantId"));
+                    b.Property<string>("WarrantId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFile")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PoliceReponse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("TimePublish")
                         .HasColumnType("datetime2");
@@ -1171,16 +1266,18 @@ namespace BackEnd_Api.Migrations
 
                     b.HasIndex("CaseId");
 
+                    b.HasIndex("PoliceReponse");
+
                     b.ToTable("Warrants");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.WarrantEvidence", b =>
                 {
-                    b.Property<int>("WarrantId")
-                        .HasColumnType("int");
+                    b.Property<string>("WarrantId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("EvidenceId")
-                        .HasColumnType("int");
+                    b.Property<string>("EvidenceId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1194,11 +1291,8 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.WarrantResult", b =>
                 {
-                    b.Property<int>("WarrantResultId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WarrantResultId"));
+                    b.Property<string>("WarrantResultId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -1213,15 +1307,18 @@ namespace BackEnd_Api.Migrations
 
                     b.Property<string>("PoliceResponse")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("TimeActive")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("WarrantId")
-                        .HasColumnType("int");
+                    b.Property<string>("WarrantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("WarrantResultId");
+
+                    b.HasIndex("PoliceResponse");
 
                     b.HasIndex("WarrantId");
 
@@ -1230,14 +1327,12 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Witness", b =>
                 {
-                    b.Property<int>("WitnessId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("WitnessId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WitnessId"));
-
-                    b.Property<int>("CaseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CaseId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Contact")
                         .IsRequired()
@@ -1261,168 +1356,6 @@ namespace BackEnd_Api.Migrations
                     b.ToTable("Witnesses");
                 });
 
-            modelBuilder.Entity("BackEnd_Api.Models.WitnessInterview", b =>
-                {
-                    b.Property<int>("WitnessId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InterviewId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("WitnessId", "InterviewId");
-
-                    b.HasIndex("InterviewId");
-
-                    b.ToTable("WitnessInterviews");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("BackEnd_Api.Models.Arrest", b =>
                 {
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
@@ -1431,10 +1364,10 @@ namespace BackEnd_Api.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "Officer")
+                    b.HasOne("BackEnd_Api.Models.User", "User")
                         .WithMany("Arrests")
                         .HasForeignKey("OfficerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackEnd_Api.Models.Suspect", "Suspect")
@@ -1445,9 +1378,9 @@ namespace BackEnd_Api.Migrations
 
                     b.Navigation("Case");
 
-                    b.Navigation("Officer");
-
                     b.Navigation("Suspect");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.CaseEvidence", b =>
@@ -1455,13 +1388,13 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
                         .WithMany("CaseEvidences")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
                         .WithMany("CaseEvidences")
                         .HasForeignKey("EvidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Case");
@@ -1485,7 +1418,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
                         .WithOne("DigitalInvest")
                         .HasForeignKey("BackEnd_Api.Models.DigitalInvest", "EvidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Evidence");
@@ -1512,29 +1445,32 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Evidence", b =>
                 {
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "CollectedByUser")
-                        .WithMany("EvidencesCollected")
+                    b.HasOne("BackEnd_Api.Models.User", "User")
+                        .WithMany("Evidences")
                         .HasForeignKey("CollectedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackEnd_Api.Models.MeasureSurvey", "MeasureSurvey")
-                        .WithMany()
-                        .HasForeignKey("MeasureSurveyId");
+                        .WithMany("Evidences")
+                        .HasForeignKey("MeasureSurveyId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BackEnd_Api.Models.Report", "Report")
-                        .WithMany()
-                        .HasForeignKey("ReportId");
+                        .WithMany("Evidences")
+                        .HasForeignKey("ReportId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BackEnd_Api.Models.WarrantResult", "WarrantResult")
-                        .WithMany()
-                        .HasForeignKey("WarrantResultId");
-
-                    b.Navigation("CollectedByUser");
+                        .WithMany("Evidences")
+                        .HasForeignKey("WarrantResultId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("MeasureSurvey");
 
                     b.Navigation("Report");
+
+                    b.Navigation("User");
 
                     b.Navigation("WarrantResult");
                 });
@@ -1544,7 +1480,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
                         .WithOne("FinancialInvest")
                         .HasForeignKey("BackEnd_Api.Models.FinancialInvest", "EvidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Evidence");
@@ -1555,7 +1491,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
                         .WithOne("ForensicInvest")
                         .HasForeignKey("BackEnd_Api.Models.ForensicInvest", "EvidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Evidence");
@@ -1585,27 +1521,20 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Interview", b =>
                 {
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "Interviewee")
-                        .WithMany()
-                        .HasForeignKey("IntervieweeId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "Interviewer")
+                    b.HasOne("BackEnd_Api.Models.User", "User")
                         .WithMany("Interviews")
                         .HasForeignKey("InterviewerId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackEnd_Api.Models.InvestigationPlan", "InvestigationPlan")
                         .WithMany("Interviews")
-                        .HasForeignKey("InvestigationPlanId");
-
-                    b.Navigation("Interviewee");
-
-                    b.Navigation("Interviewer");
+                        .HasForeignKey("InvestigationPlanId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("InvestigationPlan");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.InvestigationPlan", b =>
@@ -1613,13 +1542,13 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
                         .WithMany("InvestigationPlans")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "CreatedOfficer")
+                    b.HasOne("BackEnd_Api.Models.User", "CreatedOfficer")
                         .WithMany("InvestigationPlans")
                         .HasForeignKey("CreatedOfficerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Case");
@@ -1632,7 +1561,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
                         .WithOne("PhysicalInvest")
                         .HasForeignKey("BackEnd_Api.Models.PhysicalInvest", "EvidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Evidence");
@@ -1646,10 +1575,10 @@ namespace BackEnd_Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "Prosecutor")
+                    b.HasOne("BackEnd_Api.Models.User", "Prosecutor")
                         .WithMany("Prosecutions")
                         .HasForeignKey("ProsecutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Case");
@@ -1678,21 +1607,21 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Question", b =>
                 {
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "CreatedByUser")
+                    b.HasOne("BackEnd_Api.Models.User", "User")
                         .WithMany("Questions")
                         .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackEnd_Api.Models.Interview", "Interview")
                         .WithMany("Questions")
                         .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("CreatedByUser");
-
                     b.Navigation("Interview");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.RecordInfo", b =>
@@ -1700,7 +1629,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
                         .WithMany("RecordInfos")
                         .HasForeignKey("EvidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Evidence");
@@ -1714,15 +1643,15 @@ namespace BackEnd_Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "OfficerApprove")
-                        .WithMany("ReportsApproved")
+                    b.HasOne("BackEnd_Api.Models.User", "User")
+                        .WithMany("Reports")
                         .HasForeignKey("OfficerApproveId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Case");
 
-                    b.Navigation("OfficerApprove");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.ReportSuspect", b =>
@@ -1763,6 +1692,25 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("Victim");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.ReportWitness", b =>
+                {
+                    b.HasOne("BackEnd_Api.Models.Report", "Report")
+                        .WithMany("ReportWitness")
+                        .HasForeignKey("ReportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackEnd_Api.Models.Witness", "Witness")
+                        .WithMany("ReportWitness")
+                        .HasForeignKey("WitnessId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Report");
+
+                    b.Navigation("Witness");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.RolePermission", b =>
                 {
                     b.HasOne("BackEnd_Api.Models.Permission", "Permission")
@@ -1780,6 +1728,66 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("Permission");
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("BackEnd_Api.Models.SceneDescription", b =>
+                {
+                    b.HasOne("BackEnd_Api.Models.Case", "Case")
+                        .WithMany("SceneDescription")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackEnd_Api.Models.User", "User")
+                        .WithMany("SceneDescriptions")
+                        .HasForeignKey("Provider")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BackEnd_Api.Models.SceneMedia", b =>
+                {
+                    b.HasOne("BackEnd_Api.Models.User", "User")
+                        .WithMany("SceneMedias")
+                        .HasForeignKey("CapturedBy")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BackEnd_Api.Models.Case", "Case")
+                        .WithMany("SceneMedia")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BackEnd_Api.Models.SceneProtection", b =>
+                {
+                    b.HasOne("BackEnd_Api.Models.Case", "Case")
+                        .WithMany("SceneProtections")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
+                });
+
+            modelBuilder.Entity("BackEnd_Api.Models.SceneSuport", b =>
+                {
+                    b.HasOne("BackEnd_Api.Models.Case", "Case")
+                        .WithMany("SceneSuports")
+                        .HasForeignKey("CaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Case");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Sentence", b =>
@@ -1817,13 +1825,13 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
                         .WithMany("SuspectEvidences")
                         .HasForeignKey("EvidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackEnd_Api.Models.Suspect", "Suspect")
                         .WithMany("SuspectEvidences")
                         .HasForeignKey("SuspectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Evidence");
@@ -1842,6 +1850,17 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("CaseResult");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.User", b =>
+                {
+                    b.HasOne("BackEnd_Api.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.UserCase", b =>
                 {
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
@@ -1850,10 +1869,10 @@ namespace BackEnd_Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", "User")
+                    b.HasOne("BackEnd_Api.Models.User", "User")
                         .WithMany("UserCases")
                         .HasForeignKey("OfficerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Case");
@@ -1872,21 +1891,21 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("Case");
                 });
 
-            modelBuilder.Entity("BackEnd_Api.Models.VictimInterview", b =>
+            modelBuilder.Entity("BackEnd_Api.Models.VictimEvidence", b =>
                 {
-                    b.HasOne("BackEnd_Api.Models.Interview", "Interview")
-                        .WithMany("VictimInterviews")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
+                        .WithMany("VictimEvidences")
+                        .HasForeignKey("EvidenceId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackEnd_Api.Models.Victim", "Victim")
-                        .WithMany("VictimInterviews")
+                        .WithMany("VictimEvidences")
                         .HasForeignKey("VictimId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Interview");
+                    b.Navigation("Evidence");
 
                     b.Navigation("Victim");
                 });
@@ -1899,7 +1918,15 @@ namespace BackEnd_Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BackEnd_Api.Models.User", "User")
+                        .WithMany("Warrants")
+                        .HasForeignKey("PoliceReponse")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Case");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.WarrantEvidence", b =>
@@ -1907,7 +1934,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Evidence", "Evidence")
                         .WithMany("WarrantEvidences")
                         .HasForeignKey("EvidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BackEnd_Api.Models.Warrant", "Warrant")
@@ -1923,11 +1950,19 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.WarrantResult", b =>
                 {
+                    b.HasOne("BackEnd_Api.Models.User", "User")
+                        .WithMany("WarrantResults")
+                        .HasForeignKey("PoliceResponse")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("BackEnd_Api.Models.Warrant", "Warrant")
                         .WithMany("WarrantResults")
                         .HasForeignKey("WarrantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
 
                     b.Navigation("Warrant");
                 });
@@ -1941,95 +1976,6 @@ namespace BackEnd_Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Case");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.WitnessInterview", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.Interview", "Interview")
-                        .WithMany("WitnessInterviews")
-                        .HasForeignKey("InterviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd_Api.Models.Witness", "Witness")
-                        .WithMany("WitnessInterviews")
-                        .HasForeignKey("WitnessId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Interview");
-
-                    b.Navigation("Witness");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.ApplicationUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("Arrests");
-
-                    b.Navigation("EvidencesCollected");
-
-                    b.Navigation("Interviews");
-
-                    b.Navigation("InvestigationPlans");
-
-                    b.Navigation("Prosecutions");
-
-                    b.Navigation("Questions");
-
-                    b.Navigation("ReportsApproved");
-
-                    b.Navigation("UserCases");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Case", b =>
@@ -2047,6 +1993,14 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("Prosecutions");
 
                     b.Navigation("Reports");
+
+                    b.Navigation("SceneDescription");
+
+                    b.Navigation("SceneMedia");
+
+                    b.Navigation("SceneProtections");
+
+                    b.Navigation("SceneSuports");
 
                     b.Navigation("Sentences");
 
@@ -2088,21 +2042,24 @@ namespace BackEnd_Api.Migrations
 
                     b.Navigation("SuspectEvidences");
 
+                    b.Navigation("VictimEvidences");
+
                     b.Navigation("WarrantEvidences");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Interview", b =>
                 {
                     b.Navigation("Questions");
-
-                    b.Navigation("VictimInterviews");
-
-                    b.Navigation("WitnessInterviews");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.InvestigationPlan", b =>
                 {
                     b.Navigation("Interviews");
+                });
+
+            modelBuilder.Entity("BackEnd_Api.Models.MeasureSurvey", b =>
+                {
+                    b.Navigation("Evidences");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Permission", b =>
@@ -2119,14 +2076,20 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Report", b =>
                 {
+                    b.Navigation("Evidences");
+
                     b.Navigation("ReportSuspects");
 
                     b.Navigation("ReportVictims");
+
+                    b.Navigation("ReportWitness");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Role", b =>
                 {
                     b.Navigation("RolePermissions");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Sentence", b =>
@@ -2147,11 +2110,38 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("SuspectEvidences");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.User", b =>
+                {
+                    b.Navigation("Arrests");
+
+                    b.Navigation("Evidences");
+
+                    b.Navigation("Interviews");
+
+                    b.Navigation("InvestigationPlans");
+
+                    b.Navigation("Prosecutions");
+
+                    b.Navigation("Questions");
+
+                    b.Navigation("Reports");
+
+                    b.Navigation("SceneDescriptions");
+
+                    b.Navigation("SceneMedias");
+
+                    b.Navigation("UserCases");
+
+                    b.Navigation("WarrantResults");
+
+                    b.Navigation("Warrants");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.Victim", b =>
                 {
                     b.Navigation("ReportVictims");
 
-                    b.Navigation("VictimInterviews");
+                    b.Navigation("VictimEvidences");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Warrant", b =>
@@ -2161,9 +2151,14 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("WarrantResults");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.WarrantResult", b =>
+                {
+                    b.Navigation("Evidences");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.Witness", b =>
                 {
-                    b.Navigation("WitnessInterviews");
+                    b.Navigation("ReportWitness");
                 });
 #pragma warning restore 612, 618
         }

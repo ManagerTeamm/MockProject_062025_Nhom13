@@ -2,10 +2,10 @@
 {
     public class InvestigationPlan
     {
-        public int InvestigationPlanId { get; set; }
+        public string InvestigationPlanId { get; set; }
         public string CreatedOfficerId { get; set; }
-        public ApplicationUser CreatedOfficer { get; set; }
-        public int CaseId { get; set; }
+        public User CreatedOfficer { get; set; }
+        public string CaseId { get; set; }
         public Case Case { get; set; }
         public DateTime DeadlineDate { get; set; }
         public string Result { get; set; }

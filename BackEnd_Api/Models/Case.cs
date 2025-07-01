@@ -2,8 +2,7 @@
 {
     public class Case
     {
-        public int CaseId { get; set; }
-        public string CaseNumber { get; set; }
+        public string CaseId { get; set; }
         public string TypeCase { get; set; }
         public string Severity { get; set; }
         public string Status { get; set; }
@@ -23,5 +22,9 @@
         public ICollection<Sentence> Sentences { get; set; }
         public ICollection<Prosecution> Prosecutions { get; set; }
         public ICollection<Arrest> Arrests { get; set; }
+        public ICollection<SceneSuport> SceneSuports { get; set; }
+        public ICollection<SceneProtection> SceneProtections { get; set; }
+        public ICollection<SceneDescription> SceneDescription { get; set; }
+        public ICollection<SceneMedia> SceneMedia { get; set; }
     }
 }

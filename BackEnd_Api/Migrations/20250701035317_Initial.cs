@@ -12,26 +12,10 @@ namespace BackEnd_Api.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Cases",
                 columns: table => new
                 {
-                    CaseId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeCase = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -48,8 +32,7 @@ namespace BackEnd_Api.Migrations
                 name: "MeasureSurveys",
                 columns: table => new
                 {
-                    MeasureSurveyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MeasureSurveyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -64,8 +47,7 @@ namespace BackEnd_Api.Migrations
                 name: "Permissions",
                 columns: table => new
                 {
-                    PermissionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PermissionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -78,8 +60,7 @@ namespace BackEnd_Api.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -89,33 +70,11 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CaseResults",
                 columns: table => new
                 {
-                    CaseResultId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    CaseResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ReportTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReportAnalyst = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -134,26 +93,74 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SceneProtections",
+                columns: table => new
+                {
+                    SceneProtectionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LOcationCover = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SceneProtections", x => x.SceneProtectionId);
+                    table.ForeignKey(
+                        name: "FK_SceneProtections_Cases_CaseId",
+                        column: x => x.CaseId,
+                        principalTable: "Cases",
+                        principalColumn: "CaseId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SceneSuports",
+                columns: table => new
+                {
+                    SceneSuportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TypeSuport = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LocationAssigned = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SceneSuports", x => x.SceneSuportId);
+                    table.ForeignKey(
+                        name: "FK_SceneSuports_Cases_CaseId",
+                        column: x => x.CaseId,
+                        principalTable: "Cases",
+                        principalColumn: "CaseId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Suspects",
                 columns: table => new
                 {
-                    SuspectId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     National = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Identification = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phonenumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CatchTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MugshotUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FingerprintsHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HealthStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    FingerPrintsHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HealthStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -170,9 +177,8 @@ namespace BackEnd_Api.Migrations
                 name: "Victims",
                 columns: table => new
                 {
-                    VictimId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    VictimId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Injuries = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -191,35 +197,11 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Warrants",
-                columns: table => new
-                {
-                    WarrantId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
-                    WarrantName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TimePublish = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Warrants", x => x.WarrantId);
-                    table.ForeignKey(
-                        name: "FK_Warrants_Cases_CaseId",
-                        column: x => x.CaseId,
-                        principalTable: "Cases",
-                        principalColumn: "CaseId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Witnesses",
                 columns: table => new
                 {
-                    WitnessId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    WitnessId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Statement = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -237,47 +219,11 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "RoleId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "RolePermissions",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    PermissionId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PermissionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -298,15 +244,39 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AvatarUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateAttended = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserName);
+                    table.ForeignKey(
+                        name: "FK_Users_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "RoleId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sentences",
                 columns: table => new
                 {
-                    SentenceId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
-                    CaseResultId = table.Column<int>(type: "int", nullable: false),
+                    SentenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SentenceType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Duration = table.Column<int>(type: "int", nullable: true),
+                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Condition = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SentencingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -331,9 +301,8 @@ namespace BackEnd_Api.Migrations
                 name: "Timelines",
                 columns: table => new
                 {
-                    TimelineId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseResultId = table.Column<int>(type: "int", nullable: false),
+                    TimelineId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -356,10 +325,9 @@ namespace BackEnd_Api.Migrations
                 name: "Events",
                 columns: table => new
                 {
-                    EventId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SuspectId = table.Column<int>(type: "int", nullable: false),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    EventId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -383,35 +351,11 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WarrantResults",
-                columns: table => new
-                {
-                    WarrantResultId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    WarrantId = table.Column<int>(type: "int", nullable: false),
-                    PoliceResponse = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TimeActive = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WarrantResults", x => x.WarrantResultId);
-                    table.ForeignKey(
-                        name: "FK_WarrantResults_Warrants_WarrantId",
-                        column: x => x.WarrantId,
-                        principalTable: "Warrants",
-                        principalColumn: "WarrantId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Arrests",
                 columns: table => new
                 {
-                    SuspectId = table.Column<int>(type: "int", nullable: false),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OfficerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SuspectMirandaSignature = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ArrestStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -422,12 +366,6 @@ namespace BackEnd_Api.Migrations
                 {
                     table.PrimaryKey("PK_Arrests", x => new { x.SuspectId, x.CaseId });
                     table.ForeignKey(
-                        name: "FK_Arrests_AspNetUsers_OfficerId",
-                        column: x => x.OfficerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Arrests_Cases_CaseId",
                         column: x => x.CaseId,
                         principalTable: "Cases",
@@ -437,101 +375,21 @@ namespace BackEnd_Api.Migrations
                         column: x => x.SuspectId,
                         principalTable: "Suspects",
                         principalColumn: "SuspectId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Arrests_Users_OfficerId",
+                        column: x => x.OfficerId,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "InvestigationPlans",
                 columns: table => new
                 {
-                    InvestigationPlanId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InvestigationPlanId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOfficerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DeadlineDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -543,26 +401,25 @@ namespace BackEnd_Api.Migrations
                 {
                     table.PrimaryKey("PK_InvestigationPlans", x => x.InvestigationPlanId);
                     table.ForeignKey(
-                        name: "FK_InvestigationPlans_AspNetUsers_CreatedOfficerId",
-                        column: x => x.CreatedOfficerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_InvestigationPlans_Cases_CaseId",
                         column: x => x.CaseId,
                         principalTable: "Cases",
                         principalColumn: "CaseId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_InvestigationPlans_Users_CreatedOfficerId",
+                        column: x => x.CreatedOfficerId,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Prosecutions",
                 columns: table => new
                 {
-                    ProsecutionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    ProsecutionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProsecutorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Decision = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DecisionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -573,33 +430,33 @@ namespace BackEnd_Api.Migrations
                 {
                     table.PrimaryKey("PK_Prosecutions", x => x.ProsecutionId);
                     table.ForeignKey(
-                        name: "FK_Prosecutions_AspNetUsers_ProsecutorId",
-                        column: x => x.ProsecutorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Prosecutions_Cases_CaseId",
                         column: x => x.CaseId,
                         principalTable: "Cases",
                         principalColumn: "CaseId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Prosecutions_Users_ProsecutorId",
+                        column: x => x.ProsecutorId,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Reports",
                 columns: table => new
                 {
-                    ReportId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
+                    ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeReport = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CaseLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReportedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReporterFullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReporterEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReporterPhonenumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReporterPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfficerApproveId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -607,17 +464,75 @@ namespace BackEnd_Api.Migrations
                 {
                     table.PrimaryKey("PK_Reports", x => x.ReportId);
                     table.ForeignKey(
-                        name: "FK_Reports_AspNetUsers_OfficerApproveId",
-                        column: x => x.OfficerApproveId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Reports_Cases_CaseId",
                         column: x => x.CaseId,
                         principalTable: "Cases",
                         principalColumn: "CaseId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reports_Users_OfficerApproveId",
+                        column: x => x.OfficerApproveId,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SceneDescriptions",
+                columns: table => new
+                {
+                    SceneDescriptionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Provider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SceneDescriptions", x => x.SceneDescriptionId);
+                    table.ForeignKey(
+                        name: "FK_SceneDescriptions_Cases_CaseId",
+                        column: x => x.CaseId,
+                        principalTable: "Cases",
+                        principalColumn: "CaseId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SceneDescriptions_Users_Provider",
+                        column: x => x.Provider,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SceneMedias",
+                columns: table => new
+                {
+                    SceneMediaId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DateTaken = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SceneSketchUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CapturedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SceneMedias", x => x.SceneMediaId);
+                    table.ForeignKey(
+                        name: "FK_SceneMedias_Cases_CaseId",
+                        column: x => x.CaseId,
+                        principalTable: "Cases",
+                        principalColumn: "CaseId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SceneMedias_Users_CapturedBy",
+                        column: x => x.CapturedBy,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -625,34 +540,63 @@ namespace BackEnd_Api.Migrations
                 columns: table => new
                 {
                     OfficerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CaseId = table.Column<int>(type: "int", nullable: false),
-                    Responsible = table.Column<bool>(type: "bit", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Responsible = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserCases", x => new { x.OfficerId, x.CaseId });
                     table.ForeignKey(
-                        name: "FK_UserCases_AspNetUsers_OfficerId",
-                        column: x => x.OfficerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_UserCases_Cases_CaseId",
                         column: x => x.CaseId,
                         principalTable: "Cases",
                         principalColumn: "CaseId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserCases_Users_OfficerId",
+                        column: x => x.OfficerId,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Warrants",
+                columns: table => new
+                {
+                    WarrantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PoliceReponse = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    WarrantName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimePublish = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Warrants", x => x.WarrantId);
+                    table.ForeignKey(
+                        name: "FK_Warrants_Cases_CaseId",
+                        column: x => x.CaseId,
+                        principalTable: "Cases",
+                        principalColumn: "CaseId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Warrants_Users_PoliceReponse",
+                        column: x => x.PoliceReponse,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Inmates",
                 columns: table => new
                 {
-                    InmateId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SentenceId = table.Column<int>(type: "int", nullable: false),
+                    InmateId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SentenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AssignedFacility = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -676,11 +620,10 @@ namespace BackEnd_Api.Migrations
                 name: "Interviews",
                 columns: table => new
                 {
-                    InterviewId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    InvestigationPlanId = table.Column<int>(type: "int", nullable: true),
+                    InterviewId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    InvestigationPlanId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     InterviewerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IntervieweeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IntervieweeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TypeInterviewee = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -692,29 +635,25 @@ namespace BackEnd_Api.Migrations
                 {
                     table.PrimaryKey("PK_Interviews", x => x.InterviewId);
                     table.ForeignKey(
-                        name: "FK_Interviews_AspNetUsers_IntervieweeId",
-                        column: x => x.IntervieweeId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Interviews_AspNetUsers_InterviewerId",
-                        column: x => x.InterviewerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Interviews_InvestigationPlans_InvestigationPlanId",
                         column: x => x.InvestigationPlanId,
                         principalTable: "InvestigationPlans",
-                        principalColumn: "InvestigationPlanId");
+                        principalColumn: "InvestigationPlanId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Interviews_Users_InterviewerId",
+                        column: x => x.InterviewerId,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Indictments",
                 columns: table => new
                 {
-                    IndictmentId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProsecutionId = table.Column<int>(type: "int", nullable: false),
+                    IndictmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProsecutionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IssuedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -734,8 +673,8 @@ namespace BackEnd_Api.Migrations
                 name: "ProsecutionSuspects",
                 columns: table => new
                 {
-                    ProsecutionId = table.Column<int>(type: "int", nullable: false),
-                    SuspectId = table.Column<int>(type: "int", nullable: false),
+                    ProsecutionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -755,54 +694,11 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Evidences",
-                columns: table => new
-                {
-                    EvidenceId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MeasureSurveyId = table.Column<int>(type: "int", nullable: true),
-                    WarrantResultId = table.Column<int>(type: "int", nullable: true),
-                    ReportId = table.Column<int>(type: "int", nullable: true),
-                    CollectedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CollectedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CurrentLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Evidences", x => x.EvidenceId);
-                    table.ForeignKey(
-                        name: "FK_Evidences_AspNetUsers_CollectedBy",
-                        column: x => x.CollectedBy,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Evidences_MeasureSurveys_MeasureSurveyId",
-                        column: x => x.MeasureSurveyId,
-                        principalTable: "MeasureSurveys",
-                        principalColumn: "MeasureSurveyId");
-                    table.ForeignKey(
-                        name: "FK_Evidences_Reports_ReportId",
-                        column: x => x.ReportId,
-                        principalTable: "Reports",
-                        principalColumn: "ReportId");
-                    table.ForeignKey(
-                        name: "FK_Evidences_WarrantResults_WarrantResultId",
-                        column: x => x.WarrantResultId,
-                        principalTable: "WarrantResults",
-                        principalColumn: "WarrantResultId");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ReportSuspects",
                 columns: table => new
                 {
-                    ReportId = table.Column<int>(type: "int", nullable: false),
-                    SuspectId = table.Column<int>(type: "int", nullable: false),
+                    ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -825,8 +721,8 @@ namespace BackEnd_Api.Migrations
                 name: "ReportVictims",
                 columns: table => new
                 {
-                    ReportId = table.Column<int>(type: "int", nullable: false),
-                    VictimId = table.Column<int>(type: "int", nullable: false),
+                    ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    VictimId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -846,12 +742,64 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReportWitness",
+                columns: table => new
+                {
+                    ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    WitnessId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReportWitness", x => new { x.ReportId, x.WitnessId });
+                    table.ForeignKey(
+                        name: "FK_ReportWitness_Reports_ReportId",
+                        column: x => x.ReportId,
+                        principalTable: "Reports",
+                        principalColumn: "ReportId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReportWitness_Witnesses_WitnessId",
+                        column: x => x.WitnessId,
+                        principalTable: "Witnesses",
+                        principalColumn: "WitnessId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WarrantResults",
+                columns: table => new
+                {
+                    WarrantResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    WarrantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PoliceResponse = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeActive = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WarrantResults", x => x.WarrantResultId);
+                    table.ForeignKey(
+                        name: "FK_WarrantResults_Users_PoliceResponse",
+                        column: x => x.PoliceResponse,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WarrantResults_Warrants_WarrantId",
+                        column: x => x.WarrantId,
+                        principalTable: "Warrants",
+                        principalColumn: "WarrantId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Questions",
                 columns: table => new
                 {
-                    QuestionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    InterviewId = table.Column<int>(type: "int", nullable: false),
+                    QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    InterviewId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -862,75 +810,71 @@ namespace BackEnd_Api.Migrations
                 {
                     table.PrimaryKey("PK_Questions", x => x.QuestionId);
                     table.ForeignKey(
-                        name: "FK_Questions_AspNetUsers_CreatedBy",
-                        column: x => x.CreatedBy,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Questions_Interviews_InterviewId",
                         column: x => x.InterviewId,
                         principalTable: "Interviews",
                         principalColumn: "InterviewId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Questions_Users_CreatedBy",
+                        column: x => x.CreatedBy,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "VictimInterviews",
+                name: "Evidences",
                 columns: table => new
                 {
-                    VictimId = table.Column<int>(type: "int", nullable: false),
-                    InterviewId = table.Column<int>(type: "int", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MeasureSurveyId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    WarrantResultId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ReportId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CollectedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TypeEvidence = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CollectedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CurrentLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VictimInterviews", x => new { x.VictimId, x.InterviewId });
+                    table.PrimaryKey("PK_Evidences", x => x.EvidenceId);
                     table.ForeignKey(
-                        name: "FK_VictimInterviews_Interviews_InterviewId",
-                        column: x => x.InterviewId,
-                        principalTable: "Interviews",
-                        principalColumn: "InterviewId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Evidences_MeasureSurveys_MeasureSurveyId",
+                        column: x => x.MeasureSurveyId,
+                        principalTable: "MeasureSurveys",
+                        principalColumn: "MeasureSurveyId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_VictimInterviews_Victims_VictimId",
-                        column: x => x.VictimId,
-                        principalTable: "Victims",
-                        principalColumn: "VictimId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WitnessInterviews",
-                columns: table => new
-                {
-                    WitnessId = table.Column<int>(type: "int", nullable: false),
-                    InterviewId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WitnessInterviews", x => new { x.WitnessId, x.InterviewId });
+                        name: "FK_Evidences_Reports_ReportId",
+                        column: x => x.ReportId,
+                        principalTable: "Reports",
+                        principalColumn: "ReportId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_WitnessInterviews_Interviews_InterviewId",
-                        column: x => x.InterviewId,
-                        principalTable: "Interviews",
-                        principalColumn: "InterviewId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Evidences_Users_CollectedBy",
+                        column: x => x.CollectedBy,
+                        principalTable: "Users",
+                        principalColumn: "UserName",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_WitnessInterviews_Witnesses_WitnessId",
-                        column: x => x.WitnessId,
-                        principalTable: "Witnesses",
-                        principalColumn: "WitnessId",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Evidences_WarrantResults_WarrantResultId",
+                        column: x => x.WarrantResultId,
+                        principalTable: "WarrantResults",
+                        principalColumn: "WarrantResultId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CaseEvidences",
                 columns: table => new
                 {
-                    CaseId = table.Column<int>(type: "int", nullable: false),
-                    EvidenceId = table.Column<int>(type: "int", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -941,23 +885,23 @@ namespace BackEnd_Api.Migrations
                         column: x => x.CaseId,
                         principalTable: "Cases",
                         principalColumn: "CaseId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CaseEvidences_Evidences_EvidenceId",
                         column: x => x.EvidenceId,
                         principalTable: "Evidences",
                         principalColumn: "EvidenceId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "DigitalInvests",
                 columns: table => new
                 {
-                    EvidenceId = table.Column<int>(type: "int", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DeviceType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AnalystTool = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -968,14 +912,15 @@ namespace BackEnd_Api.Migrations
                         column: x => x.EvidenceId,
                         principalTable: "Evidences",
                         principalColumn: "EvidenceId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "FinancialInvests",
                 columns: table => new
                 {
-                    EvidenceId = table.Column<int>(type: "int", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -987,16 +932,16 @@ namespace BackEnd_Api.Migrations
                         column: x => x.EvidenceId,
                         principalTable: "Evidences",
                         principalColumn: "EvidenceId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ForensicInvests",
                 columns: table => new
                 {
-                    EvidenceId = table.Column<int>(type: "int", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LabName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Report = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReportFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ResultSummary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReceivedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -1009,14 +954,14 @@ namespace BackEnd_Api.Migrations
                         column: x => x.EvidenceId,
                         principalTable: "Evidences",
                         principalColumn: "EvidenceId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PhysicalInvests",
                 columns: table => new
                 {
-                    EvidenceId = table.Column<int>(type: "int", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -1028,16 +973,15 @@ namespace BackEnd_Api.Migrations
                         column: x => x.EvidenceId,
                         principalTable: "Evidences",
                         principalColumn: "EvidenceId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "RecordInfos",
                 columns: table => new
                 {
-                    RecordInfoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EvidenceId = table.Column<int>(type: "int", nullable: false),
+                    RecordInfoId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateCollected = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -1052,15 +996,15 @@ namespace BackEnd_Api.Migrations
                         column: x => x.EvidenceId,
                         principalTable: "Evidences",
                         principalColumn: "EvidenceId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "SuspectEvidences",
                 columns: table => new
                 {
-                    SuspectId = table.Column<int>(type: "int", nullable: false),
-                    EvidenceId = table.Column<int>(type: "int", nullable: false),
+                    SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -1071,21 +1015,44 @@ namespace BackEnd_Api.Migrations
                         column: x => x.EvidenceId,
                         principalTable: "Evidences",
                         principalColumn: "EvidenceId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_SuspectEvidences_Suspects_SuspectId",
                         column: x => x.SuspectId,
                         principalTable: "Suspects",
-                        principalColumn: "SuspectId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SuspectId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VictimEvidences",
+                columns: table => new
+                {
+                    VictimId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VictimEvidences", x => new { x.VictimId, x.EvidenceId });
+                    table.ForeignKey(
+                        name: "FK_VictimEvidences_Evidences_EvidenceId",
+                        column: x => x.EvidenceId,
+                        principalTable: "Evidences",
+                        principalColumn: "EvidenceId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_VictimEvidences_Victims_VictimId",
+                        column: x => x.VictimId,
+                        principalTable: "Victims",
+                        principalColumn: "VictimId");
                 });
 
             migrationBuilder.CreateTable(
                 name: "WarrantEvidences",
                 columns: table => new
                 {
-                    WarrantId = table.Column<int>(type: "int", nullable: false),
-                    EvidenceId = table.Column<int>(type: "int", nullable: false),
+                    WarrantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -1096,7 +1063,7 @@ namespace BackEnd_Api.Migrations
                         column: x => x.EvidenceId,
                         principalTable: "Evidences",
                         principalColumn: "EvidenceId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_WarrantEvidences_Warrants_WarrantId",
                         column: x => x.WarrantId,
@@ -1114,50 +1081,6 @@ namespace BackEnd_Api.Migrations
                 name: "IX_Arrests_OfficerId",
                 table: "Arrests",
                 column: "OfficerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
-                table: "AspNetRoleClaims",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
-                unique: true,
-                filter: "[NormalizedName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
-                table: "AspNetUserClaims",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
-                table: "AspNetUserLogins",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                table: "AspNetUserRoles",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_RoleId",
-                table: "AspNetUsers",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CaseEvidences_EvidenceId",
@@ -1208,11 +1131,6 @@ namespace BackEnd_Api.Migrations
                 name: "IX_Inmates_SentenceId",
                 table: "Inmates",
                 column: "SentenceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Interviews_IntervieweeId",
-                table: "Interviews",
-                column: "IntervieweeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Interviews_InterviewerId",
@@ -1285,9 +1203,44 @@ namespace BackEnd_Api.Migrations
                 column: "VictimId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ReportWitness_WitnessId",
+                table: "ReportWitness",
+                column: "WitnessId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RolePermissions_PermissionId",
                 table: "RolePermissions",
                 column: "PermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SceneDescriptions_CaseId",
+                table: "SceneDescriptions",
+                column: "CaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SceneDescriptions_Provider",
+                table: "SceneDescriptions",
+                column: "Provider");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SceneMedias_CapturedBy",
+                table: "SceneMedias",
+                column: "CapturedBy");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SceneMedias_CaseId",
+                table: "SceneMedias",
+                column: "CaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SceneProtections_CaseId",
+                table: "SceneProtections",
+                column: "CaseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SceneSuports_CaseId",
+                table: "SceneSuports",
+                column: "CaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sentences_CaseId",
@@ -1320,9 +1273,14 @@ namespace BackEnd_Api.Migrations
                 column: "CaseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VictimInterviews_InterviewId",
-                table: "VictimInterviews",
-                column: "InterviewId");
+                name: "IX_Users_RoleId",
+                table: "Users",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VictimEvidences_EvidenceId",
+                table: "VictimEvidences",
+                column: "EvidenceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Victims_CaseId",
@@ -1335,6 +1293,11 @@ namespace BackEnd_Api.Migrations
                 column: "EvidenceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_WarrantResults_PoliceResponse",
+                table: "WarrantResults",
+                column: "PoliceResponse");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_WarrantResults_WarrantId",
                 table: "WarrantResults",
                 column: "WarrantId");
@@ -1345,14 +1308,14 @@ namespace BackEnd_Api.Migrations
                 column: "CaseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Warrants_PoliceReponse",
+                table: "Warrants",
+                column: "PoliceReponse");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Witnesses_CaseId",
                 table: "Witnesses",
                 column: "CaseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WitnessInterviews_InterviewId",
-                table: "WitnessInterviews",
-                column: "InterviewId");
         }
 
         /// <inheritdoc />
@@ -1360,21 +1323,6 @@ namespace BackEnd_Api.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Arrests");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
                 name: "CaseEvidences");
@@ -1416,7 +1364,22 @@ namespace BackEnd_Api.Migrations
                 name: "ReportVictims");
 
             migrationBuilder.DropTable(
+                name: "ReportWitness");
+
+            migrationBuilder.DropTable(
                 name: "RolePermissions");
+
+            migrationBuilder.DropTable(
+                name: "SceneDescriptions");
+
+            migrationBuilder.DropTable(
+                name: "SceneMedias");
+
+            migrationBuilder.DropTable(
+                name: "SceneProtections");
+
+            migrationBuilder.DropTable(
+                name: "SceneSuports");
 
             migrationBuilder.DropTable(
                 name: "SuspectEvidences");
@@ -1428,22 +1391,22 @@ namespace BackEnd_Api.Migrations
                 name: "UserCases");
 
             migrationBuilder.DropTable(
-                name: "VictimInterviews");
+                name: "VictimEvidences");
 
             migrationBuilder.DropTable(
                 name: "WarrantEvidences");
-
-            migrationBuilder.DropTable(
-                name: "WitnessInterviews");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Sentences");
 
             migrationBuilder.DropTable(
                 name: "Prosecutions");
+
+            migrationBuilder.DropTable(
+                name: "Interviews");
+
+            migrationBuilder.DropTable(
+                name: "Witnesses");
 
             migrationBuilder.DropTable(
                 name: "Permissions");
@@ -1458,13 +1421,10 @@ namespace BackEnd_Api.Migrations
                 name: "Evidences");
 
             migrationBuilder.DropTable(
-                name: "Interviews");
-
-            migrationBuilder.DropTable(
-                name: "Witnesses");
-
-            migrationBuilder.DropTable(
                 name: "CaseResults");
+
+            migrationBuilder.DropTable(
+                name: "InvestigationPlans");
 
             migrationBuilder.DropTable(
                 name: "MeasureSurveys");
@@ -1476,16 +1436,13 @@ namespace BackEnd_Api.Migrations
                 name: "WarrantResults");
 
             migrationBuilder.DropTable(
-                name: "InvestigationPlans");
-
-            migrationBuilder.DropTable(
                 name: "Warrants");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Cases");
 
             migrationBuilder.DropTable(
-                name: "Cases");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Roles");

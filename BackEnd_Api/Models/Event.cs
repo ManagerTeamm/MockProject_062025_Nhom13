@@ -2,10 +2,10 @@
 {
     public class Event
     {
-        public int EventId { get; set; }
-        public int SuspectId { get; set; }
+        public string EventId { get; set; }
+        public string SuspectId { get; set; }
         public Suspect Suspect { get; set; }
-        public int CaseId { get; set; }
+        public string CaseId { get; set; }
         public Case Case { get; set; }
         public DateTime TimeStart { get; set; }
         public DateTime? TimeEnd { get; set; }

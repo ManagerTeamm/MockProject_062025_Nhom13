@@ -1,9 +1,9 @@
 ﻿namespace BackEnd_Api.Models
 {
-    public class WarrantEvidence
+    public class VictimEvidence
     {
-        public string WarrantId { get; set; }
-        public Warrant Warrant { get; set; }
+        public string VictimId { get; set; }
+        public Victim Victim { get; set; }
         public string EvidenceId { get; set; }
         public Evidence Evidence { get; set; }
         public bool IsDeleted { get; set; }

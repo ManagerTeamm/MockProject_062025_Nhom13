@@ -14,12 +14,12 @@ namespace BackEnd_Api.Helpers
         {
             _config = config;
         }
-        public string GenerateJwtToken(ApplicationUser user)
+        public string GenerateJwtToken(User user)
         {
             var claims = new[]
             {
             new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
+            new Claim(ClaimTypes.Role, user.Email)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -32,6 +32,7 @@ namespace BackEnd_Api.Helpers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
         public string? GetUserIdFromToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
