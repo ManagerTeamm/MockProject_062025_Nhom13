@@ -1,108 +1,66 @@
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import { loginAccount } from "../service/accountservice";
-const images = [
-  "/images/slide1.jpg",
-  "/images/slide2.jpg",
-  "/images/slide3.jpg",
-];
+import React, { useState } from "react";
+import { Form, Button, InputGroup } from "react-bootstrap";
+import { Eye, EyeOff } from "lucide-react";
+import "../css/login.css";
 
-const LoginPage = () => {
-  const [currentImage, setCurrentImage] = useState(0);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const account = await loginAccount(email, password);
-      console.log("Login success:", account);
-
-      localStorage.setItem("account", JSON.stringify(account));
-
-      navigate("/home");
-    } catch (err) {
-      console.error(err.message);
-      alert("Login failed: " + err.message);
-    }
-  };
+const LoginComponent = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePassword = () => setShowPassword(!showPassword);
 
   return (
-    <Container fluid className="min-vh-100 d-flex align-items-center bg-light">
-      <Row className="flex-grow-1">
-        <Col
-          md={6}
-          className="d-none d-md-flex flex-column justify-content-center align-items-center text-white p-5"
-          style={{
-            backgroundImage: `url(${images[currentImage]})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            transition: "background-image 1s ease-in-out",
-          }}
-        >
-          <h1 className="fw-bold display-5 mb-3">Demo Login</h1>
-          <p className="lead opacity-75 text-center w-75">
-            Criminal Investigation
-          </p>
-        </Col>
+    <div className="login-background">
+      <div className="login-card">
+        <div className="login-form">
+          <h1 className="login-title">PD SYSTEM</h1>
 
-        <Col
-          xs={12}
-          md={6}
-          className="d-flex align-items-center justify-content-center p-4 p-md-5"
-        >
-          <div style={{ maxWidth: 420, width: "100%" }}>
-            <h2 className="fw-bold mb-2">Welcome back 👋</h2>
-            <p className="text-muted mb-4">
-              Sign in to your account to continue
-            </p>
+          <Form>
+            <Form.Group controlId="formEmail" className="form-section">
+              <Form.Label>Email or Username</Form.Label>
+              <Form.Control type="email" placeholder="Enter email" className="login-input" />
+            </Form.Group>
 
-            <Form onSubmit={handleLogin}>
-              <Form.Group className="mb-3" controlId="email">
-                <Form.Label className="fw-medium">Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="nhan@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Form.Group>
+            <Form.Group controlId="formPassword" className="form-section">
+              <div className="d-flex justify-content-between align-items-center">
+                <Form.Label>Password</Form.Label>
+                <div className="password-toggle" onClick={togglePassword}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  <span className="toggle-text">{showPassword ? "Hide" : "Show"}</span>
+                </div>
+              </div>
+              <Form.Control
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                className="login-input"
+              />
+            </Form.Group>
 
-              <Form.Group className="mb-3" controlId="password">
-                <Form.Label className="fw-medium">Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </Form.Group>
-
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                className="w-100 fw-semibold"
-              >
-                Sign in
-              </Button>
-            </Form>
+            <div className="text-center mt-4">
+              <Button className="login-btn">Login</Button>
+            </div>
+          </Form>
+        </div>
+        <div className="language-select mt-3">
+          <Form.Select>
+            <option>English (United States)</option>
+            <option>Vietnamese</option>
+            <option>French</option>
+            <option>Japanese</option>
+          </Form.Select>
+        </div>
+        <div className="login-footer mt-4">
+          <div className="divider"></div>
+          <div className="footer-links">
+            <a href="#">About</a>
+            <a href="#">Help Center</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Cookie Policy</a>
           </div>
-        </Col>
-      </Row>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default LoginPage;
+export default LoginComponent;
+

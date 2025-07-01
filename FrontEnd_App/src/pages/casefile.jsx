@@ -85,78 +85,78 @@ const CaseFile = () => {
             </table>
 
             {modalType && selectedCase && (
-  <div
-    className="position-absolute bg-white border shadow rounded p-3"
-    style={{
-      top: popupPosition.top + 8,
-      left: popupPosition.left,
-      zIndex: 1000,
-      width: '300px'
-    }}
-  >
-    <div className="d-flex justify-content-between mb-2">
-      <strong>
-        {modalType === 'suspect' && 'Suspect'}
-        {modalType === 'cadre' && 'Cadre'}
-        {modalType === 'arrest' && 'Arrest'}
-        {modalType === 'miranda' && 'Miranda'}
-      </strong>
-      <button className="btn btn-sm btn-outline-danger py-0 px-2" onClick={closeModal}>×</button>
-    </div>
+                <div
+                    className="position-absolute bg-white border shadow rounded p-3"
+                    style={{
+                        top: popupPosition.top + 8,
+                        left: popupPosition.left,
+                        zIndex: 1000,
+                        width: '300px'
+                    }}
+                >
+                    <div className="d-flex justify-content-between mb-2">
+                        <strong>
+                            {modalType === 'suspect' && 'Suspect'}
+                            {modalType === 'cadre' && 'Cadre'}
+                            {modalType === 'arrest' && 'Arrest'}
+                            {modalType === 'miranda' && 'Miranda'}
+                        </strong>
+                        <button className="btn btn-sm btn-outline-danger py-0 px-2" onClick={closeModal}>×</button>
+                    </div>
 
-    {modalType === 'suspect' && (
-      <>
-        <p><strong>Case ID:</strong> {selectedCase.id}</p>
-        <p><strong>Name:</strong> {selectedCase.suspect.fullName}</p>
-        <p><strong>Birthdate:</strong> {selectedCase.suspect.birthdate}</p>
-        <p><strong>Features:</strong> {selectedCase.suspect.features}</p>
-        <img src={selectedCase.suspect.photoUrl} className="img-fluid rounded" alt="Suspect" />
-      </>
-    )}
+                    {modalType === 'suspect' && (
+                        <>
+                            <p><strong>Case ID:</strong> {selectedCase.id}</p>
+                            <p><strong>Name:</strong> {selectedCase.suspect.fullName}</p>
+                            <p><strong>Birthdate:</strong> {selectedCase.suspect.birthdate}</p>
+                            <p><strong>Features:</strong> {selectedCase.suspect.features}</p>
+                            <img src={selectedCase.suspect.photoUrl} className="img-fluid rounded" alt="Suspect" />
+                        </>
+                    )}
 
-    {modalType === 'cadre' && (
-      <>
-        <p><strong>Case ID:</strong> {selectedCase.id}</p>
-        <p><strong>Suspect:</strong> {selectedCase.suspect.fullName}</p>
-        <table className="table table-bordered mt-3">
-  <thead>
-    <tr>
-      <th>Cadre ID</th>
-      <th>Cadre Name</th>
-      <th>Photo</th>
-    </tr>
-  </thead>
-  <tbody>
-    {selectedCase.cadreList.map((cadre) => (
-      <tr key={cadre.id}>
-        <td>{cadre.id}</td>
-        <td>{cadre.name}</td>
-        <td>
-          <img src={cadre.photoUrl} alt={cadre.name} className="img-thumbnail" style={{ width: '80px' }} />
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-      </>
-    )}
+                    {modalType === 'cadre' && (
+                        <>
+                            <p><strong>Case ID:</strong> {selectedCase.id}</p>
+                            <p><strong>Suspect:</strong> {selectedCase.suspect.fullName}</p>
+                            <table className="table table-bordered mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>Cadre ID</th>
+                                        <th>Cadre Name</th>
+                                        <th>Photo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {selectedCase.cadreList.map((cadre) => (
+                                        <tr key={cadre.id}>
+                                            <td>{cadre.id}</td>
+                                            <td>{cadre.name}</td>
+                                            <td>
+                                                <img src={cadre.photoUrl} alt={cadre.name} className="img-thumbnail" style={{ width: '80px' }} />
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </>
+                    )}
 
-    {modalType === 'arrest' && (
-      <p>{selectedCase.arrestRecord}</p>
-    )}
+                    {modalType === 'arrest' && (
+                        <p>{selectedCase.arrestRecord}</p>
+                    )}
 
-    {modalType === 'miranda' && (
-      <>
-        <p><strong>Case ID:</strong> {selectedCase.id}</p>
-        <p><strong>Suspect:</strong> {selectedCase.suspect.fullName}</p>
-        <p><strong>Suspect ID:</strong> {selectedCase.suspect.id}</p>
-        <p><strong>Notification Time:</strong> {selectedCase.miranda.notificationTime}</p>
-        <p><strong>Executor:</strong> {selectedCase.miranda.executor}</p>
-        <p><strong>Signature:</strong> {selectedCase.miranda.signature}</p>
-      </>
-    )}
-  </div>
-)}
+                    {modalType === 'miranda' && (
+                        <>
+                            <p><strong>Case ID:</strong> {selectedCase.id}</p>
+                            <p><strong>Suspect:</strong> {selectedCase.suspect.fullName}</p>
+                            <p><strong>Suspect ID:</strong> {selectedCase.suspect.id}</p>
+                            <p><strong>Notification Time:</strong> {selectedCase.miranda.notificationTime}</p>
+                            <p><strong>Executor:</strong> {selectedCase.miranda.executor}</p>
+                            <p><strong>Signature:</strong> {selectedCase.miranda.signature}</p>
+                        </>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
