@@ -1,128 +1,115 @@
-import React, { useState, useEffect } from "react";  
-import { Container, Row, Col, Button, Spinner, Alert } from "react-bootstrap";
-import { profileService } from "../service/profileService";
+import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
+import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { login } from "../service/authenservice";
+import { jwtDecode } from "jwt-decode";
+import "../css/login.css";
+import { useAuth } from "../provider/authenprovider";
 
+const LoginComponent = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { login: saveAuthToken } = useAuth();
 
-const ProfilePage = () => {
-  const [profileData, setProfileData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [account, setAccount] = useState(null);
-  
-  const handleLogout = () => {
-    localStorage.removeItem("account");
-    window.location.href = "/";
-  };
+  const togglePassword = () => setShowPassword(!showPassword);
 
-  // Lấy account 1 lần và cache trong state
-  const getAccount = () => {
-    const accountData = localStorage.getItem("account");
-    return accountData ? JSON.parse(accountData) : null;
-  };
-  const fetchProfile = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      setLoading(true);
-      setError(null);
-      
-      if (!account || !account.token) {
-        setError("Không tìm thấy token. Vui lòng đăng nhập lại.");
-        return;
+      const token = await login(email, password);
+      saveAuthToken(token);
+
+      const decoded = jwtDecode(token);
+      const role =
+        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || decoded.role;
+
+
+      switch (role) {
+        case "Admin":
+          navigate("/admin");
+          break;
+        case "Patrol Officer":
+          navigate("/inmateadmission");
+          break;
+        case "Investigator":
+          navigate("/casefile");
+          break;
+        default:
+          navigate("/dashboard");
       }
-
-      const response = await profileService.getProfile(account.token);
-      
-      if (response.success) {
-        setProfileData(response.data);
-      } else {
-        setError(response.message || "Không thể tải thông tin profile");
-      }
-    } catch (err) {
-      setError("Có lỗi xảy ra khi tải thông tin profile: " + err.message);
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      alert("Login failed: " + (error.response?.data || "Server error"));
     }
-  };  
-  
-  useEffect(() => {
-    // Lấy account 1 lần khi component mount
-    const accountData = getAccount();
-    setAccount(accountData);
-    
-    if (accountData) {
-      fetchProfile();
-    } else {
-      setLoading(false);
-      setError("Vui lòng đăng nhập để xem thông tin profile.");
-    }
-
-  }, []);
-
-  // Effect riêng để fetch profile khi account thay đổi
-  useEffect(() => {
-    if (account && account.token) {
-      fetchProfile();
-    }
-  }, [account]);
+  };
 
   return (
-    <Container fluid className="min-vh-100 d-flex align-items-center bg-light">
-      <Row className="flex-grow-1">
-        <Col className="d-flex flex-column justify-content-center align-items-center text-dark p-5">
-          <h1 className="fw-bold display-5 mb-3">Profile</h1>
-          
-          {loading ? (
-            <div className="text-center">
-              <Spinner animation="border" role="status">
-                <span className="visually-hidden">Đang tải...</span>
-              </Spinner>
-              <p className="mt-2">Đang tải thông tin profile...</p>
-            </div>
-          ) : error ? (
-            <div className="text-center">
-              <Alert variant="danger" className="mb-3">
-                {error}
-              </Alert>
-              {account && (
-                <Button variant="outline-primary" onClick={fetchProfile} className="me-2">
-                  Thử lại
-                </Button>
-              )}
-              {!account && (
-                <Button variant="primary" onClick={() => window.location.href = "/login"}>
-                  Đăng nhập
-                </Button>
-              )}
-            </div>          ) : profileData ? (
-            <div className="text-center">
-              <div className="mb-4">
-                <h3>Thông tin cá nhân</h3>
+    <div className="login-background">
+      <div className="login-card">
+        <div className="login-form">
+          <h1 className="login-title">PD SYSTEM</h1>
+
+          <Form onSubmit={handleLogin}>
+            <Form.Group controlId="formEmail" className="form-section">
+              <Form.Label>Email or Username</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter email"
+                className="login-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formPassword" className="form-section">
+              <div className="d-flex justify-content-between align-items-center">
+                <Form.Label>Password</Form.Label>
+                <div className="password-toggle" onClick={togglePassword}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  <span className="toggle-text">{showPassword ? "Hide" : "Show"}</span>
+                </div>
               </div>
-              <div className="profile-info text-start">
-                {profileData && (
-                  <p><strong>Tên người dùng:</strong> {profileData}</p>
-                )}
-            
-              </div>
-              <div className="mt-4">
-                <Button variant="primary" onClick={handleLogout}>
-                  Đăng xuất
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="text-center">
-              <Alert variant="warning">
-                Không có dữ liệu profile để hiển thị.
-              </Alert>
-              <Button variant="primary" onClick={fetchProfile}>
-                Tải lại
+              <Form.Control
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                className="login-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+
+            <div className="text-center mt-4">
+              <Button className="login-btn" type="submit">
+                Login
               </Button>
             </div>
-          )}
-        </Col>
-      </Row>
-    </Container>
-  );
-}
+          </Form>
 
-export default ProfilePage;
+          <div className="language-select mt-3">
+            <Form.Select>
+              <option>English (United States)</option>
+              <option>Vietnamese</option>
+              <option>French</option>
+              <option>Japanese</option>
+            </Form.Select>
+          </div>
+
+          <div className="login-footer mt-4">
+            <div className="divider"></div>
+            <div className="footer-links">
+              <a href="#">About</a>
+              <a href="#">Help Center</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LoginComponent;

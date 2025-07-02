@@ -18,7 +18,8 @@ export const getRoleFromToken = () => {
       decoded.role ||
       null
     );
-  } catch {
+  } catch (e) {
+    console.error("JWT decode failed:", e);
     return null;
   }
 };

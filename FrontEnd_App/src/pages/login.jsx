@@ -6,6 +6,7 @@ import { login } from "../service/authenservice";
 import { saveToken } from "../service/tokenservice";
 import "../css/login.css";
 import { jwtDecode } from "jwt-decode";
+import { useAuth } from "../provider/authenprovider";
 
 const LoginComponent = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,38 +14,50 @@ const LoginComponent = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const { login: loginToContext } = useAuth();
+
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const token = await login(email, password);
-      saveToken(token);
-      
-      const decoded = jwtDecode(token);
-      const role = decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+  e.preventDefault();
+  try {
+    const token = await login(email, password);
+    saveToken(token);
+    loginToContext(token);
 
-      switch (role) { //sửa lại chỗ này nhé
+    try {
+      const decoded = jwtDecode(token);
+      console.log("Decoded token:", decoded); //debug token
+
+      const role =
+        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+        decoded["role"] ||
+        decoded["roles"] ||
+        "Unknown";
+
+      console.log("Extracted role:", role);
+
+      switch (role) {
         case "Admin":
-          console.log("Navigating to /admin");
-          navigate("/admin");
+          navigate("/secure/admin");
           break;
         case "Patrol Officer":
-          console.log("Navigating to /abc");
-          navigate("/inmateadmission");
+          navigate("/secure/inmateadmission");
           break;
         case "Investigator":
-          console.log("Navigating to /123");
-          navigate("/casefile");
+          navigate("/secure/casefile");
           break;
         default:
-          console.log("Navigating to /hithere");
-          navigate("/home");
+          navigate("/secure/home");
       }
-    } catch (error) {
-      alert("Login failed: " + (error.response?.data || "Server error"));
+    } catch (decodeErr) {
+      alert("Invalid token format");
     }
-  };
+  } catch (error) {
+    console.error("Login error:", error); //debug lỗi
+    alert("Login failed: " + (error.response?.data || error.message));
+  }
+};
 
   return (
     <div className="login-background">
@@ -88,13 +101,13 @@ const LoginComponent = () => {
             </div>
           </Form>
           <div className="language-select mt-3">
-              <Form.Select>
-                <option>English (United States)</option>
-                <option>Vietnamese</option>
-                <option>French</option>
-                <option>Japanese</option>
-              </Form.Select>
-            </div>
+            <Form.Select>
+              <option>English (United States)</option>
+              <option>Vietnamese</option>
+              <option>French</option>
+              <option>Japanese</option>
+            </Form.Select>
+          </div>
           <div className="login-footer mt-4">
             <div className="divider"></div>
             <div className="footer-links">
@@ -109,7 +122,7 @@ const LoginComponent = () => {
       </div>
     </div>
   );
-};
+}
 
 export default LoginComponent;
 
