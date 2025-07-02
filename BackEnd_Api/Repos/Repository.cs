@@ -3,7 +3,7 @@ using BackEnd_Api.Repos.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace BackEnd_Api.Repos.Service
+namespace BackEnd_Api.Repos
 {
     public class Repository<T> : IRepository<T> where T : class
     {

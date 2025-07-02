@@ -35,12 +35,12 @@ namespace BackEnd_Api.Controllers
             if (request == null)
                 return BadRequest("Page recieves nothing. Contact the owner.");
 
-            var user = await _userRepo.AuthenticateAsync(request.Email, request.Password);
+            var user = await _userRepo.AuthenticateAsync(request.Username, request.Password);
             if (user == null)
                 return Unauthorized("Invalid credentials");
 
             var token = GenerateJwtToken(user);
-            return Ok(new { Token = token });
+            return Ok(new { token = token });
         }
 
         private string GenerateJwtToken(User user)

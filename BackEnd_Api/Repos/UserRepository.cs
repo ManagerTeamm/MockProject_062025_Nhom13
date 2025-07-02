@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace BackEnd_Api.Repos.Service
+namespace BackEnd_Api.Repos
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
@@ -15,11 +15,11 @@ namespace BackEnd_Api.Repos.Service
             _context = context;
         }
 
-        public async Task<User?> AuthenticateAsync(string email, string password)
+        public async Task<User?> AuthenticateAsync(string username, string password)
         {
             var hashed = HashPassword(password);
             return await _context.Users.Include(u => u.Role)
-                                       .FirstOrDefaultAsync(u => u.Email == email && u.PasswordHash == hashed);
+                                       .FirstOrDefaultAsync(u => u.UserName == username && u.PasswordHash == hashed);
         }
         private string HashPassword(string password)
         {

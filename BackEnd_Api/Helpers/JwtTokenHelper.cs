@@ -1,25 +1,31 @@
 ﻿using BackEnd_Api.Models;
+using BackEnd_Api.Repos;
+using BackEnd_Api.Repos.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BackEnd_Api.Helpers
 {
     public class JwtTokenHelper
     {
+        private readonly IRoleRepository _roleRepos;
         private readonly IConfiguration _config;
-        public JwtTokenHelper(IConfiguration config)
+        public JwtTokenHelper(IConfiguration config, IRoleRepository roleRepos)
         {
             _config = config;
+            _roleRepos = roleRepos;
         }
-        public string GenerateJwtToken(User user)
+        public async Task<string> GenerateJwtToken(User user)
         {
+            var role = await _roleRepos.GetByIdAsync(user.RoleId);
             var claims = new[]
             {
             new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Role, user.Role.Description)
+            new Claim(ClaimTypes.Role, role.Description)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

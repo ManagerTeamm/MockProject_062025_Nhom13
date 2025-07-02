@@ -4,8 +4,8 @@ namespace BackEnd_Api.Dtos.Auth
 {
     public class LoginDto
     {
-        [EmailAddress]
-        public required string Email { get; set; }
+        [MinLength(1)]
+        public required string Username { get; set; }
 
         [MinLength(8)]
         public required string Password { get; set; }
