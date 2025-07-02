@@ -7,6 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BackEnd_Api.Helpers;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd_Api.Controllers
 {
@@ -14,30 +17,53 @@ namespace BackEnd_Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IConfiguration _config;
+        private readonly JwtTokenHelper _jwtTokenHelper;
+        private readonly ApplicationDbContext _context;
 
-        public AuthController(IConfiguration config)
+        public AuthController(JwtTokenHelper jwtTokenHelper, ApplicationDbContext context)
         {
-            _config = config;
+            _jwtTokenHelper = jwtTokenHelper;
+            _context = context;
         }
 
-        private string GenerateJwtToken(User user)
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginDto loginDto)
         {
-            var claims = new[]
+            if (loginDto == null || string.IsNullOrEmpty(loginDto.UserName) || string.IsNullOrEmpty(loginDto.Password))
             {
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Role, user.RoleId.ToString())
-        };
+                return BadRequest("Invalid login request.");
+            }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var loginPasswordHash = HashPassword(loginDto.Password);
+            var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.UserName == loginDto.UserName && u.PasswordHash == loginPasswordHash);
+            
+            if (user == null)
+            {
+                return Unauthorized("Invalid username or password.");
+            }
 
-            var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddHours(3),
-                claims: claims,
-                signingCredentials: creds);
+            var token = _jwtTokenHelper.GenerateJwtToken(user);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(new { Token = token });
+        }
+
+        [HttpGet("get-user")]
+        public IActionResult GetUser([FromQuery]string userName)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            return Ok(new {user});
+        }
+
+        private string HashPassword(string password)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
         }
     }
 }

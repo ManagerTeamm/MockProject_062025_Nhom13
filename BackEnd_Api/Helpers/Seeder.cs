@@ -40,7 +40,6 @@ namespace BackEnd_Api.Helpers
                 );
                 context.SaveChanges();
             }
-
             // ---- Seed Permissions ----
             if (!context.Permissions.Any())
             {
@@ -189,6 +188,86 @@ namespace BackEnd_Api.Helpers
                 );
                 context.SaveChanges();
             }
+            // ---- Seed Users ----
+            if (!context.Users.Any())
+            {
+                context.Users.AddRange(
+                    new User
+                    {
+                        UserName = "Dat2019",
+                        Email = "thaithanhdatqn@gmail.com",
+                        PasswordHash = "TNa5Vf2dtTscVzzP07NLuc6I+Qs2DlWfZrbdvSRJDS4=",
+                        FullName = "Thai Thanh Dat",
+                        PhoneNumber = "0931967189",
+                        AvatarUrl = "",
+                        DateAttended = new DateTime(2025, 7, 1, 12, 0, 0),
+                        RoleId = "4",
+                        IsDeleted = false
+                    },
+                    new User
+                    {
+                        UserName = "Huy0307",
+                        Email = "pthuy200307@gmail.com",
+                        PasswordHash = "IW2rM4MhgoNOuZC0aqCzK711PP9tRMxyLGAIEth2Svw=",
+                        FullName = "Phan Trong Huy",
+                        PhoneNumber = "0945427443",
+                        AvatarUrl = "",
+                        DateAttended = new DateTime(2025, 7, 1, 11, 55, 0),
+                        RoleId = "1",
+                        IsDeleted = false
+                    },
+                    new User
+                    {
+                        UserName = "Khanh1012",
+                        Email = "khanhtnnpd1012@gmail.com",
+                        PasswordHash = "pDJm0CjOlwfuvaKdn6Zm70Ys93jAjRwF+YK6AI0Q4r8=",
+                        FullName = "Nguyen Tran Nhat Khanh",
+                        PhoneNumber = "0342673666",
+                        AvatarUrl = "",
+                        DateAttended = new DateTime(2025, 7, 1, 12, 0, 0),
+                        RoleId = "5",
+                        IsDeleted = false
+                    },
+                    new User
+                    {
+                        UserName = "Nhan2712",
+                        Email = "phamnhan.2712@gmail.com",
+                        PasswordHash = "MbkkJqev9EajqoSPlxHakrghMSsEKIThnYJLXbR+kTY=",
+                        FullName = "Nguyen Van Nhan",
+                        PhoneNumber = "0799398267",
+                        AvatarUrl = "",
+                        DateAttended = new DateTime(2025, 7, 1, 11, 55, 0),
+                        RoleId = "1",
+                        IsDeleted = false
+                    },
+                    new User
+                    {
+                        UserName = "Thanh3887",
+                        Email = "cv.hovanthanh@gmail.com",
+                        PasswordHash = "jH1TmVC3R6W/UVRP6JW9oce3T7sN5gAp4AR7VFfDkGU=",
+                        FullName = "Ho Van Thanh",
+                        PhoneNumber = "0387053887",
+                        AvatarUrl = "",
+                        DateAttended = new DateTime(2025, 7, 1, 12, 0, 0),
+                        RoleId = "3",
+                        IsDeleted = false
+                    },
+                    new User
+                    {
+                        UserName = "Vu84730",
+                        Email = "tranhuynhvu2k3@gmail.com",
+                        PasswordHash = "lu8DNOhmrNJD0/BAxyPwRQ//0Yv+xxJMOTDVLr0Q0WU=",
+                        FullName = "Tran Huynh Vu",
+                        PhoneNumber = "0325484730",
+                        AvatarUrl = "",
+                        DateAttended = new DateTime(2025, 7, 1, 12, 0, 0),
+                        RoleId = "2",
+                        IsDeleted = false
+                    }
+                );
+                context.SaveChanges();
+            }
+
         }
     }
 }
