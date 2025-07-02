@@ -7,10 +7,11 @@ import { saveToken } from "../service/tokenservice";
 import "../css/login.css";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../provider/authenprovider";
+import { roleMap } from "../model/rolemap";
 
 const LoginComponent = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -19,21 +20,22 @@ const LoginComponent = () => {
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const token = await login(email, password);
-    saveToken(token);
-    loginToContext(token);
-
+    e.preventDefault();
     try {
-      const decoded = jwtDecode(token);
-      console.log("Decoded token:", decoded); //debug token
+      const token = await login(username, password);
+      saveToken(token);
+      loginToContext(token);
 
-      const role =
+      const decoded = jwtDecode(token);
+      console.log("Decoded token:", decoded);
+
+      const rawRole =
         decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
         decoded["role"] ||
-        decoded["roles"] ||
-        "Unknown";
+        decoded["roles"];
+
+      const roleId = Array.isArray(rawRole) ? rawRole[0] : rawRole;
+      const role = roleMap[roleId] || "Unknown";
 
       console.log("Extracted role:", role);
 
@@ -48,16 +50,13 @@ const LoginComponent = () => {
           navigate("/secure/casefile");
           break;
         default:
-          navigate("/secure/home");
+          navigate("/secure/dashboard");
       }
-    } catch (decodeErr) {
-      alert("Invalid token format");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login failed: " + (error.response?.data || error.message));
     }
-  } catch (error) {
-    console.error("Login error:", error); //debug lỗi
-    alert("Login failed: " + (error.response?.data || error.message));
-  }
-};
+  };
 
   return (
     <div className="login-background">
@@ -66,14 +65,14 @@ const LoginComponent = () => {
           <h1 className="login-title">PD SYSTEM</h1>
 
           <Form onSubmit={handleLogin}>
-            <Form.Group controlId="formEmail" className="form-section">
-              <Form.Label>Email or Username</Form.Label>
+            <Form.Group controlId="formUsername" className="form-section">
+              <Form.Label>Username</Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter email"
+                type="text"
+                placeholder="Enter username"
                 className="login-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </Form.Group>
 

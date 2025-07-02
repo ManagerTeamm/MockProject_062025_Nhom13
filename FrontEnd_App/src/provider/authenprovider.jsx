@@ -6,6 +6,7 @@ import React, {
   useMemo,
 } from "react";
 import { jwtDecode } from "jwt-decode";
+import { roleMap } from "../model/rolemap";
 
 const AuthContext = createContext();
 
@@ -26,14 +27,13 @@ export const AuthProvider = ({ children }) => {
   const role = useMemo(() => {
     if (!decoded) return null;
 
-    return (
-      decoded[
-        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-      ] ||
-      decoded["role"] ||
-      decoded["roles"] ||
-      null
-    );
+    const rawRole =
+    decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
+    decoded["role"] ||
+    decoded["roles"] ||
+    null;
+
+  return roleMap[rawRole] || "Unknown";
   }, [decoded]);
 
   useEffect(() => {
