@@ -2,17 +2,17 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/login";
 import Home from "./pages/home";
-import ProfilePage from "./pages/profile";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import ReportPage from "./pages/report";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<LoginPage />} />
-         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/report-manager" element={<ReportPage />} />
       </Routes>
     </Router>
   );
