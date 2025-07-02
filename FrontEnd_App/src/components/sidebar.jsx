@@ -15,8 +15,8 @@ const Sidebar = () => {
             try {
                 const res = await getUser();
                 setUser({
-                    username: res.user.userName,
-                    avatarUrl: res.user.avatarUrl || "",
+                    username: res.userName,
+                    avatarUrl: res.avatarUrl || "",
                 });
             } catch (error) {
                 console.error("Failed to load user", error);

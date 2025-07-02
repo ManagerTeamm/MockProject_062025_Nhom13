@@ -4,7 +4,9 @@ export const getAllUsers = async () => {
     try {
         const response = await fetch(`${Api_Url}/users`);
         if (!response.ok) throw new Error('Failed to fetch users');
-        return await response.json();
+
+        const users = await response.json();
+        return users.data;
     } catch (error) {
         console.error('getAllUsers error:', error);
         throw error;

@@ -8,7 +8,6 @@
         public T? Data { get; set; }
         public IEnumerable<string> Errors { get; set; } = new List<string>();
 
-        // Static methods for convenience
         public static ApiResponseHelper<T> SuccessResult(T data, string message = "Operation completed successfully", int statusCode = 200)
         {
             return new ApiResponseHelper<T>

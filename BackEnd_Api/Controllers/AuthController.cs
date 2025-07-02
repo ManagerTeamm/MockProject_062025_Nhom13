@@ -43,8 +43,9 @@ namespace BackEnd_Api.Controllers
             }
 
             var token = _jwtTokenHelper.GenerateJwtToken(user);
+            var response = ApiResponseHelper<object>.SuccessResult(new {token = token}, "Login successful");
 
-            return Ok(new { Token = token });
+            return Ok(response);
         }
 
         [HttpGet("get-user")]
@@ -55,7 +56,10 @@ namespace BackEnd_Api.Controllers
             {
                 return NotFound("User not found.");
             }
-            return Ok(new {user});
+
+            var response = ApiResponseHelper<User>.SuccessResult(user, "User retrieved successfully");
+
+            return Ok(response);
         }
 
         private string HashPassword(string password)

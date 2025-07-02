@@ -1,6 +1,7 @@
 ﻿using BackEnd_Api.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using BackEnd_Api.Helpers;
 
 namespace BackEnd_Api.Controllers
 {
@@ -23,7 +24,9 @@ namespace BackEnd_Api.Controllers
             {
                 return NotFound("No users found.");
             }
-            return Ok(users);
+            var response = ApiResponseHelper<List<User>>.SuccessResult(users, "Users retrieved successfully");
+
+            return Ok(response);
         }
     }
 }
