@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { loginAccount } from "../service/accountservice";
+import { loginAccount } from "../services/accountService";
 const images = [
   "/images/slide1.jpg",
   "/images/slide2.jpg",
@@ -10,7 +10,7 @@ const images = [
 
 const LoginPage = () => {
   const [currentImage, setCurrentImage] = useState(0);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const account = await loginAccount(email, password);
+      const account = await loginAccount(username, password);
       console.log("Login success:", account);
 
       localStorage.setItem("account", JSON.stringify(account));
@@ -67,13 +67,12 @@ const LoginPage = () => {
             </p>
 
             <Form onSubmit={handleLogin}>
-              <Form.Group className="mb-3" controlId="email">
-                <Form.Label className="fw-medium">Email address</Form.Label>
+                <Form.Group className="mb-3" controlId="userName">
+                <Form.Label className="fw-medium">UserName</Form.Label>
                 <Form.Control
-                  type="email"
-                  placeholder="nhan@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="userName"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </Form.Group>
