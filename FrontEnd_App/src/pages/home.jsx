@@ -26,7 +26,7 @@ function HeaderTopBar() {
             aria-expanded="false"
             style={{ fontSize: '0.85rem' }}
           >
-            English <i className="bi bi-caret-down-fill"></i>
+            English
           </button>
           <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
             <li><a className="dropdown-item small" href="#">Tiếng Việt</a></li>
@@ -183,9 +183,9 @@ function ProgramsResources() {
         {/* Card 3 */}
         <div className="col-12 col-md-4 text-center mb-4">
           <img className="img-fluid" src={helpIsAvailable} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
-          <div className="fw-bold mb-1" style={{color:'#235ea3'}}>CompStat & Crime Stats</div>
+          <div className="fw-bold mb-1" style={{color:'#235ea3'}}>Help Is Available</div>
           <div className="small text-muted">
-            Access crime statistics, traffic data, reports, and CompStat 2.0, an advanced digital crime-tracking system that delivers block-by-block data.
+            Before cops can help others, they must first take care of themselves. Help is available.
           </div>
         </div>
       </div>
