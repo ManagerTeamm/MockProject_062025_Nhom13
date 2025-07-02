@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import '../css/investigation.css';
+import Sidebar from '../components/sidebar';
+import '../styles/investigation.css';
 
 const Investigation = () => {
   const [showRecordPopup, setShowRecordPopup] = useState(false);

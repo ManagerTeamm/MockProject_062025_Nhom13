@@ -448,16 +448,16 @@ namespace BackEnd_Api.Migrations
                 columns: table => new
                 {
                     ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CaseId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TypeReport = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CaseLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReportedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReporterFullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReporterEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReporterPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OfficerApproveId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OfficerApproveId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

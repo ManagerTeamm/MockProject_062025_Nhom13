@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/sidebar';
-import '../css/investigation.css';
-import '../css/evidence.css';
+import '../styles/investigation.css';
+import '../styles/evidence.css';
 
 const evidenceData = [
   { id: '#E0462', caseId: '#20462', desc: 'amcidjfa', date: '13/05/2022', collector: 'Jeames Doan', status: 'Waiting for Test', detail: true },

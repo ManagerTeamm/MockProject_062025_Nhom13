@@ -1,19 +1,11 @@
 import React from 'react';
-import slide1 from '../images/slide1.png'
-import slide2 from '../images/slide2.png'
-import slide3 from '../images/slide3.png'
-import compStatCrimeStats from '../images/compStatCrimeStats.png'
-import bodywornCameras from '../images/bodywornCameras.png'
-import smallLogo from '../images/smallLogo.png'
-import bigLogo from '../images/bigLogo.png'
-import helpIsAvailable from '../images/helpIsAvailable.png'
 import { Carousel } from 'react-bootstrap';
 
 function HeaderTopBar() {
   return (
     <div className="bg-dark text-white small px-3 py-1 d-flex justify-content-between align-items-center" style={{fontSize: 12}}>
       <span>
-        <img src={smallLogo} alt="NYC" height="15" style={{marginRight: 8}} />
+        <img src={"/images/helpIsAvailable.png"} alt="NYC" height="15" style={{marginRight: 8}} />
         New York City Police Department
       </span>
       <span>
@@ -46,7 +38,7 @@ function MainNavbar() {
         <div className="container d-flex flex-column align-items-center justify-content-between">
           <div className="logo-container border-bottom d-flex align-items-center justify-content-center mb-3 w-100">
             <a className="navbar-brand" href="#">
-            <img src={bigLogo} width="256" height="100" alt="NYPD Logo"/>
+            <img src={"/images/bigLogo.png"} width="256" height="100" alt="NYPD Logo"/>
           </a>
           </div>
           {/* Toggler for mobile */}
@@ -103,9 +95,9 @@ function MainNavbar() {
 }
 
 const slides = [
-  { src: slide1, alt: 'Slide 1' },
-  { src: slide2, alt: 'Slide 2' },
-  { src: slide3, alt: 'Slide 3' },
+    { src: "/images/slide1.png", alt: 'Slide 1' },
+    { src: "/images/slide2.png", alt: 'Slide 2' },
+    { src: "/images/slide3.png", alt: 'Slide 3' },
 ];
 
 function HeroSection() {
@@ -166,7 +158,7 @@ function ProgramsResources() {
       <div className="row">
         {/* Card 1 */}
         <div className="col-12 col-md-4 text-center mb-4">
-          <img className="img-fluid" src={compStatCrimeStats} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
+                  <img className="img-fluid" src={"/images/compStatCrimeStats.png"} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
           <div className="fw-bold mb-1" style={{color:'#235ea3'}}>CompStat & Crime Stats</div>
           <div className="small text-muted">
             Access crime statistics, traffic data, reports, and CompStat 2.0, an advanced digital crime-tracking system that delivers block-by-block data.
@@ -174,7 +166,7 @@ function ProgramsResources() {
         </div>
         {/* Card 2 */}
         <div className="col-12 col-md-4 text-center mb-4">
-          <img className="img-fluid" src={bodywornCameras} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
+                  <img className="img-fluid" src={"/images/bodywornCameras.png"} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
           <div className="fw-bold mb-1" style={{color:'#235ea3'}}>Body-worn Cameras</div>
           <div className="small text-muted">
             Body-worn cameras have come to the NYPD. What you need to know.
@@ -182,7 +174,7 @@ function ProgramsResources() {
         </div>
         {/* Card 3 */}
         <div className="col-12 col-md-4 text-center mb-4">
-          <img className="img-fluid" src={helpIsAvailable} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
+          <img className="img-fluid" src={"/images/helpIsAvailable.png"} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
           <div className="fw-bold mb-1" style={{color:'#235ea3'}}>Help Is Available</div>
           <div className="small text-muted">
             Before cops can help others, they must first take care of themselves. Help is available.
@@ -217,7 +209,7 @@ function Footer() {
             <div className="d-flex">
               {/* NYC logo */}
               <img
-                src={smallLogo}
+                src={"/images/smallLogo.png"}
                 alt="NYC logo"
                 height="24"
                 className="mb-2 me-2"
