@@ -19,7 +19,8 @@ namespace BackEnd_Api.Helpers
             var claims = new[]
             {
             new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Role, user.Email)
+            new Claim(ClaimTypes.Role, user.Role.Description)
+ 
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
