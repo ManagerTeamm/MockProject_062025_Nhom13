@@ -1,5 +1,4 @@
-﻿// src/pages/admin/UserList.tsx
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { getAllUsers } from '../../services/adminService';
 import Sidebar from '../../components/sidebar';
 
@@ -36,7 +35,6 @@ const UserList = () => {
     return (
         <div className="container-fluid">
             <div className="row">
-                {/* Sidebar chiếm 2 cột từ md trở lên */}
                 <div className="col-12 col-md-3 col-lg-2 p-0">
                     <Sidebar />
                 </div>

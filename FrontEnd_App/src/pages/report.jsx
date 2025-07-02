@@ -1,4 +1,4 @@
-import { reportService } from "../service/reportService"; 
+import { reportService } from "../services/reportService"; 
 import React, { useEffect, useState } from "react";
 
 const ReportPage = () => {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEnd_Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250701082848_UpdateReportNull")]
-    partial class UpdateReportNull
+    [Migration("20250702031920_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
