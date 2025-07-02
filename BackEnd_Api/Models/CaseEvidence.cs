@@ -2,9 +2,9 @@
 {
     public class CaseEvidence
     {
-        public int CaseId { get; set; }
+        public string CaseId { get; set; }
         public Case Case { get; set; }
-        public int EvidenceId { get; set; }
+        public string EvidenceId { get; set; }
         public Evidence Evidence { get; set; }
         public bool IsDeleted { get; set; }
     }

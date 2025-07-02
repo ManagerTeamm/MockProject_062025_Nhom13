@@ -2,8 +2,9 @@
 {
     public class FinancialInvest
     {
-        public int EvidenceId { get; set; }
+        public string EvidenceId { get; set; }
         public Evidence Evidence { get; set; }
+        public string AttachedFiles { get; set; }
         public string Summary { get; set; }
         public bool IsDeleted { get; set; }
     }

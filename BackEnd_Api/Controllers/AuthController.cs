@@ -7,6 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BackEnd_Api.Helpers;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd_Api.Controllers
 {
@@ -14,55 +17,57 @@ namespace BackEnd_Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IConfiguration _config;
+        private readonly JwtTokenHelper _jwtTokenHelper;
+        private readonly ApplicationDbContext _context;
 
-        public AuthController(UserManager<ApplicationUser> userManager, IConfiguration config)
+        public AuthController(JwtTokenHelper jwtTokenHelper, ApplicationDbContext context)
         {
-            _userManager = userManager;
-            _config = config;
-        }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model)
-        {
-            var user = new ApplicationUser { UserName = model.Username, Email = model.Email };
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-                return Ok(new { message = "User created successfully" });
-
-            return BadRequest(result.Errors);
+            _jwtTokenHelper = jwtTokenHelper;
+            _context = context;
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        public IActionResult Login([FromBody] LoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+            if (loginDto == null || string.IsNullOrEmpty(loginDto.UserName) || string.IsNullOrEmpty(loginDto.Password))
             {
-                var token = GenerateJwtToken(user);
-                return Ok(new { token });
+                return BadRequest("Invalid login request.");
             }
-            return Unauthorized();
+
+            var loginPasswordHash = HashPassword(loginDto.Password);
+            var user = _context.Users.Include(u => u.Role).FirstOrDefault(u => u.UserName == loginDto.UserName && u.PasswordHash == loginPasswordHash);
+            
+            if (user == null)
+            {
+                return Unauthorized("Invalid username or password.");
+            }
+
+            var token = _jwtTokenHelper.GenerateJwtToken(user);
+            var response = ApiResponseHelper<object>.SuccessResult(new {token = token}, "Login successful");
+
+            return Ok(response);
         }
 
-        private string GenerateJwtToken(ApplicationUser user)
+        [HttpGet("get-user")]
+        public IActionResult GetUser([FromQuery]string userName)
         {
-            var claims = new[]
+            var user = _context.Users.FirstOrDefault(u => u.UserName == userName);
+            if (user == null)
             {
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
-        };
+                return NotFound("User not found.");
+            }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var response = ApiResponseHelper<User>.SuccessResult(user, "User retrieved successfully");
 
-            var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddHours(3),
-                claims: claims,
-                signingCredentials: creds);
+            return Ok(response);
+        }
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+        private string HashPassword(string password)
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = Encoding.UTF8.GetBytes(password);
+            var hash = sha256.ComputeHash(bytes);
+            return Convert.ToBase64String(hash);
         }
     }
 }

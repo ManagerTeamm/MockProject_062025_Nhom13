@@ -2,9 +2,10 @@
 {
     public class Role
     {
-        public int RoleId { get; set; }
+        public string RoleId { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<RolePermission> RolePermissions { get; set; }
+        public ICollection<User> Users { get; set; }
     }
 }

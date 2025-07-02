@@ -2,8 +2,8 @@
 {
     public class Inmate
     {
-        public int InmateId { get; set; }
-        public int SentenceId { get; set; }
+        public string InmateId { get; set; }
+        public string SentenceId { get; set; }
         public Sentence Sentence { get; set; }
         public string Fullname { get; set; }
         public string AssignedFacility { get; set; }

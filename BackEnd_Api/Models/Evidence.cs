@@ -2,15 +2,16 @@
 {
     public class Evidence
     {
-        public int EvidenceId { get; set; }
-        public int? MeasureSurveyId { get; set; }
+        public string EvidenceId { get; set; }
+        public string? MeasureSurveyId { get; set; }
         public MeasureSurvey MeasureSurvey { get; set; }
-        public int? WarrantResultId { get; set; }
+        public string? WarrantResultId { get; set; }
         public WarrantResult WarrantResult { get; set; }
-        public int? ReportId { get; set; }
+        public string? ReportId { get; set; }
         public Report Report { get; set; }
         public string CollectedBy { get; set; }
-        public ApplicationUser CollectedByUser { get; set; }
+        public User User { get; set; }
+        public string TypeEvidence { get; set; }
         public string Description { get; set; }
         public DateTime CollectedAt { get; set; }
         public string CurrentLocation { get; set; }
@@ -25,5 +26,6 @@
         public ICollection<CaseEvidence> CaseEvidences { get; set; }
         public ICollection<WarrantEvidence> WarrantEvidences { get; set; }
         public ICollection<SuspectEvidence> SuspectEvidences { get; set; }
+        public ICollection<VictimEvidence> VictimEvidences { get; set; }
     }
 }

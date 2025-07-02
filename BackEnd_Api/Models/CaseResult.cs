@@ -4,8 +4,8 @@ namespace BackEnd_Api.Models
 {
     public class CaseResult
     {
-        public int CaseResultId { get; set; }
-        public int CaseId { get; set; }
+        public string CaseResultId { get; set; }
+        public string CaseId { get; set; }
         public Case Case { get; set; }
         public DateTime ReportTime { get; set; }
         public string ReportAnalyst { get; set; }

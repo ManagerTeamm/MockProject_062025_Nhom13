@@ -2,9 +2,9 @@
 {
     public class ProsecutionSuspect
     {
-        public int ProsecutionId { get; set; }
+        public string ProsecutionId { get; set; }
         public Prosecution Prosecution { get; set; }
-        public int SuspectId { get; set; }
+        public string SuspectId { get; set; }
         public Suspect Suspect { get; set; }
         public bool IsDeleted { get; set; }
     }

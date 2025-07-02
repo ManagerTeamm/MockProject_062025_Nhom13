@@ -2,8 +2,8 @@
 {
     public class Timeline
     {
-        public int TimelineId { get; set; }
-        public int CaseResultId { get; set; }
+        public string TimelineId { get; set; }
+        public string CaseResultId { get; set; }
         public CaseResult CaseResult { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }

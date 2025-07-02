@@ -2,11 +2,11 @@
 {
     public class Prosecution
     {
-        public int ProsecutionId { get; set; }
-        public int CaseId { get; set; }
+        public string ProsecutionId { get; set; }
+        public string CaseId { get; set; }
         public Case Case { get; set; }
         public string ProsecutorId { get; set; }
-        public ApplicationUser Prosecutor { get; set; }
+        public User Prosecutor { get; set; }
         public string Decision { get; set; }
         public DateTime? DecisionDate { get; set; }
         public string Reason { get; set; }

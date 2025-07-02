@@ -2,8 +2,8 @@
 {
     public class RecordInfo
     {
-        public int RecordInfoId { get; set; }
-        public int EvidenceId { get; set; }
+        public string RecordInfoId { get; set; }
+        public string EvidenceId { get; set; }
         public Evidence Evidence { get; set; }
         public string TypeName { get; set; }
         public string Source { get; set; }
