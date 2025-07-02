@@ -12,7 +12,7 @@ namespace BackEnd_Api.Helpers
         {
             // Đảm bảo DB đã được tạo
             context.Database.Migrate();
-
+           
             // ---- Seed Roles ----
             if (!context.Roles.Any())
             {
