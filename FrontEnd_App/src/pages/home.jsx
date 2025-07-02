@@ -44,34 +44,59 @@ function MainNavbar() {
   return (
       <nav className="navbar navbar-expand-lg bg-white">
         <div className="container d-flex flex-column align-items-center justify-content-between">
-          <div className="logo-container border-bottom d-flex align-items-center justify-content-center mb-5" 
-              style={{ width: '100vw'}}>
+          <div className="logo-container border-bottom d-flex align-items-center justify-content-center mb-3 w-100">
             <a className="navbar-brand" href="#">
             <img src={bigLogo} width="256" height="100" alt="NYPD Logo"/>
           </a>
           </div>
-          <div className="collapse navbar-collapse justify-content-center">
-            <ul className="navbar-nav mb-2 mb-lg-0 me-5">
-              <li className="nav-item"><a className="nav-link active" href="#">Home</a></li>
-              <li className="nav-item border-start ps-3 ms-3"><a className="nav-link" href="#">About</a></li>
-              <li className="nav-item border-start ps-3 ms-3"><a className="nav-link" href="#">Bureaus</a></li>
-              <li className="nav-item border-start ps-3 ms-3"><a className="nav-link" href="#">Services</a></li>
-              <li className="nav-item border-start ps-3 ms-3"><a className="nav-link" href="#">Stats</a></li>
-              <li className="nav-item border-start ps-3 ms-3"><a className="nav-link" href="#">Policies</a></li>
-            </ul>
-            <form className="d-flex border rounded-2" role="search" style={{ backgroundColor: '#EEEEEE' }}>
-              <div className="input-group input-group-sm">
-                <span className="input-group-text border-0" style={{ backgroundColor: '#EEEEEE', color: '#878787' }}>
-                  <i className="bi bi-search"></i>
-                </span>
-                <input
-                  className="form-control border-0"
-                  placeholder="Search"
-                  style={{ backgroundColor: '#EEEEEE', color: '#878787' }}
-                />
-              </div>
-            </form>
-          </div>
+          {/* Toggler for mobile */}
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+        <div className="collapse navbar-collapse justify-content-between" id="navbarNav">
+          <ul className="navbar-nav mb-2 mb-lg-0">
+            <li className="nav-item">
+              <a className="nav-link active" href="#">Home</a>
+            </li>
+            <li className="nav-item border-start ps-3 ms-3">
+              <a className="nav-link" href="#">About</a>
+            </li>
+            <li className="nav-item border-start ps-3 ms-3">
+              <a className="nav-link" href="#">Bureaus</a>
+            </li>
+            <li className="nav-item border-start ps-3 ms-3">
+              <a className="nav-link" href="#">Services</a>
+            </li>
+            <li className="nav-item border-start ps-3 ms-3">
+              <a className="nav-link" href="#">Stats</a>
+            </li>
+            <li className="nav-item border-start ps-3 ms-3">
+              <a className="nav-link" href="#">Policies</a>
+            </li>
+        </ul>
+
+          <form className="d-flex border rounded-2 mt-2 mt-lg-0" role="search" style={{ backgroundColor: '#EEEEEE' }}>
+            <div className="input-group input-group-sm">
+              <span className="input-group-text border-0" style={{ backgroundColor: '#EEEEEE', color: '#878787' }}>
+                <i className="bi bi-search"></i>
+              </span>
+              <input
+                className="form-control border-0"
+                placeholder="Search"
+                style={{ backgroundColor: '#EEEEEE', color: '#878787' }}
+              />
+            </div>
+          </form>
+        </div>
         </div>
       </nav>
   );
@@ -89,7 +114,7 @@ function HeroSection() {
       variant="dark"
       fade
       className="shadow rounded" 
-      style={{ maxWidth: 900, maxHeight:500, margin: '0 auto' }}
+      style={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}
     >
       {slides.map((slide, idx) => (
         <Carousel.Item key={idx}>
@@ -140,24 +165,24 @@ function ProgramsResources() {
       <h4 className="fw-bold mb-4 text-center">Programs and Resources</h4>
       <div className="row">
         {/* Card 1 */}
-        <div className="col-md-4 text-center mb-4">
-          <img src={compStatCrimeStats} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
+        <div className="col-12 col-md-4 text-center mb-4">
+          <img className="img-fluid" src={compStatCrimeStats} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
           <div className="fw-bold mb-1" style={{color:'#235ea3'}}>CompStat & Crime Stats</div>
           <div className="small text-muted">
             Access crime statistics, traffic data, reports, and CompStat 2.0, an advanced digital crime-tracking system that delivers block-by-block data.
           </div>
         </div>
         {/* Card 2 */}
-        <div className="col-md-4 text-center mb-4">
-          <img src={bodywornCameras} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
+        <div className="col-12 col-md-4 text-center mb-4">
+          <img className="img-fluid" src={bodywornCameras} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
           <div className="fw-bold mb-1" style={{color:'#235ea3'}}>Body-worn Cameras</div>
           <div className="small text-muted">
             Body-worn cameras have come to the NYPD. What you need to know.
           </div>
         </div>
         {/* Card 3 */}
-        <div className="col-md-4 text-center mb-4">
-          <img src={helpIsAvailable} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
+        <div className="col-12 col-md-4 text-center mb-4">
+          <img className="img-fluid" src={helpIsAvailable} style={{width:350, height:390, objectFit:'contain', marginBottom:7}}></img>
           <div className="fw-bold mb-1" style={{color:'#235ea3'}}>CompStat & Crime Stats</div>
           <div className="small text-muted">
             Access crime statistics, traffic data, reports, and CompStat 2.0, an advanced digital crime-tracking system that delivers block-by-block data.
