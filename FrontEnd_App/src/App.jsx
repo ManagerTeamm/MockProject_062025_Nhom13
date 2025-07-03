@@ -1,7 +1,6 @@
 import React from "react";
-import { RouterProvider } from "react-router-dom";
-import AppRoutes from "./route/routes";
-import { AuthProvider } from "./provider/authenprovider";
+import AppRoutes from "./routes/routes";
+import { AuthProvider } from "./providers/authProvider";
 
 function App() {
   return (

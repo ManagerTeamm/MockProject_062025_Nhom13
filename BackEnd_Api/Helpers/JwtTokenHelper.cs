@@ -1,6 +1,4 @@
 ﻿using BackEnd_Api.Models;
-using BackEnd_Api.Repos;
-using BackEnd_Api.Repos.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

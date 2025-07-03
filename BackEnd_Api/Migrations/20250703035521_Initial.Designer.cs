@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEnd_Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250702031920_Initial")]
+    [Migration("20250703035521_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace BackEnd_Api.Migrations
                     b.Property<DateTime?>("ArrestEndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ArrestStartTime")
+                    b.Property<DateTime?>("ArrestStartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -64,7 +64,7 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("CaseId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -79,7 +79,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Summary")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeCase")
@@ -119,17 +118,15 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("IdentifyMotive")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("ReportAnalyst")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ReportTime")
+                    b.Property<DateTime?>("ReportTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
@@ -137,7 +134,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Summary")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CaseResultId");
@@ -153,11 +149,9 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AnalystTool")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AttachedFiles")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DeviceType")
@@ -182,7 +176,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventName")
@@ -199,7 +192,7 @@ namespace BackEnd_Api.Migrations
                     b.Property<DateTime?>("TimeEnd")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("TimeStart")
+                    b.Property<DateTime?>("TimeStart")
                         .HasColumnType("datetime2");
 
                     b.HasKey("EventId");
@@ -217,10 +210,9 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFile")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CollectedAt")
+                    b.Property<DateTime?>("CollectedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CollectedBy")
@@ -232,7 +224,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -274,14 +265,12 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFiles")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Summary")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EvidenceId");
@@ -301,15 +290,13 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ReceivedAt")
+                    b.Property<DateTime?>("ReceivedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ReportFiles")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ResultSummary")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EvidenceId");
@@ -323,13 +310,12 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("IssuedAt")
+                    b.Property<DateTime?>("IssuedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ProsecutionId")
@@ -349,7 +335,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AssignedFacility")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ExpectedRelease")
@@ -360,7 +345,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HealthStatus")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -370,7 +354,7 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
@@ -390,7 +374,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFile")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EndTime")
@@ -414,7 +397,7 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime?>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TypeInterviewee")
@@ -439,25 +422,23 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedOfficerId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("DeadlineDate")
+                    b.Property<DateTime?>("DeadlineDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("PlanContent")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Result")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -482,11 +463,9 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Result")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Source")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeName")
@@ -521,7 +500,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -542,7 +520,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Decision")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DecisionDate")
@@ -556,7 +533,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Reason")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProsecutionId");
@@ -592,7 +568,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Answer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
@@ -611,7 +586,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Reliability")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("QuestionId");
@@ -628,7 +602,7 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("RecordInfoId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("DateCollected")
+                    b.Property<DateTime?>("DateCollected")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EvidenceId")
@@ -639,11 +613,9 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Source")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Summary")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeName")
@@ -678,7 +650,7 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("OfficerApproveId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("ReportedAt")
+                    b.Property<DateTime?>("ReportedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ReporterEmail")
@@ -718,6 +690,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("SuspectId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ImageUrls")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -736,6 +711,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("VictimId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ImageUrls")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -753,6 +731,9 @@ namespace BackEnd_Api.Migrations
 
                     b.Property<string>("WitnessId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageUrls")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -808,11 +789,10 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -823,7 +803,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SceneDescriptionId");
@@ -848,18 +827,16 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("DateTaken")
+                    b.Property<DateTime?>("DateTaken")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("SceneSketchUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SceneMediaId");
@@ -877,7 +854,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFiles")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CaseId")
@@ -885,24 +861,21 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("LOcationCover")
-                        .IsRequired()
+                    b.Property<string>("LocationCover")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TimeEnd")
+                    b.Property<DateTime?>("TimeEnd")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("TimeStart")
+                    b.Property<DateTime?>("TimeStart")
                         .HasColumnType("datetime2");
 
                     b.HasKey("SceneProtectionId");
@@ -918,7 +891,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFiles")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CaseId")
@@ -929,11 +901,9 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("LocationAssigned")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeSuport")
@@ -961,7 +931,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Condition")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Duration")
@@ -974,7 +943,7 @@ namespace BackEnd_Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("SentencingDate")
+                    b.Property<DateTime?>("SentencingDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("SentenceId");
@@ -992,7 +961,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CaseId")
@@ -1003,53 +971,42 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Dob")
+                    b.Property<DateTime?>("Dob")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FingerPrintsHash")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Fullname")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HealthStatus")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Identification")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("MugshotUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("National")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SuspectId");
@@ -1083,11 +1040,9 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Activity")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AttachedFile")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CaseResultId")
@@ -1101,7 +1056,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartTime")
@@ -1188,19 +1142,26 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Contact")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Fullname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Injuries")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("National")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -1237,7 +1198,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AttachedFile")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CaseId")
@@ -1248,14 +1208,13 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PoliceReponse")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("TimePublish")
+                    b.Property<DateTime?>("TimePublish")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("WarrantName")
@@ -1298,11 +1257,9 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PoliceResponse")
@@ -1335,18 +1292,24 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Contact")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Fullname")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("National")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Statement")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("WitnessId");
