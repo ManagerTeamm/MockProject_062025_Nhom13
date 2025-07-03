@@ -18,7 +18,8 @@ namespace BackEnd_Api.Helpers
             var claims = new[]
             {
                 new Claim("name", user.UserName),
-                new Claim("role", user.Role.Description)
+                new Claim("role", user.Role.Description),
+                new Claim("permissions", string.Join(",", user.Role.RolePermissions.Select(rp => rp.Permission.Description))),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -31,6 +32,5 @@ namespace BackEnd_Api.Helpers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
     }
 }

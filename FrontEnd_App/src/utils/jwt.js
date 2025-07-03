@@ -1,11 +1,5 @@
 import { jwtDecode } from "jwt-decode";
-
-export const getCookie = (name) => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(";").shift();
-    return null;
-};
+import { getCookie } from "./cookie";
 
 const getDecodedToken = () => {
     const token = getCookie("token");
@@ -28,3 +22,8 @@ export const getUserNameFromToken = () => {
     const decoded = getDecodedToken();
     return decoded?.name ?? null;
 };
+
+export const getUserPermissionsFromToken = () => {
+    const decoded = getDecodedToken();
+    return decoded?.permissions ?? [];
+}

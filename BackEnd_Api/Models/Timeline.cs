@@ -7,9 +7,9 @@
         public CaseResult CaseResult { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
-        public string AttachedFile { get; set; }
-        public string Notes { get; set; }
-        public string Activity { get; set; }
+        public string? AttachedFile { get; set; }
+        public string? Notes { get; set; }
+        public string? Activity { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

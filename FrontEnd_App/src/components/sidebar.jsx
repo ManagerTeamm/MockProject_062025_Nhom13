@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getUserRoleFromToken } from "../utils/jwt";
-import { getUser } from "../services/accountService";
+import { getUser } from "../services/userService";
 
 
 const Sidebar = () => {
@@ -9,7 +9,6 @@ const Sidebar = () => {
     const role = getUserRoleFromToken();
     const [user, setUser] = useState({ username: "", avatarUrl: "" });
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 700);
-
     useEffect(() => {
         const fetchUser = async () => {
             try {
@@ -25,6 +24,8 @@ const Sidebar = () => {
 
         fetchUser();
     }, []);
+
+    console.log("User:", role);
 
     useEffect(() => {
         const handleResize = () => {

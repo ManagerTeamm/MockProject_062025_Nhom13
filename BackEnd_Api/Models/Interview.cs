@@ -10,8 +10,8 @@
         public string IntervieweeId { get; set; }
         public string TypeInterviewee { get; set; }
         public string Location { get; set; }
-        public string AttachedFile { get; set; }
-        public DateTime StartTime { get; set; }
+        public string? AttachedFile { get; set; }
+        public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<Question> Questions { get; set; }

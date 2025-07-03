@@ -6,6 +6,7 @@
         public Report Report { get; set; }
         public string SuspectId { get; set; }
         public Suspect Suspect { get; set; }
+        public string? ImageUrls { get; set; }
         public bool IsDeleted { get; set; }
     }
 }
