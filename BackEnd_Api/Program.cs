@@ -38,8 +38,6 @@ namespace BackEnd_Api
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

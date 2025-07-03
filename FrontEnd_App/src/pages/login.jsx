@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../service/authenservice";
-import { saveToken } from "../service/tokenservice";
-import "../css/login.css";
+import { login } from "../utils/authenservice";
+import { saveToken } from "../utils/tokenservice";
+import "../styles/login.css";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../provider/authenprovider";
 import { roleMap } from "../model/rolemap";
@@ -38,20 +38,9 @@ const LoginComponent = () => {
       const role = roleMap[roleId] || "Unknown";
 
       console.log("Extracted role:", role);
-
-      switch (role) {
-        case "Admin":
-          navigate("/secure/admin");
-          break;
-        case "Patrol Officer":
-          navigate("/secure/inmateadmission");
-          break;
-        case "Investigator":
-          navigate("/secure/casefile");
-          break;
-        default:
-          navigate("/secure/dashboard");
-      }
+      
+      role? navigate("/secure/home") : navigate("/login");
+      
     } catch (error) {
       console.error("Login error:", error);
       alert("Login failed: " + (error.response?.data || error.message));

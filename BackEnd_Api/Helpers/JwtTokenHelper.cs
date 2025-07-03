@@ -12,20 +12,17 @@ namespace BackEnd_Api.Helpers
 {
     public class JwtTokenHelper
     {
-        private readonly IRoleRepository _roleRepos;
         private readonly IConfiguration _config;
-        public JwtTokenHelper(IConfiguration config, IRoleRepository roleRepos)
+        public JwtTokenHelper(IConfiguration config)
         {
             _config = config;
-            _roleRepos = roleRepos;
         }
         public async Task<string> GenerateJwtToken(User user)
         {
-            var role = await _roleRepos.GetByIdAsync(user.RoleId);
             var claims = new[]
             {
             new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Role, role.Description)
+            new Claim(ClaimTypes.Role, user.RoleId)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));

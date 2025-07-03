@@ -1,6 +1,6 @@
 import React from "react";
 import { RouterProvider } from "react-router-dom";
-import AppRoutes from "./pages/routes";
+import AppRoutes from "./route/routes";
 import { AuthProvider } from "./provider/authenprovider";
 
 function App() {

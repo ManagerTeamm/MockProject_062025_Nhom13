@@ -39,29 +39,8 @@ namespace BackEnd_Api.Controllers
             if (user == null)
                 return Unauthorized("Invalid credentials");
 
-            var token = GenerateJwtToken(user);
+            var token = _jwtHelper.GenerateJwtToken(user);
             return Ok(new { token = token });
-        }
-
-        private string GenerateJwtToken(User user)
-        {
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Role, user.RoleId)
-        };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(3),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
