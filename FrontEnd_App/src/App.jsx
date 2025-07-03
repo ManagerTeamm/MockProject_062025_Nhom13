@@ -6,6 +6,7 @@ import Investigation from "./pages/investigation";
 import Evidence from "./pages/evidence";
 import UserList from "./pages/admin/userList";
 import ReportPage from "./pages/report";
+import Suspect from "./pages/suspect";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/investigation" element={<Investigation />} />
         <Route path="/evidence" element={<Evidence />} />
+        <Route path="/suspect" element={<Suspect />} />
         <Route path="/admin/userlist" element={<UserList /> } />
         <Route path="/report-manager" element={<ReportPage />} />
       </Routes>

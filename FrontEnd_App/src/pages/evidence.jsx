@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
@@ -24,6 +25,7 @@ const statusClass = status => {
 };
 
 const Evidence = () => {
+  const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [date, setDate] = useState("");
   const [desc, setDesc] = useState("");
@@ -47,20 +49,11 @@ const Evidence = () => {
       <main className="investigation-main">
         <header className="investigation-header">
           <h1>List of evidence</h1>
-          <div className="user-info-box">
-            <div>
-              <span className="user-name">MATTHA, JOHN</span><br />
-              <span className="user-role">Controller</span>
-            </div>
-            <button className="btn-logout" title="Logout">
-              <img src="/icons/Logout.svg" alt="logout" className="icon-logout" />
-            </button>
-          </div>
         </header>
         <section className="section">
           <div className="section-box">
             <div className="section-title-row">
-              <button className="btn-back">BACK <img src="/icons/Back.png" alt="back" className="icon-back" /></button>
+              <button className="btn-back" onClick={() => navigate('/investigation')}>BACK <img src="/icons/Back.png" alt="back" className="icon-back" /></button>
               <div style={{ flex: 1 }} />
               <button className="btn-add" onClick={() => setShowPopup(true)}><img src="/icons/add_circle.svg" alt="add" className="icon-add" /> ADD</button>
             </div>
