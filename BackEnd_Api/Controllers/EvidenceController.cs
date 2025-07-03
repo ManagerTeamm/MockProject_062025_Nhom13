@@ -22,6 +22,17 @@ namespace BackEnd_Api.Controllers
             return Ok(evidences);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EvidenceDto>> GetEvidenceById(string id)
+        {
+            var evidence = await _evidenceRepository.GetEvidenceByIdAsync(id);
+            if (evidence == null)
+            {
+                return NotFound();
+            }
+            return Ok(evidence);
+        }
+
         [HttpPost]
         public async Task<ActionResult<EvidenceDto>> CreateEvidence(CreateEvidenceDto createEvidenceDto)
         {

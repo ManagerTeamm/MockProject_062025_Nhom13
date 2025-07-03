@@ -1,20 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
+import evidenceService from '../services/evidenceService';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
 
-const evidenceData = [
-  { id: '#E0462', caseId: '#20462', desc: 'amcidjfa', date: '13/05/2022', collector: 'Jeames Doan', status: 'Waiting for Test', detail: true },
-  { id: '#E0461', caseId: '#20462', desc: 'amcidjfa', date: '13/05/2022', collector: 'John Tran', status: 'Waiting for Test', detail: true },
-  { id: '#E0460', caseId: '#20462', desc: 'amcidjfa', date: '22/05/2022', collector: 'Maria Ton', status: 'Waiting for Test', detail: true },
-  { id: '#E0222', caseId: '#20400', desc: 'amcidjfa', date: '15/06/2022', collector: 'd', status: 'In Progress', detail: true },
-  { id: '#34304', caseId: '#20400', desc: 'amcidjfa', date: '06/09/2022', collector: 'e', status: 'In Progress', detail: true },
-  { id: '#17188', caseId: '#20400', desc: 'amcidjfa', date: '25/09/2022', collector: 'ấcvfdhbbbbbb', status: 'Tested', detail: true },
-  { id: '#73003', caseId: '#20400', desc: 'amcidjfa', date: '04/10/2022', collector: 'bbbbbbbbbbbbbb', status: 'Waiting for Test', detail: true },
-  { id: '#58825', caseId: '#202222', desc: 'amcidfainor', date: '17/10/2022', collector: 'bbbbbbbbbbbb', status: 'Waiting for Test', detail: true },
-  { id: '#89094', caseId: '#202222', desc: 'amcidjfa', date: '01/11/2022', collector: 'fsdfasdfs', status: 'Tested', detail: true },
-  { id: '#85252', caseId: '#202222', desc: 'amcidjfa', date: '22/11/2022', collector: 'ACE D.', status: 'In Progress', detail: true },
+// Dữ liệu mẫu để fallback khi API chưa sẵn sàng
+const fallbackEvidenceData = [
+  { evidenceId: '#E0462', caseId: '#20462', description: 'amcidjfa', collectedAt: '2022-05-13', collector: 'Jeames Doan', status: 'Waiting for Test' },
+  { evidenceId: '#E0461', caseId: '#20462', description: 'amcidjfa', collectedAt: '2022-05-13', collector: 'John Tran', status: 'Waiting for Test' },
+  { evidenceId: '#E0460', caseId: '#20462', description: 'amcidjfa', collectedAt: '2022-05-22', collector: 'Maria Ton', status: 'Waiting for Test' },
 ];
 
 const statusClass = status => {
@@ -30,7 +25,31 @@ const Evidence = () => {
   const [date, setDate] = useState("");
   const [desc, setDesc] = useState("");
   const [files, setFiles] = useState([]);
+  const [evidences, setEvidences] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const fileInputRef = React.useRef();
+
+  // Fetch evidences from API
+  useEffect(() => {
+    const fetchEvidences = async () => {
+      try {
+        setLoading(true);
+        const data = await evidenceService.getAllEvidences();
+        setEvidences(data);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch evidences:', err);
+        setError('Failed to load evidences. Using fallback data.');
+        // Sử dụng dữ liệu fallback nếu API không hoạt động
+        setEvidences(fallbackEvidenceData);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvidences();
+  }, []);
 
   const handleFileChange = (e) => {
     setFiles([...files, ...Array.from(e.target.files)]);
@@ -43,12 +62,52 @@ const Evidence = () => {
     fileInputRef.current && fileInputRef.current.click();
   };
 
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB'); // Format: DD/MM/YYYY
+  };
+
+  // Handle form submission for creating new evidence
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const evidenceData = {
+        caseId: '#20462', // Có thể thêm field để chọn case
+        description: desc,
+        collectedAt: date,
+        collectedBy: 'Current User', // Có thể lấy từ context/auth
+        typeEvidence: 'Physical',
+        currentLocation: 'Evidence Room',
+        attachedFile: files.map(f => f.name).join(','),
+        status: 'Waiting for Test'
+      };
+
+      await evidenceService.createEvidence(evidenceData);
+      
+      // Refresh the list
+      const updatedEvidences = await evidenceService.getAllEvidences();
+      setEvidences(updatedEvidences);
+      
+      // Reset form
+      setShowPopup(false);
+      setDate('');
+      setDesc('');
+      setFiles([]);
+    } catch (err) {
+      console.error('Failed to create evidence:', err);
+      alert('Failed to create evidence. Please try again.');
+    }
+  };
+
   return (
     <div className="investigation-container">
       <Sidebar />
       <main className="investigation-main">
         <header className="investigation-header">
           <h1>List of evidence</h1>
+          {error && <div style={{color: 'red', fontSize: '14px', marginTop: '10px'}}>{error}</div>}
         </header>
         <section className="section">
           <div className="section-box">
@@ -67,32 +126,36 @@ const Evidence = () => {
                 <input type="date" className="filter-date" placeholder="Select a day" />
               </div>
             </div>
-            <table className="info-table">
-              <thead>
-                <tr>
-                  <th>Evidence ID</th>
-                  <th>Case ID</th>
-                  <th>Description</th>
-                  <th>Date collected</th>
-                  <th>Collector</th>
-                  <th>Status</th>
-                  <th>Detail file</th>
-                </tr>
-              </thead>
-              <tbody>
-                {evidenceData.map((row, idx) => (
-                  <tr key={row.id}>
-                    <td>{row.id}</td>
-                    <td>{row.caseId}</td>
-                    <td>{row.desc}</td>
-                    <td>{row.date}</td>
-                    <td>{row.collector}</td>
-                    <td><span className={statusClass(row.status)}>{row.status}</span></td>
-                    <td><a href="#">See details</a></td>
+            {loading ? (
+              <div style={{textAlign: 'center', padding: '20px'}}>Loading evidences...</div>
+            ) : (
+              <table className="info-table">
+                <thead>
+                  <tr>
+                    <th>Evidence ID</th>
+                    <th>Case ID</th>
+                    <th>Description</th>
+                    <th>Date collected</th>
+                    <th>Collector</th>
+                    <th>Status</th>
+                    <th>Detail file</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {evidences.map((row, idx) => (
+                    <tr key={row.evidenceId || row.id}>
+                      <td>{row.evidenceId || row.id}</td>
+                      <td>{row.caseId}</td>
+                      <td>{row.description || row.desc}</td>
+                      <td>{formatDate(row.collectedAt || row.date)}</td>
+                      <td>{row.collector}</td>
+                      <td><span className={statusClass(row.status)}>{row.status}</span></td>
+                      <td><a href="#">See details</a></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
             <div className="pagination-row">
               <span>Show <select><option>10</option></select> entries</span>
               <div className="pagination">
@@ -110,7 +173,7 @@ const Evidence = () => {
             <div className="popup-form">
               <h2 className="popup-title">Add the Evidence</h2>
               <div className="popup-sub">This form is used to record evidence during a crime investigation.</div>
-              <form onSubmit={e => { e.preventDefault(); setShowPopup(false); }}>
+              <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>Date collected <span style={{color:'red'}}>*</span></label><br />
                   <input type="date" value={date} onChange={e => setDate(e.target.value)} className="popup-date" required />

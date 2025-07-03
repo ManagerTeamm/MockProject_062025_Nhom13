@@ -31,6 +31,28 @@ namespace BackEnd_Api.Services
                 .ToListAsync();
         }
 
+        public async Task<EvidenceDto> GetEvidenceByIdAsync(string id)
+        {
+            var evidence = await _context.Evidences
+                .Where(e => e.EvidenceId == id && !e.IsDeleted)
+                .Include(e => e.User)
+                .Include(e => e.CaseEvidences)
+                .FirstOrDefaultAsync();
+
+            if (evidence == null)
+                return null;
+
+            return new EvidenceDto
+            {
+                EvidenceId = evidence.EvidenceId,
+                CaseId = evidence.CaseEvidences.FirstOrDefault()?.CaseId,
+                Description = evidence.Description,
+                CollectedAt = evidence.CollectedAt,
+                Collector = evidence.User?.FullName ?? "Unknown",
+                Status = evidence.Status
+            };
+        }
+
         public async Task<EvidenceDto> CreateEvidenceAsync(CreateEvidenceDto createEvidenceDto)
         {
             var evidence = new Evidence
