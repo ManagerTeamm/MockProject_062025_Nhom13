@@ -1,13 +1,6 @@
 ﻿using BackEnd_Api.Dtos.Auth;
 using BackEnd_Api.Helpers;
-using BackEnd_Api.Models;
-using BackEnd_Api.Repos.Interface;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-
 using Microsoft.AspNetCore.Mvc;
-using BackEnd_Api.Helpers;
-using Microsoft.EntityFrameworkCore;
 using BackEnd_Api.Repositories.Interfaces;
 
 namespace BackEnd_Api.Controllers

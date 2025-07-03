@@ -19,8 +19,8 @@ namespace BackEnd_Api.Migrations
                     TypeCase = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -34,8 +34,8 @@ namespace BackEnd_Api.Migrations
                 {
                     MeasureSurveyId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Result = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -75,10 +75,10 @@ namespace BackEnd_Api.Migrations
                 {
                     CaseResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ReportTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReportAnalyst = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdentifyMotive = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ReportTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ReportAnalyst = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdentifyMotive = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -98,12 +98,12 @@ namespace BackEnd_Api.Migrations
                 {
                     SceneProtectionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LOcationCover = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LocationCover = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -124,9 +124,9 @@ namespace BackEnd_Api.Migrations
                     SceneSuportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeSuport = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LocationAssigned = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LocationAssigned = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -146,20 +146,20 @@ namespace BackEnd_Api.Migrations
                 {
                     SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    National = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Dob = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Identification = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    National = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Dob = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Identification = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CatchTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MugshotUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FingerPrintsHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HealthStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MugshotUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FingerPrintsHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HealthStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -179,9 +179,12 @@ namespace BackEnd_Api.Migrations
                 {
                     VictimId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Injuries = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    National = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Injuries = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -202,9 +205,12 @@ namespace BackEnd_Api.Migrations
                 {
                     WitnessId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Statement = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fullname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    National = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Contact = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Statement = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -277,8 +283,8 @@ namespace BackEnd_Api.Migrations
                     CaseResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SentenceType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Condition = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SentencingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Condition = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SentencingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -305,9 +311,9 @@ namespace BackEnd_Api.Migrations
                     CaseResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Activity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Activity = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -328,10 +334,10 @@ namespace BackEnd_Api.Migrations
                     EventId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeStart = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TimeEnd = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -358,7 +364,7 @@ namespace BackEnd_Api.Migrations
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OfficerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SuspectMirandaSignature = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ArrestStartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ArrestStartTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ArrestEndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -390,11 +396,11 @@ namespace BackEnd_Api.Migrations
                     InvestigationPlanId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOfficerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DeadlineDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Result = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeadlineDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Result = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PlanContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PlanContent = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -421,9 +427,9 @@ namespace BackEnd_Api.Migrations
                     ProsecutionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProsecutorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Decision = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Decision = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DecisionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -453,7 +459,7 @@ namespace BackEnd_Api.Migrations
                     Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CaseLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReportedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReportedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ReporterFullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReporterEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ReporterPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -483,10 +489,10 @@ namespace BackEnd_Api.Migrations
                 {
                     SceneDescriptionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Provider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -512,10 +518,10 @@ namespace BackEnd_Api.Migrations
                 {
                     SceneMediaId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DateTaken = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SceneSketchUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateTaken = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SceneSketchUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CapturedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -569,9 +575,9 @@ namespace BackEnd_Api.Migrations
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PoliceReponse = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     WarrantName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TimePublish = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TimePublish = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -598,10 +604,10 @@ namespace BackEnd_Api.Migrations
                     InmateId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SentenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AssignedFacility = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AssignedFacility = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpectedRelease = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    HealthStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HealthStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -626,8 +632,8 @@ namespace BackEnd_Api.Migrations
                     IntervieweeId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TypeInterviewee = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -654,8 +660,8 @@ namespace BackEnd_Api.Migrations
                 {
                     IndictmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProsecutionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IssuedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IssuedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -699,6 +705,7 @@ namespace BackEnd_Api.Migrations
                 {
                     ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SuspectId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageUrls = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -723,6 +730,7 @@ namespace BackEnd_Api.Migrations
                 {
                     ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     VictimId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageUrls = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -747,6 +755,7 @@ namespace BackEnd_Api.Migrations
                 {
                     ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     WitnessId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ImageUrls = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -772,8 +781,8 @@ namespace BackEnd_Api.Migrations
                     WarrantResultId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     WarrantId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PoliceResponse = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TimeActive = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -802,8 +811,8 @@ namespace BackEnd_Api.Migrations
                     InterviewId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Reliability = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Answer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Reliability = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -833,10 +842,10 @@ namespace BackEnd_Api.Migrations
                     ReportId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CollectedBy = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeEvidence = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CollectedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CollectedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CurrentLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFile = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -900,8 +909,8 @@ namespace BackEnd_Api.Migrations
                 {
                     EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DeviceType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AnalystTool = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AnalystTool = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -920,8 +929,8 @@ namespace BackEnd_Api.Migrations
                 columns: table => new
                 {
                     EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AttachedFiles = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -941,9 +950,9 @@ namespace BackEnd_Api.Migrations
                 {
                     EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LabName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReportFiles = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResultSummary = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReceivedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReportFiles = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResultSummary = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReceivedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -962,7 +971,7 @@ namespace BackEnd_Api.Migrations
                 columns: table => new
                 {
                     EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -983,9 +992,9 @@ namespace BackEnd_Api.Migrations
                     RecordInfoId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     EvidenceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DateCollected = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateCollected = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

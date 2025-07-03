@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../utils/authenservice";
-import { saveToken } from "../utils/tokenservice";
+import { login } from "../services/authService";
+import { saveCookie } from "../utils/cookie";
 import "../styles/login.css";
-import { jwtDecode } from "jwt-decode";
-import { useAuth } from "../provider/authenprovider";
-import { roleMap } from "../model/rolemap";
 import { getUserRoleFromToken } from "../utils/jwt";
 
 const LoginComponent = () => {
@@ -15,20 +12,19 @@ const LoginComponent = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { login: loginToContext } = useAuth();
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const data = await loginAccount(username, password);
+      const data = await login(username, password);
       console.log("Login success:", data);
 
-      saveCookie("token", data.token);
+      saveCookie("token", data);
       const role = getUserRoleFromToken();
+      console.log("User role:", role);
       
-      role? navigate("/secure/home") : navigate("/login");
-      
+      role? navigate("/secure/dashboard") : navigate("/login");
     } catch (error) {
       console.error("Login error:", error);
       alert("Login failed: " + (error.response?.data || error.message));
