@@ -1,5 +1,5 @@
 import React from "react";
-import sampleCases from '../samples/case';
+import sampleCases from '../../samples/case';
 import { useState } from 'react';
 
 const CaseFile = () => {

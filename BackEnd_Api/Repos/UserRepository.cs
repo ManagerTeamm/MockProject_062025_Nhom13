@@ -1,4 +1,5 @@
-﻿using BackEnd_Api.Models;
+﻿using BackEnd_Api.Dtos.Auth;
+using BackEnd_Api.Models;
 using BackEnd_Api.Repos.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -19,7 +20,9 @@ namespace BackEnd_Api.Repos
         {
             var hashed = HashPassword(password);
             return await _context.Users.Include(u => u.Role)
-                                       .FirstOrDefaultAsync(u => u.UserName == username && u.PasswordHash == hashed);
+                                         .ThenInclude(r => r.RolePermissions)
+                                         .ThenInclude(rp => rp.Permission)
+                                         .FirstOrDefaultAsync(u => u.UserName == username && u.PasswordHash == hashed);
         }
         private string HashPassword(string password)
         {

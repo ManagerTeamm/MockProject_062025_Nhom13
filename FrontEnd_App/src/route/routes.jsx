@@ -3,14 +3,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../provider/authenprovider";
 import ProtectedRoute from "./protectedroute";
 import LoginComponent from "../pages/login";
-import Main from "../pages/main";
-import AdminPage from "../pages/admin";
-import InmateAdmissions from "../pages/inmateadmission";
-import CaseFile from "../pages/casefile";
-import Home from "../pages/home";
+import Main from "../pages/samples/main";
+import AdminPage from "../pages/samples/admin/admin";
+import InmateAdmissions from "../pages/samples/inmateadmission";
+import CaseFile from "../pages/samples/casefile";
+import Home from "../pages/samples/home";
 
 const AppRoutes = () => {
-  const { token, role, loading } = useAuth();
+  const {loading } = useAuth();
 
   if (loading) return <div>Loading...</div>;
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import inmateAdmissions from '../samples/inmateadmission';
+import inmateAdmissions from '../../samples/inmateadmission';
 
 const InmateAdmissions = () => {
   const [search, setSearch] = useState('');
