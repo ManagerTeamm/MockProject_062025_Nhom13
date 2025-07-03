@@ -1,0 +1,21 @@
+[33mdc10c34[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mThaiThanhDat[m[33m, [m[1;31morigin/ThaiThanhDat[m[33m)[m HEAD@{0}: pull origin ThaiThanhDat --rebase: Fast-forward
+[33ma8937c5[m HEAD@{1}: checkout: moving from ThaiThanhDat1 to ThaiThanhDat
+[33m497efd0[m[33m ([m[1;32mThaiThanhDat1[m[33m)[m HEAD@{2}: commit: api Evidence
+[33m6618818[m[33m ([m[1;31morigin/ThaiThanhDat1[m[33m)[m HEAD@{3}: commit: api Evidence
+[33m28d5037[m[33m ([m[1;32mdev[m[33m)[m HEAD@{4}: checkout: moving from dev to ThaiThanhDat1
+[33m28d5037[m[33m ([m[1;32mdev[m[33m)[m HEAD@{5}: commit: screen suspect
+[33m97cc7ff[m[33m ([m[1;31morigin/dev[m[33m)[m HEAD@{6}: pull origin dev: Fast-forward
+[33m4f798fd[m HEAD@{7}: checkout: moving from ThaiThanhDat to dev
+[33ma8937c5[m HEAD@{8}: checkout: moving from dev to ThaiThanhDat
+[33m4f798fd[m HEAD@{9}: checkout: moving from ThaiThanhDat to dev
+[33ma8937c5[m HEAD@{10}: reset: moving to a8937c5
+[33mce51346[m HEAD@{11}: commit: screen evidence and screen investigation
+[33ma8937c5[m HEAD@{12}: commit: screen evidence and screen investigation
+[33me33ca32[m HEAD@{13}: checkout: moving from dev to ThaiThanhDat
+[33m4f798fd[m HEAD@{14}: pull origin dev: Fast-forward
+[33me8155de[m HEAD@{15}: checkout: moving from ThaiThanhDat to dev
+[33me33ca32[m HEAD@{16}: commit: entity
+[33md60c780[m HEAD@{17}: checkout: moving from dev to ThaiThanhDat
+[33me8155de[m HEAD@{18}: checkout: moving from ThaiThanhDat to dev
+[33md60c780[m HEAD@{19}: commit: Test
+[33me8155de[m HEAD@{20}: clone: from https://github.com/ManagerTeamm/MockProject_062025_Nhom13.git
