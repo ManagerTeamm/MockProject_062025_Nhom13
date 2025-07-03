@@ -6,8 +6,8 @@
         public string TypeCase { get; set; }
         public string Severity { get; set; }
         public string Status { get; set; }
-        public string Summary { get; set; }
-        public DateTime CreateAt { get; set; }
+        public string? Summary { get; set; }
+        public DateTime? CreateAt { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<UserCase> UserCases { get; set; }
         public ICollection<Victim> Victims { get; set; }

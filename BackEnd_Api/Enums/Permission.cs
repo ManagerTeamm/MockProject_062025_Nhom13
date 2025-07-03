@@ -1,0 +1,38 @@
+﻿namespace BackEnd_Api.Enums
+{
+    public enum Permission
+    {
+        View_All_Cases,
+        Manage_Roles,
+        Add_Evidence,
+        Analyze_Evidence,
+        Approve_Arrest,
+        Create_Arrest,
+        Manage_Warrants,
+        Conduct_Interview,
+        View_Financial_Records,
+        Manage_Inmates,
+        Access_Forensics_Lab,
+        Create_Case,
+        Manage_Investigation_Plans,
+        View_Sensitive_Data,
+        Issue_Indictment,
+        Approve_Prosecution,
+        Issue_Sentence,
+        Manage_Timeline_Entries,
+        View_Victims,
+        View_Suspects,
+        View_Witnesses,
+        Conduct_Physical_Invest,
+        Edit_Case,
+        Conduct_Digital_Invest,
+        Conduct_Financial_Invest,
+        Create_Measure_Survey,
+        Delete_Case,
+        Approve_Report,
+        Create_Report,
+        Edit_Report,
+        Delete_Report,
+        Manage_Users
+    }
+}

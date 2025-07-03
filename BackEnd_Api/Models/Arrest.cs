@@ -9,7 +9,7 @@
         public string OfficerId { get; set; }
         public User User { get; set; }
         public string SuspectMirandaSignature { get; set; }
-        public DateTime ArrestStartTime { get; set; }
+        public DateTime? ArrestStartTime { get; set; }
         public DateTime? ArrestEndTime { get; set; }
         public bool IsDeleted { get; set; }
     }
