@@ -1,9 +1,12 @@
 ﻿using BackEnd_Api.Models;
+using BackEnd_Api.Repos;
+using BackEnd_Api.Repos.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BackEnd_Api.Helpers
 {
@@ -13,6 +16,7 @@ namespace BackEnd_Api.Helpers
         public JwtTokenHelper(IConfiguration config) => _config = config;
 
         public string GenerateJwtToken(User user)
+
         {
 
             var claims = new[]
