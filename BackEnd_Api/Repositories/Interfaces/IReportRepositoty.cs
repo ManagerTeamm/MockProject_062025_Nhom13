@@ -5,6 +5,6 @@ namespace BackEnd_Api.Repositories.Interfaces
 {
     public interface IReportRepositoty : IRepository<Report>
     {
-        ApiResponseHelper<Report> GetReportDetail(string id);
+        Task<object> GetReportDetail(string id);
     }
 }

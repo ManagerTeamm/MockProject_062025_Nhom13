@@ -1,5 +1,6 @@
 ﻿using BackEnd_Api.Helpers;
 using BackEnd_Api.Models;
+using BackEnd_Api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +8,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd_Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(Roles = "Report Approver")]
     public class ReportController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public ReportController(ApplicationDbContext context)
+        private readonly IReportRepositoty _reportRepositoty;
+        private readonly IUserRepository _userRepository;
+        public ReportController(ApplicationDbContext context,
+                                IReportRepositoty reportRepositoty,
+                                IUserRepository userRepository)
         {
             _context = context;
+            _reportRepositoty = reportRepositoty;
+            _userRepository = userRepository;
         }
         [HttpGet("get-reports")]
         public async Task<IActionResult> GetReports()
@@ -36,32 +42,33 @@ namespace BackEnd_Api.Controllers
             }
         }
 
-        [HttpGet("/report-detail/{id}")]
+        [HttpGet("report-detail/{id}")]
         public async Task<IActionResult> GetReportDetail(string id)
         {
             try
             {
-                var reportDetail = await _context.Reports
-                                 .Include(r => r.ReportVictims)
-                                     .ThenInclude(rv => rv.Victim)
-                                 .Include(r => r.ReportWitness)
-                                     .ThenInclude(rw => rw.Witness)
-                                 .Include(r => r.ReportSuspects)
-                                     .ThenInclude(rs => rs.Suspect)
-                                 .Include(r => r.Case)
-                                 .FirstOrDefaultAsync(r => r.ReportId == id);
-                if(reportDetail == null)
+                if (id != null)
                 {
-                    var notFoundResponse = ApiResponseHelper<string>.FailureResult("Report not found", new[] { $"No report found with ID: {id}" }, 404);
-                    return NotFound(notFoundResponse);
+                    //var userPermissions = _userRepository.GetPermissions();
+                    //if (!userPermissions.Contains("Manage_Users"))
+                    //    return Forbid("You do not have permission to view users.");
+
+                    var reportDetail = await _reportRepositoty.GetReportDetail(id);
+
+                    if (reportDetail == null)
+                    {
+                        return NotFound(ApiResponseHelper<string>.NotFoundResult("Not found report id = " + id));
+                    }
+
+                    var response = ApiResponseHelper<object>.SuccessResult(reportDetail);
+
+                    return Ok(response);
                 }
-                var response = ApiResponseHelper<Report>.SuccessResult(reportDetail);
-                return Ok(response);
+                return NotFound(ApiResponseHelper<string>.NotFoundResult("Not found report id = " + id));
             }
             catch(Exception e)
             {
-                var response = ApiResponseHelper<string>.FailureResult("Failed to found  sample reports", new[] { e.Message }, 500);
-                return StatusCode(500, response);
+                return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] {e.Message}, 500));
             }
         }
     }

@@ -18,5 +18,15 @@ export const reportService ={
             console.error('Error fetching reports:', error);
             throw error;
         }
+    },
+
+    getReportDetail: async (reportId) => {
+        try {
+            const response = await apiClient.get(`/report-detail/${reportId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching report detail:', error);
+            throw error;
+        }
     }
 };

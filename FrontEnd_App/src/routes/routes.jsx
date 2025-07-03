@@ -10,6 +10,8 @@ import CaseFile from "../samples/pages/casefile";
 import Home from "../pages/home";
 import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
+import ReportDetail from "../pages/reportDetail";
+import ReportPage from "../pages/report";
 
 const AppRoutes = () => {
   const {loading } = useAuth();
@@ -23,7 +25,9 @@ const AppRoutes = () => {
     { path: "/service", element: <div>Service Page</div> },
     { path: "/about-us", element: <div>About Us</div> },
     { path: "/home", element: <Home /> },
-    { path: "/reportSupect", element: <ReportSuspect/>},
+    { path: "/reportSupect", element: <ReportSuspect /> },
+    { path: "/report-list", element: <ReportPage /> },
+    { path: "/report-detail/:reportId", element: <ReportDetail /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,

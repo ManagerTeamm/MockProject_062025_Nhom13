@@ -631,6 +631,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("ReportId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AddressReported")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CaseId")
                         .HasColumnType("nvarchar(450)");
 
@@ -646,6 +649,9 @@ namespace BackEnd_Api.Migrations
 
                     b.Property<string>("OfficerApproveId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RelationshipToIncident")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReportedAt")
                         .HasColumnType("datetime2");
@@ -665,6 +671,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("Severity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TimeOfOccurrence")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TypeReport")
                         .IsRequired()

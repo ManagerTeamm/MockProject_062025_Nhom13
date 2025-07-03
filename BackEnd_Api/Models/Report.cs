@@ -20,5 +20,8 @@
         public ICollection<ReportSuspect> ReportSuspects { get; set; }
         public ICollection<ReportWitness> ReportWitness { get; set; }
         public ICollection<Evidence> Evidences { get; set; }
+        public string? RelationshipToIncident { get; set; }
+        public DateTime? TimeOfOccurrence { get; set; }
+        public string? AddressReported { get; set; }
     }
 }
