@@ -3,7 +3,7 @@ using BackEnd_Api.Models;
 using BackEnd_Api.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace BackEnd_Api.Services
+namespace BackEnd_Api.Repositories
 {
     public class EvidenceRepository : IEvidenceRepository
     {
@@ -24,7 +24,7 @@ namespace BackEnd_Api.Services
                     EvidenceId = e.EvidenceId,
                     CaseId = e.CaseEvidences.FirstOrDefault().CaseId,
                     Description = e.Description,
-                    CollectedAt = e.CollectedAt,
+                    CollectedAt = (DateTime)e.CollectedAt,
                     Collector = e.User.FullName,
                     Status = e.Status
                 })
@@ -67,7 +67,7 @@ namespace BackEnd_Api.Services
                 EvidenceId = evidence.EvidenceId,
                 CaseId = caseEvidence.CaseId,
                 Description = evidence.Description,
-                CollectedAt = evidence.CollectedAt,
+                CollectedAt = (DateTime)evidence.CollectedAt,
                 Collector = user?.FullName ?? "Unknown",
                 Status = evidence.Status
             };
