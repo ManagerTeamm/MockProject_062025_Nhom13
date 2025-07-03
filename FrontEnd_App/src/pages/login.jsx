@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { loginAccount } from "../services/accountService";
+import { saveCookie } from "../utils/cookie";
 const images = [
   "/images/slide1.jpg",
   "/images/slide2.jpg",
@@ -24,10 +25,10 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const account = await loginAccount(username, password);
-      console.log("Login success:", account);
+      const data = await loginAccount(username, password);
+      console.log("Login success:", data);
 
-      localStorage.setItem("account", JSON.stringify(account));
+      saveCookie("token", data.token);
 
       navigate("/home");
     } catch (err) {

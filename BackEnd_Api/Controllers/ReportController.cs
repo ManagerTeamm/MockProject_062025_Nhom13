@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd_Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(Roles = "Report Approver")]
@@ -34,6 +35,7 @@ namespace BackEnd_Api.Controllers
                 return StatusCode(500, response);
             }
         }
+
         [HttpPost("insert-sample")]
         public async Task<IActionResult> InsertSampleReports()
         {

@@ -1,12 +1,13 @@
 
 using BackEnd_Api.Helpers;
 using BackEnd_Api.Models;
-using BackEnd_Api.Services.Interface;
+using BackEnd_Api.Repositories.Interfaces;
+using BackEnd_Api.Repositories;
 using BackEnd_Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
 
@@ -20,7 +21,37 @@ namespace BackEnd_Api
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Insert: 'Bearer {token}'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            In = ParameterLocation.Header,
+                            Name = "Authorization",
+                            Scheme = "Bearer"
+                        },
+                        new List<string>()
+                    }
+                });
+            });
 
             builder.Services.AddCors(options =>
             {
@@ -35,6 +66,9 @@ namespace BackEnd_Api
 
             //Services
             builder.Services.AddScoped<JwtTokenHelper>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 
             builder.Services.AddAuthentication(options =>

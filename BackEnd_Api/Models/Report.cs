@@ -9,7 +9,7 @@
         public string Severity { get; set; }
         public string? Description { get; set; }
         public string CaseLocation { get; set; }
-        public DateTime ReportedAt { get; set; }
+        public DateTime? ReportedAt { get; set; }
         public string ReporterFullname { get; set; }
         public string ReporterEmail { get; set; }
         public string ReporterPhoneNumber { get; set; }

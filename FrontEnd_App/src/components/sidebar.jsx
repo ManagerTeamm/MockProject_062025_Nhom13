@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getUserRoleFromToken } from "../utils/jwt";
-import { getUser } from "../services/accountService";
+import { getUser } from "../services/userService";
 
 const Sidebar = () => {
     const location = useLocation();
@@ -25,6 +25,8 @@ const Sidebar = () => {
 
         fetchUser();
     }, []);
+
+    console.log("User:", role);
 
     useEffect(() => {
         const handleResize = () => {

@@ -1,12 +1,14 @@
 ﻿import React, { useEffect, useState } from 'react';
-import { getAllUsers } from '../../services/adminService';
+import { getAllUsers } from '../../services/userService';
 import Sidebar from '../../components/sidebar';
+import { getRoleLabel } from '../../utils/roleHelper';
 import '../../styles/investigation.css';
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
+
         const fetchUsers = async () => {
             try {
                 const data = await getAllUsers();
@@ -21,16 +23,6 @@ const UserList = () => {
 
     const handleViewDetail = (user) => {
         // Hiện modal hoặc console.log(user);
-    };
-
-    const getRoleLabel = (roleId) => {
-        switch (roleId) {
-            case 1: return 'Admin';
-            case 2: return 'Detective';
-            case 3: return 'Officer';
-            case 4: return 'Moderator';
-            default: return 'User';
-        }
     };
 
     return (

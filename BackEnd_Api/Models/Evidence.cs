@@ -12,10 +12,10 @@
         public string CollectedBy { get; set; }
         public User User { get; set; }
         public string TypeEvidence { get; set; }
-        public string Description { get; set; }
-        public DateTime CollectedAt { get; set; }
+        public string? Description { get; set; }
+        public DateTime? CollectedAt { get; set; }
         public string CurrentLocation { get; set; }
-        public string AttachedFile { get; set; }
+        public string? AttachedFile { get; set; }
         public string Status { get; set; }
         public bool IsDeleted { get; set; }
         public DigitalInvest DigitalInvest { get; set; }
