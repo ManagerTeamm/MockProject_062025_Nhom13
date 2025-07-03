@@ -23,15 +23,33 @@ namespace BackEnd_Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<EvidenceDto>> CreateEvidence(CreateEvidenceDto createEvidenceDto)
+        public async Task<ActionResult<EvidenceDto>> CreateEvidence([FromBody] CreateEvidenceDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var created = await _evidenceRepository.CreateEvidenceAsync(dto);
+            return CreatedAtAction(nameof(GetEvidences), new { id = created.EvidenceId }, created);
+        }
 
-            var evidence = await _evidenceRepository.CreateEvidenceAsync(createEvidenceDto);
-            return CreatedAtAction(nameof(GetEvidences), new { id = evidence.EvidenceId }, evidence);
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EvidenceDto>> GetEvidenceById(string id)
+        {
+            var evidence = await _evidenceRepository.GetEvidenceByIdAsync(id);
+            if (evidence == null) return NotFound();
+            return Ok(evidence);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<EvidenceDto>> UpdateEvidence(string id, [FromBody] CreateEvidenceDto dto)
+        {
+            var updated = await _evidenceRepository.UpdateEvidenceAsync(id, dto);
+            if (updated == null) return NotFound();
+            return Ok(updated);
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<EvidenceDto>>> SearchEvidence([FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] string status)
+        {
+            var result = await _evidenceRepository.SearchEvidenceAsync(from, to, status);
+            return Ok(result);
         }
     }
 }

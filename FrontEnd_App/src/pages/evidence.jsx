@@ -1,21 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
-
-const evidenceData = [
-  { id: '#E0462', caseId: '#20462', desc: 'amcidjfa', date: '13/05/2022', collector: 'Jeames Doan', status: 'Waiting for Test', detail: true },
-  { id: '#E0461', caseId: '#20462', desc: 'amcidjfa', date: '13/05/2022', collector: 'John Tran', status: 'Waiting for Test', detail: true },
-  { id: '#E0460', caseId: '#20462', desc: 'amcidjfa', date: '22/05/2022', collector: 'Maria Ton', status: 'Waiting for Test', detail: true },
-  { id: '#E0222', caseId: '#20400', desc: 'amcidjfa', date: '15/06/2022', collector: 'd', status: 'In Progress', detail: true },
-  { id: '#34304', caseId: '#20400', desc: 'amcidjfa', date: '06/09/2022', collector: 'e', status: 'In Progress', detail: true },
-  { id: '#17188', caseId: '#20400', desc: 'amcidjfa', date: '25/09/2022', collector: 'ấcvfdhbbbbbb', status: 'Tested', detail: true },
-  { id: '#73003', caseId: '#20400', desc: 'amcidjfa', date: '04/10/2022', collector: 'bbbbbbbbbbbbbb', status: 'Waiting for Test', detail: true },
-  { id: '#58825', caseId: '#202222', desc: 'amcidfainor', date: '17/10/2022', collector: 'bbbbbbbbbbbb', status: 'Waiting for Test', detail: true },
-  { id: '#89094', caseId: '#202222', desc: 'amcidjfa', date: '01/11/2022', collector: 'fsdfasdfs', status: 'Tested', detail: true },
-  { id: '#85252', caseId: '#202222', desc: 'amcidjfa', date: '22/11/2022', collector: 'ACE D.', status: 'In Progress', detail: true },
-];
+import { getAllEvidence } from '../services/evidenceService';
 
 const statusClass = status => {
   if (status === 'Waiting for Test') return 'status-waiting';
@@ -30,7 +18,20 @@ const Evidence = () => {
   const [date, setDate] = useState("");
   const [desc, setDesc] = useState("");
   const [files, setFiles] = useState([]);
+  const [evidenceData, setEvidenceData] = useState([]);
   const fileInputRef = React.useRef();
+
+  useEffect(() => {
+    const fetchEvidence = async () => {
+      try {
+        const data = await getAllEvidence();
+        setEvidenceData(data);
+      } catch (error) {
+        console.error('Failed to fetch evidence:', error);
+      }
+    };
+    fetchEvidence();
+  }, []);
 
   const handleFileChange = (e) => {
     setFiles([...files, ...Array.from(e.target.files)]);
@@ -81,12 +82,12 @@ const Evidence = () => {
               </thead>
               <tbody>
                 {evidenceData.map((row, idx) => (
-                  <tr key={row.id}>
-                    <td>{row.id}</td>
+                  <tr key={row.id || idx}>
+                    <td>{row.id || row.evidenceId}</td>
                     <td>{row.caseId}</td>
-                    <td>{row.desc}</td>
-                    <td>{row.date}</td>
-                    <td>{row.collector}</td>
+                    <td>{row.desc || row.description}</td>
+                    <td>{row.collectedAt ? new Date(row.collectedAt).toLocaleDateString() : (row.date || row.dateCollected)}</td>
+                    <td>{row.collector || row.collectorName}</td>
                     <td><span className={statusClass(row.status)}>{row.status}</span></td>
                     <td><a href="#">See details</a></td>
                   </tr>
