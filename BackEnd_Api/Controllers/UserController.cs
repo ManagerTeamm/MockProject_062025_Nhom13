@@ -25,7 +25,6 @@ namespace BackEnd_Api.Controllers
             try
             {
                 var userPermissions = _userRepository.GetPermissions();
-
                 if (!userPermissions.Contains("Manage_Users"))
                     return Forbid("You do not have permission to view users.");
 

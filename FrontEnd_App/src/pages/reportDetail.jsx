@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import '../../../public/css/reportDetail.css';
+import '../styles/reportDetail.css';
 
 const ReportDetail = () => {
   const [reportData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Fetch report data from API
-    // setReportData(fetchedData);
     setLoading(false);
   }, []);
 
