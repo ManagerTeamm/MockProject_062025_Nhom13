@@ -6,7 +6,7 @@ import Investigation from "./pages/investigation";
 import Evidence from "./pages/evidence";
 import UserList from "./pages/admin/userList";
 import ReportPage from "./pages/report";
-
+import ReportDetail from "./pages/reportDetail";
 function App() {
   return (
     <Router>
@@ -17,6 +17,7 @@ function App() {
         <Route path="/evidence" element={<Evidence />} />
         <Route path="/admin/userlist" element={<UserList /> } />
         <Route path="/report-manager" element={<ReportPage />} />
+        <Route path="/report-detail" element={<ReportDetail />} />
       </Routes>
     </Router>
   );
