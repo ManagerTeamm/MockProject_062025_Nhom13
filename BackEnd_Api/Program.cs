@@ -69,6 +69,7 @@ namespace BackEnd_Api
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
 
             builder.Services.AddAuthentication(options =>
             {

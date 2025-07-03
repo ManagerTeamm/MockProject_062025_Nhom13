@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 
 const Investigation = () => {
+  const navigate = useNavigate();
   const [showRecordPopup, setShowRecordPopup] = useState(false);
   const [recordType, setRecordType] = useState("");
   const [recordDate, setRecordDate] = useState("");
@@ -54,7 +56,16 @@ const Investigation = () => {
           </div>
         </header>
         <section className="section">
-          <h2>PHYSICAL EVIDENCE</h2>
+          <div className="section-box">
+            <div className="section-title-row">
+              <span>PHYSICAL EVIDENCE </span>
+              <button className="btn-list" onClick={() => navigate('/evidence')}>
+                <img src="/icons/calendar_today.svg" alt="calendar" className="icon-calendar" /> LIST
+              </button>
+            </div>
+          </div>
+        </section>
+        <section className="section">
           <div className="section-box">
             <div className="section-title-row">
               <span>COLLECTED RECORDS INFORMATION</span>
@@ -212,7 +223,7 @@ const Investigation = () => {
           <div className="section-box">
             <div className="section-title-row">
               <span>SUSPECTS</span>
-              <button className="btn-list">
+              <button className="btn-list" onClick={() => navigate('/suspect')}>
                 <img src="/icons/calendar_today.svg" alt="calendar" className="icon-calendar" /> LIST
               </button>
             </div>
