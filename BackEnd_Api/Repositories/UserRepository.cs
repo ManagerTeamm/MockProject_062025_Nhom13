@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using BackEnd_Api.Dtos;
 using BackEnd_Api.Models;
-using BackEnd_Api.Repositories;
 using BackEnd_Api.Repositories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-namespace BackEnd_Api.Services
+namespace BackEnd_Api.Repositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
         private readonly ApplicationDbContext _context;
+
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
@@ -23,6 +17,15 @@ namespace BackEnd_Api.Services
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+        }
+        
+        public async Task<User?> AuthenticateAsync(string username, string password)
+        {
+            var hashed = HashPassword(password);
+            return await _context.Users.Include(u => u.Role)
+                                         .ThenInclude(r => r.RolePermissions)
+                                         .ThenInclude(rp => rp.Permission)
+                                         .FirstOrDefaultAsync(u => u.UserName == username && u.PasswordHash == hashed);
         }
 
         public string HashPassword(string password)

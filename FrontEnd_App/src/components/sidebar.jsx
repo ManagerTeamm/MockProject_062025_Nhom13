@@ -8,7 +8,6 @@ const Sidebar = () => {
     const role = getUserRoleFromToken();
     const [user, setUser] = useState({ username: "", avatarUrl: "" });
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 700);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(!window.innerWidth < 700);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -30,9 +29,7 @@ const Sidebar = () => {
 
     useEffect(() => {
         const handleResize = () => {
-            const smallScreen = window.innerWidth < 700;
-            setIsSmallScreen(smallScreen);
-            setIsSidebarOpen(!smallScreen);
+            setIsSmallScreen(window.innerWidth < 700);
         };
 
         window.addEventListener("resize", handleResize);
@@ -41,72 +38,51 @@ const Sidebar = () => {
 
     const isActive = (path) => location.pathname.startsWith(path);
 
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
-
     return (
         <>
             {/* Mobile toggle button */}
             <button
                 className="btn btn-light d-md-none position-fixed top-0 start-0 m-2 z-3"
                 type="button"
-                onClick={toggleSidebar}
-                style={{ zIndex: 1001 }}
+                data-bs-toggle="offcanvas"
+                data-bs-target="#sidebarOffcanvas"
+                aria-controls="sidebarOffcanvas"
             >
                 <i className="bi bi-list fs-3"></i>
             </button>
 
-            {/* Overlay for mobile */}
-            {isSmallScreen && isSidebarOpen && (
-                <div 
-                    className="position-fixed top-0 start-0 w-100 h-100 bg-dark"
-                    style={{ 
-                        opacity: 0.5, 
-                        zIndex: 999,
-                        cursor: 'pointer'
-                    }}
-                    onClick={toggleSidebar}
-                />
-            )}
-
-            {/* Fixed Sidebar */}
             <div
-                className={`position-fixed top-0 start-0 h-100 bg-light shadow-lg`}
-                style={{ 
-                    width: "250px",
-                    zIndex: 1000,
-                    transform: isSmallScreen && !isSidebarOpen ? 'translateX(-100%)' : 'translateX(0)',
-                    transition: 'transform 0.3s ease-in-out'
-                }}
+                className={`${isSmallScreen ? "offcanvas" : "offcanvas-md"} offcanvas-start bg-light`}
+                tabIndex={-1}
+                id="sidebarOffcanvas"
+                aria-labelledby="sidebarLabel"
+                style={{ width: "250px" }}
             >
+                <div className="offcanvas-header d-md-none">
+                    <h5 className="offcanvas-title" id="sidebarLabel">Menu</h5>
+                    <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                    ></button>
+                </div>
                 <div className="d-flex flex-column vh-100">
-                    {/* Header */}
-                    <div className="d-flex align-items-center justify-content-between border-bottom py-4 px-3">
-                        <div className="d-flex align-items-center">
-                            {user.avatarUrl ? (
-                                <img
-                                    src={user.avatarUrl}
-                                    alt="Avatar"
-                                    className="rounded-circle"
-                                    style={{ width: "60px", height: "60px", objectFit: "cover" }}
-                                />
-                            ) : (
-                                <div
-                                    className="bg-secondary rounded-circle"
-                                    style={{ width: "60px", height: "60px" }}
-                                />
-                            )}
-                            <div className="fw-bold ms-3">{user.username}</div>
-                        </div>
-                        {isSmallScreen && (
-                            <button
-                                type="button"
-                                className="btn-close"
-                                onClick={toggleSidebar}
-                                aria-label="Close"
+                    <div className="d-flex align-items-center border-bottom py-4 px-3">
+                        {user.avatarUrl ? (
+                            <img
+                                src={user.avatarUrl}
+                                alt="Avatar"
+                                className="rounded-circle"
+                                style={{ width: "60px", height: "60px", objectFit: "cover" }}
+                            />
+                        ) : (
+                            <div
+                                className="bg-secondary rounded-circle"
+                                style={{ width: "60px", height: "60px" }}
                             />
                         )}
+                        <div className="fw-bold ms-3">{user.username}</div>
                     </div>
 
                     {/* Navigation */}
@@ -119,7 +95,6 @@ const Sidebar = () => {
                                 <Link
                                     to="/admin/dashboard"
                                     className={`nav-link d-flex align-items-center gap-2 ${isActive("/admin/dashboard") ? "active text-primary fw-bold" : "text-dark"}`}
-                                    onClick={() => isSmallScreen && setIsSidebarOpen(false)}
                                 >
                                     <i className={`bi bi-house fs-4 ${isActive("/admin/dashboard") ? "text-primary" : "text-secondary"}`}></i>
                                     Dashboard
@@ -133,7 +108,6 @@ const Sidebar = () => {
                                 <Link
                                     to="/admin/userList"
                                     className={`nav-link d-flex align-items-center gap-2 ${isActive("/admin/userList") ? "active text-primary fw-bold" : "text-dark"}`}
-                                    onClick={() => isSmallScreen && setIsSidebarOpen(false)}
                                 >
                                     <i className={`bi bi-person-rolodex fs-4 ${isActive("/admin/userList") ? "text-primary" : "text-secondary"}`}></i>
                                     User Management
@@ -147,7 +121,6 @@ const Sidebar = () => {
                                 <Link
                                     to="/admin/reports"
                                     className={`nav-link d-flex align-items-center gap-2 ${isActive("/admin/reports") ? "active text-primary fw-bold" : "text-dark"}`}
-                                    onClick={() => isSmallScreen && setIsSidebarOpen(false)}
                                 >
                                     <i className={`bi bi-pencil-square fs-4 ${isActive("/admin/reports") ? "text-primary" : "text-secondary"}`}></i>
                                     Reports
@@ -161,7 +134,6 @@ const Sidebar = () => {
                                 <Link
                                     to="/admin/cases"
                                     className={`nav-link d-flex align-items-center gap-2 ${isActive("/admin/cases") ? "active text-primary fw-bold" : "text-dark"}`}
-                                    onClick={() => isSmallScreen && setIsSidebarOpen(false)}
                                 >
                                     <i className={`bi bi-journal-text fs-4 ${isActive("/admin/cases") ? "text-primary" : "text-secondary"}`}></i>
                                     Cases
@@ -175,7 +147,6 @@ const Sidebar = () => {
                                 <Link
                                     to="/admin/supervise"
                                     className={`nav-link d-flex align-items-center gap-2 ${isActive("/admin/supervise") ? "active text-primary fw-bold" : "text-dark"}`}
-                                    onClick={() => isSmallScreen && setIsSidebarOpen(false)}
                                 >
                                     <i className={`bi bi-eye fs-4 ${isActive("/admin/supervise") ? "text-primary" : "text-secondary"}`}></i>
                                     Supervise

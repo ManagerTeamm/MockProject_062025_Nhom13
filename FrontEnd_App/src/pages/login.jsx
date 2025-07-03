@@ -1,108 +1,100 @@
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
+import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { loginAccount } from "../services/accountService";
+import { login } from "../services/authService";
 import { saveCookie } from "../utils/cookie";
-const images = [
-  "/images/slide1.jpg",
-  "/images/slide2.jpg",
-  "/images/slide3.jpg",
-];
+import "../styles/login.css";
+import { getUserRoleFromToken } from "../utils/jwt";
 
-const LoginPage = () => {
-  const [currentImage, setCurrentImage] = useState(0);
+const LoginComponent = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+  const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const data = await loginAccount(username, password);
+      const data = await login(username, password);
       console.log("Login success:", data);
 
-      saveCookie("token", data.token);
-
-      navigate("/home");
-    } catch (err) {
-      console.error(err.message);
-      alert("Login failed: " + err.message);
+      saveCookie("token", data);
+      const role = getUserRoleFromToken();
+      console.log("User role:", role);
+      
+      role? navigate("/secure/dashboard") : navigate("/login");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Login failed: " + (error.response?.data || error.message));
     }
   };
 
   return (
-    <Container fluid className="min-vh-100 d-flex align-items-center bg-light">
-      <Row className="flex-grow-1">
-        <Col
-          md={6}
-          className="d-none d-md-flex flex-column justify-content-center align-items-center text-white p-5"
-          style={{
-            backgroundImage: `url(${images[currentImage]})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            transition: "background-image 1s ease-in-out",
-          }}
-        >
-          <h1 className="fw-bold display-5 mb-3">Demo Login</h1>
-          <p className="lead opacity-75 text-center w-75">
-            Criminal Investigation
-          </p>
-        </Col>
+    <div className="login-background">
+      <div className="login-card">
+        <div className="login-form">
+          <h1 className="login-title">PD SYSTEM</h1>
+          <Form onSubmit={handleLogin}>
+            <Form.Group controlId="formUsername" className="form-section">
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter username"
+                className="login-input"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </Form.Group>
 
-        <Col
-          xs={12}
-          md={6}
-          className="d-flex align-items-center justify-content-center p-4 p-md-5"
-        >
-          <div style={{ maxWidth: 420, width: "100%" }}>
-            <h2 className="fw-bold mb-2">Welcome back 👋</h2>
-            <p className="text-muted mb-4">
-              Sign in to your account to continue
-            </p>
+            <Form.Group controlId="formPassword" className="form-section">
+              <div className="d-flex justify-content-between align-items-center">
+                <Form.Label>Password</Form.Label>
+                <div className="password-toggle" onClick={togglePassword}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  <span className="toggle-text">{showPassword ? "Hide" : "Show"}</span>
+                </div>
+              </div>
+              <Form.Control
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                className="login-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
 
-            <Form onSubmit={handleLogin}>
-                <Form.Group className="mb-3" controlId="userName">
-                <Form.Label className="fw-medium">UserName</Form.Label>
-                <Form.Control
-                  type="userName"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="password">
-                <Form.Label className="fw-medium">Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </Form.Group>
-
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                className="w-100 fw-semibold"
-              >
-                Sign in
+            <div className="text-center mt-4">
+              <Button className="login-btn" type="submit">
+                Login
               </Button>
-            </Form>
+            </div>
+          </Form>
+          <div className="language-select mt-3">
+            <Form.Select>
+              <option>English (United States)</option>
+              <option>Vietnamese</option>
+              <option>French</option>
+              <option>Japanese</option>
+            </Form.Select>
           </div>
-        </Col>
-      </Row>
-    </Container>
+          <div className="login-footer mt-4">
+            <div className="divider"></div>
+            <div className="footer-links">
+              <a href="#">About</a>
+              <a href="#">Help Center</a>
+              <a href="#">Terms of Service</a>
+              <a href="#">Privacy Policy</a>
+              <a href="#">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
-};
+}
 
-export default LoginPage;
+export default LoginComponent;
+
+

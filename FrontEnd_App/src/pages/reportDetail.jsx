@@ -7,8 +7,6 @@ const ReportDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Fetch report data from API
-    // setReportData(fetchedData);
     setLoading(false);
   }, []);
 

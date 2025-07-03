@@ -14,7 +14,7 @@ namespace BackEnd_Api.Repositories
         {
             try
             {
-                var reportDetaill = 
+                //var reportDetaill = _dbSet
             }
             catch (Exception e)
             {
