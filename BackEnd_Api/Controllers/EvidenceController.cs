@@ -22,6 +22,7 @@ namespace BackEnd_Api.Controllers
             return Ok(evidences);
         }
 
+        //getbyid
         [HttpGet("{id}")]
         public async Task<ActionResult<EvidenceDto>> GetEvidenceById(string id)
         {
