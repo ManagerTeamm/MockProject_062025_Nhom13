@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import '../../public/css/reportDetail.css';
+import '../styles/reportDetail.css';
 
 const ReportDetail = () => {
   const [reportData] = useState(null);
