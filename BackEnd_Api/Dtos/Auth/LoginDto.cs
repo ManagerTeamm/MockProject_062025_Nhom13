@@ -6,7 +6,6 @@ namespace BackEnd_Api.Dtos.Auth
     {
         [MinLength(1)]
         public required string Username { get; set; }
-
         [MinLength(8)]
         public required string Password { get; set; }
     }

@@ -11,8 +11,8 @@ namespace BackEnd_Api.Models
         public CaseResult CaseResult { get; set; }
         public string SentenceType { get; set; }
         public string? Duration { get; set; }
-        public string Condition { get; set; }
-        public DateTime SentencingDate { get; set; }
+        public string? Condition { get; set; }
+        public DateTime? SentencingDate { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<Inmate> Inmates { get; set; }
     }

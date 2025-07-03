@@ -660,7 +660,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CaseId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CaseLocation")
@@ -668,14 +667,12 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("OfficerApproveId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ReportedAt")
@@ -1640,14 +1637,12 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
                         .WithMany("Reports")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BackEnd_Api.Models.User", "User")
                         .WithMany("Reports")
                         .HasForeignKey("OfficerApproveId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Case");
 

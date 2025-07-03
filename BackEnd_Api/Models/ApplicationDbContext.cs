@@ -55,6 +55,7 @@ namespace BackEnd_Api.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
 
             modelBuilder.Entity<Arrest>()
                 .HasKey(a => new { a.SuspectId, a.CaseId });

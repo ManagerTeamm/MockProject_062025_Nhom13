@@ -13,12 +13,12 @@ namespace BackEnd_Api.Helpers
     public class JwtTokenHelper
     {
         private readonly IConfiguration _config;
-        public JwtTokenHelper(IConfiguration config)
+        public JwtTokenHelper(IConfiguration config) => _config = config;
+
+        public string GenerateJwtToken(User user)
+
         {
-            _config = config;
-        }
-        public async Task<string> GenerateJwtToken(User user)
-        {
+
             var claims = new[]
             {
                 new Claim("name", user.UserName),
@@ -35,30 +35,6 @@ namespace BackEnd_Api.Helpers
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public string? GetUserIdFromToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
-
-            try
-            {
-                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false, // Set true nếu có Issuer
-                    ValidateAudience = false, // Set true nếu có Audience
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
-                return principal.FindFirst(ClaimTypes.NameIdentifier)?.Value; // user.Id
-            }
-            catch
-            {
-                return null;
-            }
         }
     }
 }

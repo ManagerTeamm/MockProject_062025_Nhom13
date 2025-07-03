@@ -1,28 +1,29 @@
 import { jwtDecode } from "jwt-decode";
+import { getCookie } from "./cookie";
 
-export const saveToken = (token) => {
-  localStorage.setItem("token", token);
-};
-
-export const getToken = () => {
-  return localStorage.getItem("token");
-};
-
-export const getRoleFromToken = () => {
-  try {
-    const token = getToken();
+const getDecodedToken = () => {
+    const token = getCookie("token");
     if (!token) return null;
-    const decoded = jwtDecode(token);
-    return (
-      decoded?.role ||
-      null
-    );
-  } catch (e) {
-    console.error("JWT decode failed:", e);
-    return null;
-  }
+
+    try {
+        return jwtDecode(token);
+    } catch (error) {
+        console.error("Invalid token", error);
+        return null;
+    }
 };
 
-export const clearToken = () => {
-  localStorage.removeItem("token");
+export const getUserRoleFromToken = () => {
+    const decoded = getDecodedToken();
+    return decoded?.role ?? null;
 };
+
+export const getUserNameFromToken = () => {
+    const decoded = getDecodedToken();
+    return decoded?.name ?? null;
+};
+
+export const getUserPermissionsFromToken = () => {
+    const decoded = getDecodedToken();
+    return decoded?.permissions ?? [];
+}

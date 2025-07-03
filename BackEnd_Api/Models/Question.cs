@@ -8,8 +8,8 @@
         public string CreatedBy { get; set; }
         public User User { get; set; }
         public string Content { get; set; }
-        public string Answer { get; set; }
-        public string Reliability { get; set; }
+        public string? Answer { get; set; }
+        public string? Reliability { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

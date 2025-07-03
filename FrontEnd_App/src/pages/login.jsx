@@ -8,36 +8,24 @@ import "../styles/login.css";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../provider/authenprovider";
 import { roleMap } from "../model/rolemap";
+import { getUserRoleFromToken } from "../utils/jwt";
 
 const LoginComponent = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
   const { login: loginToContext } = useAuth();
-
   const togglePassword = () => setShowPassword(!showPassword);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const token = await login(username, password);
-      saveToken(token);
-      loginToContext(token);
+      const data = await loginAccount(username, password);
+      console.log("Login success:", data);
 
-      const decoded = jwtDecode(token);
-      console.log("Decoded token:", decoded);
-
-      const rawRole =
-        decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] ||
-        decoded["role"] ||
-        decoded["roles"];
-
-      const roleId = Array.isArray(rawRole) ? rawRole[0] : rawRole;
-      const role = roleMap[roleId] || "Unknown";
-
-      console.log("Extracted role:", role);
+      saveCookie("token", data.token);
+      const role = getUserRoleFromToken();
       
       role? navigate("/secure/home") : navigate("/login");
       
@@ -52,7 +40,6 @@ const LoginComponent = () => {
       <div className="login-card">
         <div className="login-form">
           <h1 className="login-title">PD SYSTEM</h1>
-
           <Form onSubmit={handleLogin}>
             <Form.Group controlId="formUsername" className="form-section">
               <Form.Label>Username</Form.Label>

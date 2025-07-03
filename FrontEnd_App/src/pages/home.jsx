@@ -1,12 +1,14 @@
-import React from 'react';
+import Layout from '../components/baseLayout';
+import HeroSection from '../components/heroSection';
+import HowYouCanHelp from '../components/howYouCanHelp';
+import ProgramsResources from '../components/programsResources';
 
-const Home = () => {
+export default function Home() {
   return (
-    <div className="text-center p-5">
-      <h1>Welcome to the Home Page</h1>
-      <p>You are now logged in.</p>
-    </div>
+    <Layout>
+      <HeroSection />
+      <HowYouCanHelp />
+      <ProgramsResources />
+    </Layout>
   );
-};
-
-export default Home;
+}
