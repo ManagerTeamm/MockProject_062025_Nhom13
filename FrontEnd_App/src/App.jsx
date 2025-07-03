@@ -8,6 +8,7 @@ import UserList from "./pages/admin/userList";
 import ReportPage from "./pages/report";
 import Suspect from "./pages/suspect";
 
+
 function App() {
   return (
     <Router>
@@ -19,6 +20,7 @@ function App() {
         <Route path="/suspect" element={<Suspect />} />
         <Route path="/admin/userlist" element={<UserList /> } />
         <Route path="/report-manager" element={<ReportPage />} />
+     
       </Routes>
     </Router>
   );
