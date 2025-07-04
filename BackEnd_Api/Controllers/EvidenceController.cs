@@ -51,5 +51,12 @@ namespace BackEnd_Api.Controllers
             var result = await _evidenceRepository.SearchEvidenceAsync(from, to, status);
             return Ok(result);
         }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<object>> GetEvidencesPaginated([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            var result = await _evidenceRepository.GetEvidencesPaginatedAsync(page, pageSize);
+            return Ok(result);
+        }
     }
 }

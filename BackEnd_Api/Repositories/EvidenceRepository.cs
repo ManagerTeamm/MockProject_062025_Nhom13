@@ -171,5 +171,40 @@ namespace BackEnd_Api.Repositories
                 })
                 .ToListAsync();
         }
+
+        public async Task<object> GetEvidencesPaginatedAsync(int page, int pageSize)
+        {
+            var totalCount = await _context.Evidences.Where(e => !e.IsDeleted).CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+            var skip = (page - 1) * pageSize;
+
+            var evidences = await _context.Evidences
+                .Where(e => !e.IsDeleted)
+                .Include(e => e.User)
+                .Include(e => e.CaseEvidences)
+                .Skip(skip)
+                .Take(pageSize)
+                .Select(e => new EvidenceDto
+                {
+                    EvidenceId = e.EvidenceId,
+                    CaseId = e.CaseEvidences.FirstOrDefault().CaseId,
+                    Description = e.Description,
+                    CollectedAt = (DateTime)e.CollectedAt,
+                    Collector = e.User.FullName,
+                    Status = e.Status
+                })
+                .ToListAsync();
+
+            return new
+            {
+                Data = evidences,
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = page,
+                PageSize = pageSize,
+                HasNextPage = page < totalPages,
+                HasPreviousPage = page > 1
+            };
+        }
     }
 }

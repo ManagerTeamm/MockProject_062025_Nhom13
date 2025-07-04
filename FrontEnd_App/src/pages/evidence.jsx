@@ -4,6 +4,7 @@ import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
 import { getAllEvidence } from '../services/evidenceService';
+import { getEvidencePaginated } from '../services/evidenceService';
 
 const statusClass = status => {
   if (status === 'Waiting for Test') return 'status-waiting';
@@ -19,19 +20,25 @@ const Evidence = () => {
   const [desc, setDesc] = useState("");
   const [files, setFiles] = useState([]);
   const [evidenceData, setEvidenceData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
   const fileInputRef = React.useRef();
 
   useEffect(() => {
     const fetchEvidence = async () => {
       try {
-        const data = await getAllEvidence();
-        setEvidenceData(data);
+        const result = await getEvidencePaginated(currentPage, pageSize);
+        setEvidenceData(result.data);
+        setTotalPages(result.totalPages);
+        setTotalCount(result.totalCount);
       } catch (error) {
         console.error('Failed to fetch evidence:', error);
       }
     };
     fetchEvidence();
-  }, []);
+  }, [currentPage, pageSize]);
 
   const handleFileChange = (e) => {
     setFiles([...files, ...Array.from(e.target.files)]);
@@ -42,6 +49,10 @@ const Evidence = () => {
 
   const handleUploadClick = () => {
     fileInputRef.current && fileInputRef.current.click();
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -95,13 +106,35 @@ const Evidence = () => {
               </tbody>
             </table>
             <div className="pagination-row">
-              <span>Show <select><option>10</option></select> entries</span>
+              <span>Show <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select> entries</span>
               <div className="pagination">
-                <button className="page-btn">Previous</button>
-                <button className="page-btn active">1</button>
-                <button className="page-btn">2</button>
-                <button className="page-btn">3</button>
-                <button className="page-btn">Next</button>
+                <button 
+                  className="page-btn" 
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button 
+                    key={page}
+                    className={`page-btn ${currentPage === page ? 'active' : ''}`}
+                    onClick={() => handlePageChange(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button 
+                  className="page-btn" 
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
               </div>
             </div>
           </div>

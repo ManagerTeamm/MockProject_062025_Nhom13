@@ -9,5 +9,6 @@ namespace BackEnd_Api.Services.Interface
         Task<EvidenceDto> GetEvidenceByIdAsync(string id);
         Task<EvidenceDto> UpdateEvidenceAsync(string id, CreateEvidenceDto dto);
         Task<IEnumerable<EvidenceDto>> SearchEvidenceAsync(DateTime? from, DateTime? to, string status);
+        Task<object> GetEvidencesPaginatedAsync(int page, int pageSize);
     }
 }
