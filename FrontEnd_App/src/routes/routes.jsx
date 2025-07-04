@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
-import ProtectedRoute from "./protectedRoute";
+import ProtectedRoute from "./protectedroute";
 import LoginComponent from "../pages/login";
 import Main from "../samples/pages/admin/main";
 import AdminPage from "../samples/pages/admin/admin";
@@ -23,7 +23,7 @@ const AppRoutes = () => {
     { path: "/service", element: <div>Service Page</div> },
     { path: "/about-us", element: <div>About Us</div> },
     { path: "/home", element: <Home /> },
-    { path: "/reportSupect", element: <ReportSuspect/>},
+    { path: "/report-suspect", element: <ReportSuspect/>},
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,

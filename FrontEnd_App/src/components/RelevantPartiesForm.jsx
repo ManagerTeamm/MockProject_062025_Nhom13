@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const RelevantPartiesForm = () => {
+const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
     // State cho các trường nhập liệu
     const [fullName, setFullName] = useState('');
     const [relationship, setRelationship] = useState('');
@@ -15,6 +15,29 @@ const RelevantPartiesForm = () => {
     const [attachments, setAttachments] = useState([]); 
     const [showSubmitMessage, setShowSubmitMessage] = useState(false); 
     
+    // Populate form với dữ liệu ban đầu khi edit
+    useEffect(() => {
+        if (initialData) {
+    setFullName(initialData.name || '');
+    setRelationship(initialData.role || '');
+    setGender(initialData.gender || '');
+    setNationality(initialData.nationality || '');
+    setContact(initialData.contact || '');
+    setStatement(initialData.statement || '');
+    // Thêm dòng này để load attachments khi edit
+    setAttachments(initialData.attachments || []);
+  } else {
+    // Reset form khi thêm mới
+    setFullName('');
+    setRelationship('');
+    setGender('');
+    setNationality('');
+    setContact('');
+    setStatement('');
+    setAttachments([]);
+  }
+    }, [initialData]);
+
     const relationshipOptions = [
         { value: '', label: 'Select an option' },
         { value: 'victim', label: 'Victim' },
@@ -120,7 +143,7 @@ const RelevantPartiesForm = () => {
 
   
     const handleCreate = () => {
-        console.log("Form Data:", {
+         const formData = {
             fullName,
             relationship,
             gender,
@@ -128,7 +151,11 @@ const RelevantPartiesForm = () => {
             contact,
             statement,
             attachments
-        });
+            };
+            
+            if (onSubmit) {
+            onSubmit(formData);
+            }
         setShowSubmitMessage(true);
         setTimeout(() => {
             setShowSubmitMessage(false);
@@ -137,20 +164,40 @@ const RelevantPartiesForm = () => {
 
    
     const handleCancel = () => {
-        setFullName('');
-        setRelationship('');
-        setGender('');
-        setNationality('');
-        setContact('');
-        setStatement('');
-        setAttachments([]);
-        setShowSubmitMessage(false);
-        console.log('Form cancelled and reset.');
+        // Reset form về trạng thái ban đầu
+        if (initialData) {
+    // Nếu đang edit, reset về dữ liệu ban đầu
+    setFullName(initialData.name || '');
+    setRelationship(initialData.role || '');
+    setGender(initialData.gender || '');
+    setNationality(initialData.nationality || '');
+    setContact(initialData.contact || '');
+    setStatement(initialData.statement || '');
+    setAttachments(initialData.attachments || []); // Sửa dòng này
+  } else {
+    // Nếu đang thêm mới, reset về trống
+    setFullName('');
+    setRelationship('');
+    setGender('');
+    setNationality('');
+    setContact('');
+    setStatement('');
+    setAttachments([]);
+  }
+  setShowSubmitMessage(false);
+  console.log('Form cancelled and reset.');
+
+  if (onCancel) {
+    onCancel();
+  }
     };
+
+    // Kiểm tra xem có phải đang edit hay không
+    const isEditing = Boolean(initialData);
 
     return (
        
-        <div className="container-fluid d-flex justify-content-center align-items-center py-5" style={{ minHeight: '100vh', backgroundColor: '#343a40' }}>
+        <div className="container-fluid d-flex justify-content-center align-items-center py-5" style={{ minHeight: '100vh'}}>
             
             <div className="card shadow-lg p-4 my-4" style={{ 
                 maxWidth: '600px', 
@@ -161,14 +208,19 @@ const RelevantPartiesForm = () => {
                 boxSizing: 'border-box'
             }}>
                 <div className="card-body">
-                    <h2 className="card-title text-center mb-1" style={{ color: '#333' }}>Relevant Parties</h2>
+                    <h2 className="card-title text-center mb-1" style={{ color: '#333' }}>
+                        {isEditing ? 'Edit Relevant Party' : 'Relevant Parties'}
+                    </h2>
                     <p className="text-center text-muted mb-4" style={{ fontSize: '0.9rem' }}>
-                        This form is used to document the roles and identities of all parties connected to the incident.
+                        {isEditing 
+                            ? 'Update the information for this relevant party.'
+                            : 'This form is used to document the roles and identities of all parties connected to the incident.'
+                        }
                     </p>
 
                     {showSubmitMessage && (
                         <div className="alert alert-success alert-dismissible fade show" role="alert">
-                            Form submitted successfully! Check console for data.
+                            Form {isEditing ? 'updated' : 'submitted'} successfully! Check console for data.
                             <button type="button" className="btn-close" onClick={() => setShowSubmitMessage(false)} aria-label="Close"></button>
                         </div>
                     )}
@@ -302,7 +354,9 @@ const RelevantPartiesForm = () => {
 
                     <div className="d-flex justify-content-end gap-2 mt-4">
                         <button type="button" className="btn btn-secondary px-4 py-2" onClick={handleCancel}>Cancel</button>
-                        <button type="button" className="btn btn-dark px-4 py-2" onClick={handleCreate}>Create</button>
+                        <button type="button" className="btn btn-dark px-4 py-2" onClick={handleCreate}>
+                            {isEditing ? 'Update' : 'Create'}
+                        </button>
                     </div>
                 </div>
             </div>
