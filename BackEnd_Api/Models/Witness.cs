@@ -3,8 +3,8 @@
     public class Witness
     {
         public string WitnessId { get; set; }
-        public string CaseId { get; set; }
-        public Case Case { get; set; }
+        public string? CaseId { get; set; }
+        public Case? Case { get; set; }
         public string? Fullname { get; set; }
         public string? National { get; set; }
         public string? Gender { get; set; }

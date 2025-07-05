@@ -213,7 +213,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CollectedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CurrentLocation")
@@ -631,6 +630,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("ReportId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AddressReported")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CaseId")
                         .HasColumnType("nvarchar(450)");
 
@@ -646,6 +648,9 @@ namespace BackEnd_Api.Migrations
 
                     b.Property<string>("OfficerApproveId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RelationshipToIncident")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ReportedAt")
                         .HasColumnType("datetime2");
@@ -665,6 +670,9 @@ namespace BackEnd_Api.Migrations
                     b.Property<string>("Severity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("TimeOfOccurrence")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TypeReport")
                         .IsRequired()
@@ -961,7 +969,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CaseId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CatchTime")
@@ -1135,7 +1142,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CaseId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Contact")
@@ -1148,7 +1154,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Injuries")
@@ -1285,7 +1290,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CaseId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Contact")
@@ -1408,8 +1412,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.User", "User")
                         .WithMany("Evidences")
                         .HasForeignKey("CollectedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BackEnd_Api.Models.MeasureSurvey", "MeasureSurvey")
                         .WithMany("Evidences")
@@ -1772,8 +1775,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
                         .WithMany("Suspects")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Case");
                 });
@@ -1843,8 +1845,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
                         .WithMany("Victims")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Case");
                 });
@@ -1930,8 +1931,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
                         .WithMany("Witnesses")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Case");
                 });
