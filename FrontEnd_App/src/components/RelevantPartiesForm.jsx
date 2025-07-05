@@ -18,7 +18,7 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
     // Populate form với dữ liệu ban đầu khi edit
     useEffect(() => {
         if (initialData) {
-    setFullName(initialData.name || '');
+    setFullName(initialData.fullName || '');
     setRelationship(initialData.role || '');
     setGender(initialData.gender || '');
     setNationality(initialData.nationality || '');
@@ -114,9 +114,14 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
         const files = event.target.files;
         if (files.length > 0) {
             const newFiles = Array.from(files).map(file => ({
+                file: file, // Store the actual File object
                 name: file.name,
-                size: (file.size / 1024).toFixed(0), 
-                date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).replace(/ /g, ' '),
+                size: (file.size / 1024).toFixed(0),
+                date: new Date().toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                }).replace(/ /g, ' '),
                 type: file.type
             }));
             setAttachments(prevAttachments => [...prevAttachments, ...newFiles]);
