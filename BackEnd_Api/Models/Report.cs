@@ -13,6 +13,9 @@
         public string ReporterFullname { get; set; }
         public string ReporterEmail { get; set; }
         public string ReporterPhoneNumber { get; set; }
+        public string? RelationshipToIncident { get; set; }
+        public DateTime? TimeOfOccurrence { get; set; }
+        public string? AddressReported { get; set; }
         public string? OfficerApproveId { get; set; }
         public User User { get; set; }
         public bool IsDeleted { get; set; } = false;
@@ -20,5 +23,8 @@
         public ICollection<ReportSuspect> ReportSuspects { get; set; }
         public ICollection<ReportWitness> ReportWitness { get; set; }
         public ICollection<Evidence> Evidences { get; set; }
+        public string? RelationshipToIncident { get; set; }
+        public DateTime? TimeOfOccurrence { get; set; }
+        public string? AddressReported { get; set; }
     }
 }

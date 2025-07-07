@@ -9,8 +9,8 @@
         public WarrantResult WarrantResult { get; set; }
         public string? ReportId { get; set; }
         public Report Report { get; set; }
-        public string CollectedBy { get; set; }
-        public User User { get; set; }
+        public string? CollectedBy { get; set; }
+        public User? User { get; set; }
         public string TypeEvidence { get; set; }
         public string? Description { get; set; }
         public DateTime? CollectedAt { get; set; }
