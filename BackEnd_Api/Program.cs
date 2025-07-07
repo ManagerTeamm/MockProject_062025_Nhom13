@@ -71,6 +71,7 @@ namespace BackEnd_Api
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
+            builder.Services.AddScoped<IPatrolOfficerRepository, PatrolOfficerRepository>();
 
             builder.Services.AddAuthentication(options =>
             {
