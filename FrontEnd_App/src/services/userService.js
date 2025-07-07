@@ -15,9 +15,7 @@ export const getAllUsers = async () => {
                 Authorization: `Bearer ${token}`
             }
         });
-
         return response.data.data;
-        console.log("getAllUsers response:", response.data.data);
     } catch (error) {
         console.error("getAllUsers error:", error);
         throw error;
@@ -62,12 +60,14 @@ export const updateUser = async (userData) => {
     try {
         const token = getCookie("token");
         if (!token) throw new Error("No token found");
-        const response = await axios.put(`${Api_Url}/update-user`, userData, {
+        console.log("data", userData);
+        const response = await axios.put(`${Api_Url}/update-user?username=${userData.userName}`, userData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             }
         });
+        console.log("updateUser response:", response.data);
         return response.data;
     } catch (error) {
         console.error("updateUser error:", error);
@@ -75,17 +75,17 @@ export const updateUser = async (userData) => {
     }
 }
 
-export const deleteUser = async (userId) => {
+export const deleteUser = async (username) => {
     try {
         const token = getCookie("token");
         if (!token) throw new Error("No token found");
-        const response = await axios.delete(`${Api_Url}/delete-user`, {
-            data: { userId },
+        const response = await axios.delete(`${Api_Url}/delete-user?username=${username}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
             }
         });
+        
         return response.data;
     } catch (error) {
         console.error("deleteUser error:", error);

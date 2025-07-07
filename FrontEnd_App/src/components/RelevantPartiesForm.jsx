@@ -5,7 +5,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const RelevantPartiesForm = () => {
-    // State cho các trường nhập liệu
     const [fullName, setFullName] = useState('');
     const [relationship, setRelationship] = useState('');
     const [gender, setGender] = useState('');

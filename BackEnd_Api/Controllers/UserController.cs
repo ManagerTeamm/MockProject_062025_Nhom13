@@ -116,10 +116,8 @@ namespace BackEnd_Api.Controllers
                 user.PhoneNumber = userDto.PhoneNumber;
                 user.AvatarUrl = userDto.AvatarUrl;
                 user.RoleId = userDto.RoleId;
-                user.PasswordHash = _userRepository.HashPassword(userDto.Password);
 
-
-                _userRepository.Update(user);
+                var response = _userRepository.Update(user);
 
                 return Ok(ApiResponseHelper<string>.SuccessResult(null, "User updated successfully"));
             }
@@ -131,7 +129,7 @@ namespace BackEnd_Api.Controllers
 
         [Authorize]
         [HttpDelete("delete-user")]
-        public async Task<IActionResult> DeleteUser([FromQuery] string userId)
+        public async Task<IActionResult> DeleteUser([FromQuery] string username)
         {
             try
             {
@@ -139,11 +137,11 @@ namespace BackEnd_Api.Controllers
                 if (!userPermissions.Contains("Manage_Users"))
                     return Forbid("You do not have permission to delete users.");
 
-                var user = await _userRepository.FindOneAsync(u => u.UserName == userId && !u.IsDeleted);
+                var user = await _userRepository.FindOneAsync(u => u.UserName == username && !u.IsDeleted);
                 if (user == null)
                     return NotFound("User not found.");
 
-                _userRepository.Delete(user);
+                var response = _userRepository.Delete(user);
 
                 return Ok(ApiResponseHelper<string>.SuccessResult(null, "User deleted successfully"));
             }

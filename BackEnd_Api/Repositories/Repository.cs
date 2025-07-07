@@ -38,21 +38,25 @@ namespace BackEnd_Api.Repositories
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
+            await SaveAsync();
         }
 
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
             _dbSet.Update(entity);
+            await SaveAsync();
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
-            if(entity is ISoftDeletable deletable)
+            if (entity is ISoftDeletable deletable)
             {
                 deletable.IsDeleted = true;
                 _dbSet.Update(entity);
             }
+            await SaveAsync();
         }
+
 
         public async Task SaveAsync()
         {
