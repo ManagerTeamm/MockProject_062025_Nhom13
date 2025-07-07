@@ -1,4 +1,3 @@
-
 using BackEnd_Api.Helpers;
 using BackEnd_Api.Models;
 using BackEnd_Api.Repositories.Interfaces;
@@ -72,6 +71,17 @@ namespace BackEnd_Api
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
             builder.Services.AddScoped<IPatrolOfficerRepository, PatrolOfficerRepository>();
+            builder.Services.AddScoped<IReportRepository, ReportRepository>();
+            builder.Services.AddScoped<IVictimRepository, VictimRepository>();
+            builder.Services.Scan(scan => scan
+                // scan từ assembly chứa IRepository hoặc ReportRepository
+                .FromAssemblyOf<IRepository<object>>()
+                // chọn tất cả class có tên kết thúc bằng "Repository"
+                .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Repository")))
+                // đăng ký chúng dưới tất cả interface mà chúng implement
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+            );
 
             builder.Services.AddAuthentication(options =>
             {
@@ -111,6 +121,8 @@ namespace BackEnd_Api
 
             app.UseAuthentication(); 
             app.UseAuthorization();
+
+            app.UseStaticFiles();
 
             app.MapControllers();
 

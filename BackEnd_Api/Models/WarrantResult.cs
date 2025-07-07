@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class WarrantResult
+    public class WarrantResult : ISoftDeletable
     {
         public string WarrantResultId { get; set; }
         public string WarrantId { get; set; }

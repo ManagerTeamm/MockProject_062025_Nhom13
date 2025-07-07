@@ -1,8 +1,9 @@
-﻿using static System.Net.Mime.MediaTypeNames;
+﻿using BackEnd_Api.Repositories.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BackEnd_Api.Models
 {
-    public class Sentence
+    public class Sentence : ISoftDeletable
     {
         public string SentenceId { get; set; }
         public string CaseId { get; set; }

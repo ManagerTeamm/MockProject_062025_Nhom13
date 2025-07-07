@@ -2,6 +2,7 @@
 using BackEnd_Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using BackEnd_Api.Repositories.Interfaces;
+using BackEnd_Api.Models;
 
 namespace BackEnd_Api.Controllers
 {
@@ -33,7 +34,8 @@ namespace BackEnd_Api.Controllers
                 return Unauthorized("Invalid credentials");
 
             var token = _jwtHelper.GenerateJwtToken(user);
-            return Ok(new { token = token });
+            
+            return Ok(ApiResponseHelper<string>.SuccessResult(token, "Login successfully"));
         }
     }
 }

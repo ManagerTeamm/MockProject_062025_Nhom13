@@ -19,8 +19,5 @@
         public string CurrentLocation { get; set; }
         public string AttachedFile { get; set; }
         public string Status { get; set; }
-        public string? MeasureSurveyId { get; set; }
-        public string? WarrantResultId { get; set; }
-        public string? ReportId { get; set; }
     }
 }
