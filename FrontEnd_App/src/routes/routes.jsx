@@ -11,6 +11,8 @@ import Home from "../pages/home";
 import Investigation from "../pages/investigation";
 import Suspect from "../pages/suspect";
 import Evidence from "../pages/evidence";
+import CaseList from "../pages/caseList";
+import InterviewsList from "../pages/interviewsList";
 import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
@@ -32,6 +34,8 @@ const AppRoutes = () => {
     { path: "/suspect", element: <Suspect /> },
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
+    { path: "/caselist", element: <CaseList /> },
+    { path: "/interviewslist", element: <InterviewsList /> },
     { path: "/report-list", element: <ReportPage /> },
     { path: "/report-detail/:reportId", element: <ReportDetail /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
@@ -66,6 +70,7 @@ const AppRoutes = () => {
     },
 
     { path: "/unauthorized", element: <div>Unauthorized</div> },
+    { path: "/CaseList", element: <CaseList /> },
     { path: "*", element: <div>404 Not Found</div> },
   ]);
 
