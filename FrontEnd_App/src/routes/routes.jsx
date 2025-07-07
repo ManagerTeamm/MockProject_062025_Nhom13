@@ -8,12 +8,18 @@ import AdminPage from "../samples/pages/admin/admin";
 import InmateAdmissions from "../samples/pages/inmateadmission";
 import CaseFile from "../samples/pages/casefile";
 import Home from "../pages/home";
+import Investigation from "../pages/investigation";
+import Suspect from "../pages/suspect";
+import Evidence from "../pages/evidence";
 import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
-import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
+import ReportDetail from "../pages/reportDetail";
+import ReportPage from "../pages/report";
+import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
+
 
 const AppRoutes = () => {
   const { loading } = useAuth();
@@ -27,8 +33,13 @@ const AppRoutes = () => {
     { path: "/service", element: <div>Service Page</div> },
     { path: "/about-us", element: <div>About Us</div> },
     { path: "/home", element: <Home /> },
-    { path: "/reportSupect", element: <ReportSuspect /> },
-    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
+    { path: "/suspect", element: <Suspect /> },
+    { path: "/investigation", element: <Investigation /> },
+    { path: "/evidence", element: <Evidence /> },
+    { path: "/report-list", element: <ReportPage /> },
+    { path: "/report-detail/:reportId", element: <ReportDetail /> },
+    { path: "/report-suspect", element: <ReportSuspect/>},
+    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,

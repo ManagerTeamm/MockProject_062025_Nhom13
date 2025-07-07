@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using BackEnd_Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BackEnd_Api.Models
 {
-    public class CaseResult
+    public class CaseResult : ISoftDeletable
     {
         public string CaseResultId { get; set; }
         public string CaseId { get; set; }

@@ -1,11 +1,9 @@
 ﻿import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { getUserRoleFromToken } from "../utils/jwt";
 import { getUser } from "../services/userService";
 
 const Sidebar = () => {
     const location = useLocation();
-    const role = getUserRoleFromToken();
     const [user, setUser] = useState({ username: "", avatarUrl: "" });
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 700);
 
@@ -25,8 +23,6 @@ const Sidebar = () => {
         fetchUser();
     }, []);
 
-    console.log("User:", role);
-
     useEffect(() => {
         const handleResize = () => {
             setIsSmallScreen(window.innerWidth < 700);
@@ -40,7 +36,6 @@ const Sidebar = () => {
 
     return (
         <>
-            {/* Mobile toggle button */}
             <button
                 className="btn btn-light d-md-none position-fixed top-0 start-0 m-2 z-3"
                 type="button"
@@ -52,7 +47,7 @@ const Sidebar = () => {
             </button>
 
             <div
-                className={`${isSmallScreen ? "offcanvas" : "offcanvas-md"} offcanvas-start bg-light`}
+                className={`sidebar ${isSmallScreen ? "offcanvas" : "offcanvas-md"} offcanvas-start bg-light`}
                 tabIndex={-1}
                 id="sidebarOffcanvas"
                 aria-labelledby="sidebarLabel"
@@ -142,13 +137,26 @@ const Sidebar = () => {
 
                             <li
                                 className="nav-item"
-                                style={isActive("/admin/supervise") ? { backgroundColor: "#E9F5FE", borderRadius: "4px" } : {}}
+                                style={isActive("/secure/admin/evidence") ? { backgroundColor: "#E9F5FE", borderRadius: "4px" } : {}}
                             >
                                 <Link
-                                    to="/admin/supervise"
-                                    className={`nav-link d-flex align-items-center gap-2 ${isActive("/admin/supervise") ? "active text-primary fw-bold" : "text-dark"}`}
+                                    to="/secure/admin/evidence"
+                                    className={`nav-link d-flex align-items-center gap-2 ${isActive("/secure/admin/evidence") ? "active text-primary fw-bold" : "text-dark"}`}
                                 >
-                                    <i className={`bi bi-eye fs-4 ${isActive("/admin/supervise") ? "text-primary" : "text-secondary"}`}></i>
+                                    <i className={`bi bi-flask-florence fs-4 ${isActive("/secure/admin/evidence") ? "text-primary" : "text-secondary"}`}></i>
+                                    Supervise
+                                </Link>
+                            </li>
+
+                            <li
+                                className="nav-item"
+                                style={isActive("/secure/admin/supervise") ? { backgroundColor: "#E9F5FE", borderRadius: "4px" } : {}}
+                            >
+                                <Link
+                                    to="/secure/admin/supervise"
+                                    className={`nav-link d-flex align-items-center gap-2 ${isActive("/secure/admin/supervise") ? "active text-primary fw-bold" : "text-dark"}`}
+                                >
+                                    <i className={`bi bi-eye fs-4 ${isActive("/secure/admin/supervise") ? "text-primary" : "text-secondary"}`}></i>
                                     Supervise
                                 </Link>
                             </li>

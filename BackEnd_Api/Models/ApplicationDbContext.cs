@@ -18,7 +18,6 @@ namespace BackEnd_Api.Models
         public DbSet<Indictment> Indictments { get; set; }
         public DbSet<Victim> Victims { get; set; }
         public DbSet<Prosecution> Prosecutions { get; set; }
-        public DbSet<ReportWitness> ReportWitness { get; set; }
         public DbSet<Case> Cases { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Warrant> Warrants { get; set; }
@@ -33,9 +32,7 @@ namespace BackEnd_Api.Models
         public DbSet<DigitalInvest> DigitalInvests { get; set; }
         public DbSet<ForensicInvest> ForensicInvests { get; set; }
         public DbSet<RecordInfo> RecordInfos { get; set; }
-        public DbSet<ReportVictim> ReportVictims { get; set; }
         public DbSet<MeasureSurvey> MeasureSurveys { get; set; }
-        public DbSet<ReportSuspect> ReportSuspects { get; set; }
         public DbSet<Suspect> Suspects { get; set; }
         public DbSet<SceneDescription> SceneDescriptions { get; set; }
         public DbSet<Event> Events { get; set; }
@@ -274,45 +271,6 @@ namespace BackEnd_Api.Models
                 .WithMany(c => c.Reports)
                 .HasForeignKey(r => r.CaseId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<ReportSuspect>()
-                .HasKey(rs => new { rs.ReportId, rs.SuspectId });
-            modelBuilder.Entity<ReportSuspect>()
-                .HasOne(rs => rs.Report)
-                .WithMany(r => r.ReportSuspects)
-                .HasForeignKey(rs => rs.ReportId)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<ReportSuspect>()
-                .HasOne(rs => rs.Suspect)
-                .WithMany(s => s.ReportSuspects)
-                .HasForeignKey(rs => rs.SuspectId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<ReportVictim>()
-                .HasKey(rv => new { rv.ReportId, rv.VictimId });
-            modelBuilder.Entity<ReportVictim>()
-                .HasOne(rv => rv.Report)
-                .WithMany(r => r.ReportVictims)
-                .HasForeignKey(rv => rv.ReportId)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<ReportVictim>()
-                .HasOne(rv => rv.Victim)
-                .WithMany(v => v.ReportVictims)
-                .HasForeignKey(rv => rv.VictimId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<ReportWitness>()
-                .HasKey(rv => new { rv.ReportId, rv.WitnessId });
-            modelBuilder.Entity<ReportWitness>()
-                .HasOne(rv => rv.Report)
-                .WithMany(r => r.ReportWitness)
-                .HasForeignKey(rv => rv.ReportId)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<ReportWitness>()
-                .HasOne(rv => rv.Witness)
-                .WithMany(v => v.ReportWitness)
-                .HasForeignKey(rv => rv.WitnessId)
-                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Role>()
                 .HasKey(r => r.RoleId);
