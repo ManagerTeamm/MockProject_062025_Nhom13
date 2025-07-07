@@ -29,9 +29,9 @@ namespace BackEnd_Api.Controllers
         {
             try
             {
-                var reports = await _context.Reports.ToListAsync();
+                var reports = await _reportRepositoty.GetAllAsync();
 
-                var response = ApiResponseHelper<List<Report>>.SuccessResult(reports, "Get reports completed");
+                var response = ApiResponseHelper<List<Report>>.SuccessResult((List<Report>)reports, "Get reports completed");
 
                 return Ok(response);
             }
