@@ -47,7 +47,7 @@ const Sidebar = () => {
             </button>
 
             <div
-                className={`${isSmallScreen ? "offcanvas" : "offcanvas-md"} offcanvas-start bg-light`}
+                className={`sidebar ${isSmallScreen ? "offcanvas" : "offcanvas-md"} offcanvas-start bg-light`}
                 tabIndex={-1}
                 id="sidebarOffcanvas"
                 aria-labelledby="sidebarLabel"
