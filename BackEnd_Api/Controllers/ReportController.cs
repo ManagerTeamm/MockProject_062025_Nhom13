@@ -11,7 +11,6 @@ using System.IO;
 
 namespace BackEnd_Api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(Roles = "Report Approver")]
@@ -27,7 +26,8 @@ namespace BackEnd_Api.Controllers
         private readonly IReportWitnessRepository _reportWitnessRepository;
         private readonly IEvidenceRepository _evidenceRepository;
         private readonly IWebHostEnvironment _env;
-        public ReportController(ApplicationDbContext context, IReportRepository reportRepository, IVictimRepository victimRepository, IReportVictimRepository reportVictimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository, IReportSuspectRepository reportSuspectRepository, IWitnessRepository witnessRepository, IReportWitnessRepository reportWitnessRepository, IEvidenceRepository evidenceRepository)
+        private readonly IUserRepository _userRepository;
+        public ReportController(ApplicationDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IReportVictimRepository reportVictimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository, IReportSuspectRepository reportSuspectRepository, IWitnessRepository witnessRepository, IReportWitnessRepository reportWitnessRepository, IEvidenceRepository evidenceRepository)
         {
             _context = context;
             _reportRepository = reportRepository;
@@ -39,15 +39,17 @@ namespace BackEnd_Api.Controllers
             _witnessRepository = witnessRepository;
             _reportWitnessRepository = reportWitnessRepository;
             _evidenceRepository = evidenceRepository;
+            _userRepository = userRepository;
         }
+        
         [HttpGet("get-reports")]
         public async Task<IActionResult> GetReports()
         {
             try
             {
-                var reports = await _context.Reports.ToListAsync();
+                var reports = await _reportRepositoty.GetAllAsync();
 
-                var response = ApiResponseHelper<List<Report>>.SuccessResult(reports, "Get reports completed");
+                var response = ApiResponseHelper<List<Report>>.SuccessResult((List<Report>)reports, "Get reports completed");
 
                 return Ok(response);
             }
@@ -58,69 +60,33 @@ namespace BackEnd_Api.Controllers
             }
         }
 
-        [HttpPost("insert-sample")]
-        public async Task<IActionResult> InsertSampleReports()
-        {
-            try
-            {
-                var sampleReports = new List<Report>
-                {
-                    new Report
-                    {
-                        ReportId = Guid.NewGuid().ToString(),
-                        CaseId = null, // hoặc "CASE001" nếu bạn có CaseId tồn tại
-                        TypeReport = "Witness Statement",
-                        Severity = "Medium",
-                        Description = "Witness saw suspect near crime scene.",
-                        CaseLocation = "District 1",
-                        ReportedAt = DateTime.Now,
-                        ReporterFullname = "Nguyen Van A",
-                        ReporterEmail = "a@example.com",
-                        ReporterPhoneNumber = "0901000001",
-                        OfficerApproveId = "Huy0307",
-                        IsDeleted = false
-                    }
-
-                };
-
-                await _context.Reports.AddRangeAsync(sampleReports);
-                await _context.SaveChangesAsync();
-
-                var response = ApiResponseHelper<string>.SuccessResult(null, "Inserted 5 sample reports successfully");
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var response = ApiResponseHelper<string>.FailureResult("Failed to insert sample reports", new[] { ex.Message }, 500);
-                return StatusCode(500, response);
-            }
-        }
-        [HttpGet("/report-detail/{id}")]
+        [HttpGet("report-detail/{id}")]
         public async Task<IActionResult> GetReportDetail(string id)
         {
             try
             {
-                var reportDetail = await _context.Reports
-                                 .Include(r => r.ReportVictims)
-                                     .ThenInclude(rv => rv.Victim)
-                                 .Include(r => r.ReportWitness)
-                                     .ThenInclude(rw => rw.Witness)
-                                 .Include(r => r.ReportSuspects)
-                                     .ThenInclude(rs => rs.Suspect)
-                                 .Include(r => r.Case)
-                                 .FirstOrDefaultAsync(r => r.ReportId == id);
-                if (reportDetail == null)
+                if (id != null)
                 {
-                    var notFoundResponse = ApiResponseHelper<string>.FailureResult("Report not found", new[] { $"No report found with ID: {id}" }, 404);
-                    return NotFound(notFoundResponse);
+                    //var userPermissions = _userRepository.GetPermissions();
+                    //if (!userPermissions.Contains("Manage_Users"))
+                    //    return Forbid("You do not have permission to view users.");
+
+                    var reportDetail = await _reportRepositoty.GetReportDetail(id);
+
+                    if (reportDetail == null)
+                    {
+                        return NotFound(ApiResponseHelper<string>.NotFoundResult("Not found report id = " + id));
+                    }
+
+                    var response = ApiResponseHelper<object>.SuccessResult(reportDetail);
+                    
+                    return Ok(response);
                 }
-                var response = ApiResponseHelper<Report>.SuccessResult(reportDetail);
-                return Ok(response);
+                return NotFound(ApiResponseHelper<string>.NotFoundResult("Not found report id = " + id));
             }
             catch (Exception e)
             {
-                var response = ApiResponseHelper<string>.FailureResult("Failed to found  sample reports", new[] { e.Message }, 500);
-                return StatusCode(500, response);
+                return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] {e.Message}, 500));
             }
         }
 

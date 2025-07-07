@@ -1,12 +1,12 @@
 import { reportService } from "../services/reportService"; 
 import React, { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 const ReportPage = () => {
     const [reports, setReports] = useState([]);
     const [filteredReports, setFilteredReports] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    
+    const navigate = useNavigate();
     // Filter states
     const [selectedStatus, setSelectedStatus] = useState('All Status');
     const [selectedType, setSelectedType] = useState('All Types');
@@ -112,6 +112,15 @@ const ReportPage = () => {
         setSelectedType('All Types');
         setSelectedSeverity('All Severity');
     };
+
+
+    const handleViewDetail = (reportId) => {
+           if (reportId) {
+            navigate(`/report-detail/${reportId}`);
+        } else {
+            console.error('Report ID is missing');
+        }
+    }
 
     useEffect(() => {
         getReports();
@@ -320,7 +329,7 @@ const ReportPage = () => {
                                                     <td>
                                                         <button 
                                                             className="btn btn-sm btn-outline-primary"
-                                                            onClick={() => console.log('View details', report.reportId)}
+                                                            onClick={() =>handleViewDetail(report.reportId)}
                                                         >
                                                             View detail
                                                         </button>
