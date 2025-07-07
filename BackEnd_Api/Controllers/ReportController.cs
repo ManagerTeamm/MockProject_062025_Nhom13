@@ -47,7 +47,7 @@ namespace BackEnd_Api.Controllers
         {
             try
             {
-                var reports = await _reportRepositoty.GetAllAsync();
+                var reports = await _reportRepository.GetAllAsync();
 
                 var response = ApiResponseHelper<List<Report>>.SuccessResult((List<Report>)reports, "Get reports completed");
 
@@ -71,7 +71,7 @@ namespace BackEnd_Api.Controllers
                     //if (!userPermissions.Contains("Manage_Users"))
                     //    return Forbid("You do not have permission to view users.");
 
-                    var reportDetail = await _reportRepositoty.GetReportDetail(id);
+                    var reportDetail = await _reportRepository.GetReportDetail(id);
 
                     if (reportDetail == null)
                     {
@@ -149,16 +149,16 @@ namespace BackEnd_Api.Controllers
                                     imageUrls = await SaveFileAsync("images", party.Attachments, "victim", victim.VictimId);
                                 }
 
-                                var reportVictim = new ReportVictim
-                                {
-                                    ReportId = report.ReportId,
-                                    VictimId = victim.VictimId,
-                                    ImageUrls = imageUrls.Count > 0
-                                                ? string.Join(";", imageUrls)
-                                                : null,
-                                    IsDeleted = false
-                                };
-                                await _reportVictimRepository.CreateReportVictimAsync(reportVictim);
+                                //var reportVictim = new ReportVictim
+                                //{
+                                //    ReportId = report.ReportId,
+                                //    VictimId = victim.VictimId,
+                                //    ImageUrls = imageUrls.Count > 0
+                                //                ? string.Join(";", imageUrls)
+                                //                : null,
+                                //    IsDeleted = false
+                                //};
+                                //await _reportVictimRepository.CreateReportVictimAsync(reportVictim);
                                 break;
                             case "suspect":
                                 var suspect = new Suspect
@@ -184,17 +184,17 @@ namespace BackEnd_Api.Controllers
                                 }
 
 
-                                var reportSuspect = new ReportSuspect
-                                {
-                                    ReportId = report.ReportId,
-                                    SuspectId = suspect.SuspectId,
-                                    ImageUrls = imageUrlsSuspect.Count > 0
-                                                ? string.Join(";", imageUrlsSuspect)
-                                                : null,
-                                    IsDeleted = false,
-                                };
+                                //var reportSuspect = new ReportSuspect
+                                //{
+                                //    ReportId = report.ReportId,
+                                //    SuspectId = suspect.SuspectId,
+                                //    ImageUrls = imageUrlsSuspect.Count > 0
+                                //                ? string.Join(";", imageUrlsSuspect)
+                                //                : null,
+                                //    IsDeleted = false,
+                                //};
 
-                                await _reportSuspectRepository.CreateReportSuspectAsync(reportSuspect);
+                                //await _reportSuspectRepository.CreateReportSuspectAsync(reportSuspect);
                                 break;
                             case "witness":
                                 var witness = new Witness
@@ -219,17 +219,17 @@ namespace BackEnd_Api.Controllers
                                 }
 
 
-                                var reportWitness = new ReportWitness
-                                {
-                                    ReportId = report.ReportId,
-                                    WitnessId = witness.WitnessId,
-                                    ImageUrls = imageUrlsWitness.Count > 0
-                                                ? string.Join(";", imageUrlsWitness)
-                                                : null,
-                                    IsDeleted = false,
-                                };
+                                //var reportWitness = new ReportWitness
+                                //{
+                                //    ReportId = report.ReportId,
+                                //    WitnessId = witness.WitnessId,
+                                //    ImageUrls = imageUrlsWitness.Count > 0
+                                //                ? string.Join(";", imageUrlsWitness)
+                                //                : null,
+                                //    IsDeleted = false,
+                                //};
 
-                                await _reportWitnessRepository.CreateReportWitnessAsync(reportWitness);
+                                //await _reportWitnessRepository.CreateReportWitnessAsync(reportWitness);
                                 break;
                             case "other":
                                 break;

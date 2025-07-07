@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class Interview
+    public class Interview : ISoftDeletable
     {
         public string InterviewId { get; set; }
         public string? InvestigationPlanId { get; set; }

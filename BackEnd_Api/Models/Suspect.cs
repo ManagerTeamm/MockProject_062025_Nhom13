@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class Suspect
+    public class Suspect : ISoftDeletable
     {
         public string SuspectId { get; set; }
         public string? CaseId { get; set; }
@@ -20,7 +22,6 @@
         public string? FingerPrintsHash { get; set; }
         public string? HealthStatus { get; set; }
         public bool IsDeleted { get; set; }
-        public ICollection<ReportSuspect> ReportSuspects { get; set; }
         public ICollection<ProsecutionSuspect> ProsecutionSuspects { get; set; }
         public ICollection<SuspectEvidence> SuspectEvidences { get; set; }
         public ICollection<Event> Events { get; set; }

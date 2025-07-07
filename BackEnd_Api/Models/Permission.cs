@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class Permission
+    public class Permission : ISoftDeletable
     {
         public string PermissionId { get; set; }
         public string Description { get; set; }
