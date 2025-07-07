@@ -10,6 +10,7 @@ import CaseFile from "../samples/pages/casefile";
 import Home from "../pages/home";
 import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
+import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 
 const AppRoutes = () => {
   const {loading } = useAuth();
@@ -24,6 +25,7 @@ const AppRoutes = () => {
     { path: "/about-us", element: <div>About Us</div> },
     { path: "/home", element: <Home /> },
     { path: "/reportSupect", element: <ReportSuspect/>},
+    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
