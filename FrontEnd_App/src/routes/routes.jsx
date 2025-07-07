@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
-import ProtectedRoute from "./protectedRoute";
+import ProtectedRoute from "./protectedroute";
 import LoginComponent from "../pages/login";
 import Main from "../samples/pages/admin/main";
 import AdminPage from "../samples/pages/admin/admin";
@@ -10,10 +10,13 @@ import CaseFile from "../samples/pages/casefile";
 import Home from "../pages/home";
 import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
-import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
+import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
+
+//sample dashboard
+import Dashboard from "../samples/dashboard";
 
 const AppRoutes = () => {
-  const {loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) return <div>Loading...</div>;
 
@@ -24,18 +27,23 @@ const AppRoutes = () => {
     { path: "/service", element: <div>Service Page</div> },
     { path: "/about-us", element: <div>About Us</div> },
     { path: "/home", element: <Home /> },
-    { path: "/reportSupect", element: <ReportSuspect/>},
-    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
+    { path: "/reportSupect", element: <ReportSuspect /> },
+    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
       children: [
-        
+
         {
           path: "admin",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <AdminPage /> }],
-          },
+        },
+        {
+          path: "admin/dashboard",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Dashboard /> }],
+        },
         {
           path: "admin/userList",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,

@@ -24,7 +24,7 @@ const LoginComponent = () => {
       const role = getUserRoleFromToken();
       console.log("User role:", role);
       
-      role? navigate("/secure/dashboard") : navigate("/login");
+      role=="Admin"? navigate("/secure/admin/dashboard") : navigate("/home");
     } catch (error) {
       console.error("Login error:", error);
       alert("Login failed: " + (error.response?.data || error.message));
