@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class Case
+    public class Case : ISoftDeletable
     {
         public string CaseId { get; set; }
         public string TypeCase { get; set; }

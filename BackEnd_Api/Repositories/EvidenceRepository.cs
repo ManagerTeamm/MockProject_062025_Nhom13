@@ -205,6 +205,8 @@ namespace BackEnd_Api.Repositories
                 HasNextPage = page < totalPages,
                 HasPreviousPage = page > 1
             };
+        }
+
 
         public async Task CreateInitialEvidence(Evidence evidence)
         {

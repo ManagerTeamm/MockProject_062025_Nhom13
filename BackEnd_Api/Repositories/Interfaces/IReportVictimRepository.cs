@@ -4,6 +4,6 @@ namespace BackEnd_Api.Repositories.Interfaces
 {
     public interface IReportVictimRepository
     {
-        Task CreateReportVictimAsync(ReportVictim reportVictim);
+        //Task CreateReportVictimAsync(ReportVictim reportVictim);
     }
 }

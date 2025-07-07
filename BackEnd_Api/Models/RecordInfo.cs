@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class RecordInfo
+    public class RecordInfo : ISoftDeletable
     {
         public string RecordInfoId { get; set; }
         public string EvidenceId { get; set; }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEnd_Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250705041142_updatedb")]
-    partial class updatedb
+    [Migration("20250707024625_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -216,7 +216,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CollectedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CurrentLocation")
@@ -691,69 +690,6 @@ namespace BackEnd_Api.Migrations
                     b.ToTable("Reports");
                 });
 
-            modelBuilder.Entity("BackEnd_Api.Models.ReportSuspect", b =>
-                {
-                    b.Property<string>("ReportId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SuspectId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ImageUrls")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ReportId", "SuspectId");
-
-                    b.HasIndex("SuspectId");
-
-                    b.ToTable("ReportSuspects");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ReportVictim", b =>
-                {
-                    b.Property<string>("ReportId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("VictimId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ImageUrls")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ReportId", "VictimId");
-
-                    b.HasIndex("VictimId");
-
-                    b.ToTable("ReportVictims");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ReportWitness", b =>
-                {
-                    b.Property<string>("ReportId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("WitnessId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ImageUrls")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ReportId", "WitnessId");
-
-                    b.HasIndex("WitnessId");
-
-                    b.ToTable("ReportWitness");
-                });
-
             modelBuilder.Entity("BackEnd_Api.Models.Role", b =>
                 {
                     b.Property<string>("RoleId")
@@ -973,7 +909,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CaseId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CatchTime")
@@ -1159,7 +1094,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Injuries")
@@ -1296,7 +1230,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CaseId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Contact")
@@ -1419,8 +1352,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.User", "User")
                         .WithMany("Evidences")
                         .HasForeignKey("CollectedBy")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BackEnd_Api.Models.MeasureSurvey", "MeasureSurvey")
                         .WithMany("Evidences")
@@ -1623,63 +1555,6 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BackEnd_Api.Models.ReportSuspect", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.Report", "Report")
-                        .WithMany("ReportSuspects")
-                        .HasForeignKey("ReportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd_Api.Models.Suspect", "Suspect")
-                        .WithMany("ReportSuspects")
-                        .HasForeignKey("SuspectId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Report");
-
-                    b.Navigation("Suspect");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ReportVictim", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.Report", "Report")
-                        .WithMany("ReportVictims")
-                        .HasForeignKey("ReportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd_Api.Models.Victim", "Victim")
-                        .WithMany("ReportVictims")
-                        .HasForeignKey("VictimId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Report");
-
-                    b.Navigation("Victim");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ReportWitness", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.Report", "Report")
-                        .WithMany("ReportWitness")
-                        .HasForeignKey("ReportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd_Api.Models.Witness", "Witness")
-                        .WithMany("ReportWitness")
-                        .HasForeignKey("WitnessId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Report");
-
-                    b.Navigation("Witness");
-                });
-
             modelBuilder.Entity("BackEnd_Api.Models.RolePermission", b =>
                 {
                     b.HasOne("BackEnd_Api.Models.Permission", "Permission")
@@ -1783,8 +1658,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
                         .WithMany("Suspects")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Case");
                 });
@@ -1940,8 +1814,7 @@ namespace BackEnd_Api.Migrations
                     b.HasOne("BackEnd_Api.Models.Case", "Case")
                         .WithMany("Witnesses")
                         .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Case");
                 });
@@ -2045,12 +1918,6 @@ namespace BackEnd_Api.Migrations
             modelBuilder.Entity("BackEnd_Api.Models.Report", b =>
                 {
                     b.Navigation("Evidences");
-
-                    b.Navigation("ReportSuspects");
-
-                    b.Navigation("ReportVictims");
-
-                    b.Navigation("ReportWitness");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Role", b =>
@@ -2072,8 +1939,6 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("Events");
 
                     b.Navigation("ProsecutionSuspects");
-
-                    b.Navigation("ReportSuspects");
 
                     b.Navigation("SuspectEvidences");
                 });
@@ -2107,8 +1972,6 @@ namespace BackEnd_Api.Migrations
 
             modelBuilder.Entity("BackEnd_Api.Models.Victim", b =>
                 {
-                    b.Navigation("ReportVictims");
-
                     b.Navigation("VictimEvidences");
                 });
 
@@ -2122,11 +1985,6 @@ namespace BackEnd_Api.Migrations
             modelBuilder.Entity("BackEnd_Api.Models.WarrantResult", b =>
                 {
                     b.Navigation("Evidences");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.Witness", b =>
-                {
-                    b.Navigation("ReportWitness");
                 });
 #pragma warning restore 612, 618
         }

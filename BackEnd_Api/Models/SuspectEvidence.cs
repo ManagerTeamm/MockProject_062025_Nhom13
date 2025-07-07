@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class SuspectEvidence
+    public class SuspectEvidence : ISoftDeletable
     {
         public string SuspectId { get; set; }
         public Suspect Suspect { get; set; }
