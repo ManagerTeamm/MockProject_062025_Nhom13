@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 const helpItems = [
   { icon: 'chat-square-text', text: 'Tell us what happened.' },
   { icon: 'people',           text: 'Your contribution & our mission.' },
@@ -5,6 +6,7 @@ const helpItems = [
 ];
 
 export default function HowYouCanHelp() {
+  const navigate = useNavigate();
   return (
     <section className="text-center my-5">
       <h3 className="fw-bold mb-4">How You Can Help?</h3>
@@ -16,7 +18,7 @@ export default function HowYouCanHelp() {
           </div>
         ))}
       </div>
-      <button className="btn btn-primary px-5 py-2">File A Report</button>
+      <button onClick={() => navigate('/report-suspect')} className="btn btn-primary px-5 py-2">File A Report</button>
       <hr className="my-5" style={{ maxWidth: 700, margin: '2rem auto' }} />
     </section>
   );

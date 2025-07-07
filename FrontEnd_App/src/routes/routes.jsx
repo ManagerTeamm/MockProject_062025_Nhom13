@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
-import ProtectedRoute from "./protectedRoute";
+import ProtectedRoute from "./protectedroute";
 import LoginComponent from "../pages/login";
 import Main from "../samples/pages/admin/main";
 import AdminPage from "../samples/pages/admin/admin";
@@ -12,6 +12,7 @@ import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
+import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 
 const AppRoutes = () => {
   const {loading } = useAuth();
@@ -25,9 +26,10 @@ const AppRoutes = () => {
     { path: "/service", element: <div>Service Page</div> },
     { path: "/about-us", element: <div>About Us</div> },
     { path: "/home", element: <Home /> },
-    { path: "/reportSupect", element: <ReportSuspect /> },
     { path: "/report-list", element: <ReportPage /> },
     { path: "/report-detail/:reportId", element: <ReportDetail /> },
+    { path: "/report-suspect", element: <ReportSuspect/>},
+    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,

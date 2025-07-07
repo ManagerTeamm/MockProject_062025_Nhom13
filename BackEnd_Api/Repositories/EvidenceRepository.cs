@@ -72,5 +72,11 @@ namespace BackEnd_Api.Repositories
                 Status = evidence.Status
             };
         }
+
+        public async Task CreateInitialEvidence(Evidence evidence)
+        {
+            await _context.Evidences.AddAsync(evidence);
+            await _context.SaveChangesAsync();
+        }
     }
 }
