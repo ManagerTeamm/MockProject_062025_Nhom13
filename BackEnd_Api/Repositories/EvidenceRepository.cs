@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd_Api.Repositories
 {
-    public class EvidenceRepository : IEvidenceRepository
+    public class EvidenceRepository : Repository<Evidence>, IEvidenceRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public EvidenceRepository(ApplicationDbContext context)
+        public EvidenceRepository(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
@@ -208,9 +208,9 @@ namespace BackEnd_Api.Repositories
         }
 
 
-        public async Task CreateInitialEvidence(Evidence evidence)
+        public async Task CreateEvidenceAsync(Evidence evidence)
         {
-            await _context.Evidences.AddAsync(evidence);
+            await _dbSet.AddAsync(evidence);
             await _context.SaveChangesAsync();
         }
     }

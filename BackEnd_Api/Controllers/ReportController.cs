@@ -18,29 +18,19 @@ namespace BackEnd_Api.Controllers
     public class ReportController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
-        private readonly IVictimRepository _victimRepository;
-      //  private readonly IReportVictimRepository _reportVictimRepository;
-        private readonly ISuspectRepository _suspectRepository;
-      //  private readonly IReportSuspectRepository _reportSuspectRepository;
-        private readonly IWitnessRepository _witnessRepository;
-      //  private readonly IReportWitnessRepository _reportWitnessRepository;
         private readonly IEvidenceRepository _evidenceRepository;
         private readonly IWebHostEnvironment _env;
         private readonly IUserRepository _userRepository;
-        public ReportController(IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository,  IWitnessRepository witnessRepository, IEvidenceRepository evidenceRepository)
+        private readonly IReportPartiesRepository _reportPartiesRepository;
+        public ReportController(ApplicationDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository, IWitnessRepository witnessRepository, IEvidenceRepository evidenceRepository, IReportPartiesRepository reportPartiesRepository)
         {
             _reportRepository = reportRepository;
-            _victimRepository = victimRepository;
-         //   _reportVictimRepository = reportVictimRepository;
             _env = env;
-            _suspectRepository = suspectRepository;
-        //    _reportSuspectRepository = reportSuspectRepository;
-            _witnessRepository = witnessRepository;
-        //    _reportWitnessRepository = reportWitnessRepository;
             _evidenceRepository = evidenceRepository;
             _userRepository = userRepository;
+            _reportPartiesRepository = reportPartiesRepository;
         }
-        
+
         [HttpGet("get-reports")]
         public async Task<IActionResult> GetReports()
         {
@@ -82,14 +72,14 @@ namespace BackEnd_Api.Controllers
                     }
 
                     var response = ApiResponseHelper<object>.SuccessResult(reportDetail);
-                    
+
                     return Ok(response);
                 }
                 return NotFound(ApiResponseHelper<string>.NotFoundResult("Not found report id = " + id));
             }
             catch (Exception e)
             {
-                return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] {e.Message}, 500));
+                return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] { e.Message }, 500));
             }
         }
 
@@ -124,126 +114,33 @@ namespace BackEnd_Api.Controllers
 
                 await _reportRepository.CreateReportAsync(report);
 
-                if(request.RelevantParties != null && request.RelevantParties.Any())
+                if (request.RelevantParties != null && request.RelevantParties.Any())
                 {
                     foreach (var party in request.RelevantParties)
                     {
-                        switch (party.Role?.ToLower())
+                        var relevantParty = new ReportParties()
                         {
-                            case "victim":
-                                var victim = new Victim
-                                {
-                                    VictimId = Guid.NewGuid().ToString(),
-                                    CaseId = null,
-                                    Fullname = party.FullName,
-                                    National = party.Nationality,
-                                    Gender = party.Gender,
-                                    Description = party.Statement,
-                                    Contact = party.Contact,
-                                    Status = "Unknown",
-                                    IsDeleted = false
-                                };
-                                await _victimRepository.CreateVictimAsync(victim);
+                            ReportPartiesId = Guid.NewGuid().ToString(),
+                            ReportId = report.ReportId,
+                            FullName = party.FullName,
+                            TypeOfParties = party.Role ?? "unknown",
+                            Gender = party.Gender,
+                            National = party.Nationality,
+                            Description = party.Statement,
+                            IsDeleted = false
+                        };
 
-                                var imageUrls = new List<string>();
-
-                                if (party.Attachments != null && party.Attachments.Any())
-                                {
-                                    imageUrls = await SaveFileAsync("images", party.Attachments, "victim", victim.VictimId);
-                                }
-
-                                //var reportVictim = new ReportVictim
-                                //{
-                                //    ReportId = report.ReportId,
-                                //    VictimId = victim.VictimId,
-                                //    ImageUrls = imageUrls.Count > 0
-                                //                ? string.Join(";", imageUrls)
-                                //                : null,
-                                //    IsDeleted = false
-                                //};
-                                //await _reportVictimRepository.CreateReportVictimAsync(reportVictim);
-                                break;
-                            case "suspect":
-                                var suspect = new Suspect
-                                {
-                                    SuspectId = Guid.NewGuid().ToString(),
-                                    CaseId = null,
-                                    Fullname = party.FullName,
-                                    Gender = party.Gender,
-                                    National = party.Nationality,
-                                    Description = party.Statement,
-                                    PhoneNumber = party.Contact,
-                                    Status = "Unknown",
-                                    IsDeleted = false
-                                };
-
-                                await _suspectRepository.CreateSuspectAsync(suspect);
-
-                                var imageUrlsSuspect = new List<string>();
-
-                                if (party.Attachments != null && party.Attachments.Any())
-                                {
-                                    imageUrls = await SaveFileAsync("images", party.Attachments, "suspect", suspect.SuspectId);
-                                }
-
-
-                                //var reportSuspect = new ReportSuspect
-                                //{
-                                //    ReportId = report.ReportId,
-                                //    SuspectId = suspect.SuspectId,
-                                //    ImageUrls = imageUrlsSuspect.Count > 0
-                                //                ? string.Join(";", imageUrlsSuspect)
-                                //                : null,
-                                //    IsDeleted = false,
-                                //};
-
-                                //await _reportSuspectRepository.CreateReportSuspectAsync(reportSuspect);
-                                break;
-                            case "witness":
-                                var witness = new Witness
-                                {
-                                    WitnessId = Guid.NewGuid().ToString(),
-                                    CaseId = null,
-                                    Fullname = party.FullName,
-                                    Gender = party.Gender,
-                                    National = party.Nationality,
-                                    Statement = party.Statement,
-                                    Contact = party.Contact,
-                                    IsDeleted = false
-                                };
-
-                                await _witnessRepository.CreateWitnessAsync(witness);
-
-                                var imageUrlsWitness = new List<string>();
-
-                                if (party.Attachments != null && party.Attachments.Any())
-                                {
-                                    imageUrls = await SaveFileAsync("images", party.Attachments, "witness", witness.WitnessId);
-                                }
-
-
-                                //var reportWitness = new ReportWitness
-                                //{
-                                //    ReportId = report.ReportId,
-                                //    WitnessId = witness.WitnessId,
-                                //    ImageUrls = imageUrlsWitness.Count > 0
-                                //                ? string.Join(";", imageUrlsWitness)
-                                //                : null,
-                                //    IsDeleted = false,
-                                //};
-
-                                //await _reportWitnessRepository.CreateReportWitnessAsync(reportWitness);
-                                break;
-                            case "other":
-                                break;
-                        }
+                        await _reportPartiesRepository.CreateReportPartiesAsync(relevantParty);
                     }
                 }
 
-                if(request.Evidences != null && request.Evidences.Any())
+                if (request.Evidences != null && request.Evidences.Any())
                 {
                     foreach (var evidenceDto in request.Evidences)
                     {
+                        if (evidenceDto == null)
+                            continue;
+
                         var evidence = new Evidence
                         {
                             EvidenceId = Guid.NewGuid().ToString(),
@@ -251,7 +148,7 @@ namespace BackEnd_Api.Controllers
                             TypeEvidence = evidenceDto.TypeOfEvidence,
                             Description = evidenceDto.Description,
                             CollectedAt = DateTime.UtcNow,
-                            CurrentLocation = "Unknown",
+                            CurrentLocation = evidenceDto.EvidenceLocation ?? "Unknown",
                             Status = "Pending",
                             IsDeleted = false
                         };
@@ -260,14 +157,14 @@ namespace BackEnd_Api.Controllers
 
                         if (evidenceDto.Attachments != null && evidenceDto.Attachments.Any())
                         {
-                            files = await SaveFileAsync("files",evidenceDto.Attachments, "evidence", evidence.EvidenceId);
+                            files = await SaveFileAsync("files", evidenceDto.Attachments, "evidence", evidence.EvidenceId);
                         }
 
                         evidence.AttachedFile = files.Count > 0
                                             ? string.Join(";", files)
                                             : null;
 
-                        await _evidenceRepository.CreateInitialEvidence(evidence);
+                        await _evidenceRepository.CreateEvidenceAsync(evidence);
                     }
                 }
                 var response = ApiResponseHelper<string>.SuccessResult(null, "Report created successfully");
@@ -286,6 +183,9 @@ namespace BackEnd_Api.Controllers
 
             if (attachments == null || !attachments.Any())
                 return imageUrls;
+
+            var rootPath = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            Directory.CreateDirectory(rootPath);
 
             var dateFolder = DateTime.UtcNow.ToString("yyyyMMdd");
             var validUrl = $"{prefix}_{dateFolder}";
