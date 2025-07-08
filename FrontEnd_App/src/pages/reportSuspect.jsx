@@ -92,6 +92,14 @@ export default function MultiStepFormMui() {
         setConfirmDeleteDialog({ open: false, type: '', id: null });
     };
 
+    const handleDetailedAddressChange = useCallback((e) => {
+        setDetailedAddress(e.target.value);
+    }, []);
+
+    const handleIncidentDescriptionChange = useCallback((e) => {
+        setIncidentDescription(e.target.value);
+    }, []);
+
 
     // Sử dụng useMemo để tối ưu hóa việc kiểm tra validation
     const isStepValid = useMemo(() => {
@@ -492,8 +500,7 @@ export default function MultiStepFormMui() {
                                 fullWidth
                                 name="detailedAddress"
                                 label="Detailed address"
-                                value={detailedAddress}
-                                onChange={(e) => setDetailedAddress(e.target.value)}
+                                onChange={handleDetailedAddressChange}
                                 multiline
                                 sx={{ mb: 4 }}
                             />
@@ -505,8 +512,7 @@ export default function MultiStepFormMui() {
                                 multiline
                                 rows={4}
                                 fullWidth
-                                value={incidentDescription}
-                                onChange={(e) => setIncidentDescription(e.target.value)}
+                                onChange={handleIncidentDescriptionChange}
                                 sx={{ mb: 4 }}
                             />
 
