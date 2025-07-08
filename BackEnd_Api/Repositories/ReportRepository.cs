@@ -1,12 +1,81 @@
 ﻿using BackEnd_Api.Models;
 using BackEnd_Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-
 namespace BackEnd_Api.Repositories
 {
     public class ReportRepository : Repository<Report>, IReportRepository
     {
-        public ReportRepository(ApplicationDbContext context) : base(context) { }
+        private readonly ICaseRepository _caseRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserRepository _userRepository;
+        public ReportRepository(ApplicationDbContext context, ICaseRepository caseRepository,
+                           IHttpContextAccessor httpContextAccessor, IUserRepository userRepository) : base(context) 
+        {
+            _caseRepository = caseRepository;
+            _httpContextAccessor = httpContextAccessor;
+            _userRepository = userRepository;
+        }
+
+        public async Task<object> ApproveReport(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentException("Empty id", nameof(id));
+
+            var report = await GetByIdAsync(id);
+
+            if (report == null)
+                throw new ArgumentException($"Not found ID: {id}");
+
+            if (report.CaseId != null)
+            {
+                throw new ArgumentException($"Report Approved: {id}");
+            }
+
+            // Bắt đầu transaction
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var newCase = new Case
+                {
+                    CaseId = $"CASE_{DateTime.Now:yyyyMMddHHmmss}_{Random.Shared.Next(1000, 9999)}",
+                    TypeCase = report.TypeReport,
+                    Severity = report.Severity,
+                    Status = "New Case",
+                    CreateAt = DateTime.Now,
+                    IsDeleted = false
+                };
+
+                // Thêm case (có auto SaveAsync trong AddAsync)
+                await _caseRepository.AddAsync(newCase);
+
+                // Update OfficerApprove
+                var userName = _httpContextAccessor.HttpContext?.User.FindFirst("name")?.Value;
+                report.OfficerApproveId = userName;
+                report.CaseId = newCase.CaseId;
+
+                // Save change (có auto SaveAsync trong Update)
+                await Update(report);
+
+                // Commit transaction nếu tất cả thành công
+                await transaction.CommitAsync();
+
+                return new
+                {
+                    CaseId = newCase.CaseId,
+                    TypeCase = newCase.TypeCase,
+                    Severity = newCase.Severity,
+                    Status = newCase.Status,
+                    CreateAt = newCase.CreateAt,
+                    IsDeleted = newCase.IsDeleted
+                };
+            }
+            catch (Exception)
+            {
+                // Rollback nếu có lỗi
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
 
         public async Task CreateReportAsync(Report report)
         {

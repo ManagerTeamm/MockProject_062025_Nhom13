@@ -7,5 +7,6 @@ namespace BackEnd_Api.Repositories.Interfaces
     {
         Task CreateReportAsync(Report report);
         Task<object> GetReportDetail(string id);
+        Task<object> ApproveReport(string id);
     }
 }

@@ -83,6 +83,26 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        [HttpPost("report-approve/{id}")]
+        public async Task<IActionResult> ApproveReport(string id)
+        {
+            try
+             {
+                var newCase = await _reportRepository.ApproveReport(id);
+
+                return Ok(ApiResponseHelper<object>.SuccessResult(newCase));
+
+
+            }catch(ArgumentException e)
+            {
+                return BadRequest(ApiResponseHelper<string>.NotFoundResult(e.Message));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] { e.Message }, 500));
+            }
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> CreateReport([FromForm] ReportRequestDto request)
@@ -193,7 +213,7 @@ namespace BackEnd_Api.Controllers
             Directory.CreateDirectory(saveDir);
 
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp",
-    ".pdf", ".psd", ".doc", ".docx", ".ppt", ".pptx", ".ai"};
+                                            ".pdf", ".psd", ".doc", ".docx", ".ppt", ".pptx", ".ai"};
 
             foreach (var file in attachments)
             {
@@ -227,5 +247,7 @@ namespace BackEnd_Api.Controllers
 
             return imageUrls;
         }
+
+
     }
 }

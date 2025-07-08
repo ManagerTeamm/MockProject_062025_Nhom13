@@ -24,7 +24,7 @@ const ReportPage = () => {
     ];
 
     // Severity levels
-    const severityLevels = ['Minor', 'Moderate', 'Serious', 'Critical'];
+    const severityLevels = ['Urgent', 'No Urgent'];
 
     // Status options
     const statusOptions = ['Approved', 'Pending', 'Rejected'];
@@ -55,9 +55,8 @@ const ReportPage = () => {
         return date.toLocaleDateString('en-GB');
     };
 
-    // Get status based on some logic (you can customize this)
+    // Get status based on some logic
     const getStatus = (report) => {
-        // Example logic - you can customize based on your business rules
         if (report.isDeleted) return { text: 'Rejected', class: 'badge bg-danger' };
         if (report.officerApproveId) return { text: 'Approved', class: 'badge bg-success' };
         return { text: 'Pending', class: 'badge bg-warning' };
@@ -206,12 +205,13 @@ const ReportPage = () => {
                 </div>
 
                 {/* Error Message */}
-                {error && (
+                
+                {/* {error && (
                     <div className="alert alert-danger" role="alert">
                         {error}
                     </div>
-                )}
-
+                )} */}
+                
                 {/* Loading */}
                 {loading ? (
                     <div className="text-center py-5">
@@ -388,7 +388,6 @@ const ReportPage = () => {
             </div>
         </div>
     );
-    // ...existing code...
 };
 
 export default ReportPage;

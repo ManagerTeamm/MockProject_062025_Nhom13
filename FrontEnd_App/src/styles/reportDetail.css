@@ -94,6 +94,126 @@
   height: 3rem;
 }
 
+/* Media Modal styling */
+.modal.show {
+  display: block !important;
+}
+
+.modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  min-height: calc(100vh - 1rem);
+}
+
+.modal-content {
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  border-top: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+}
+
+/* Action buttons styling */
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+/* Spinner styling */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Media preview styling */
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+video {
+  border-radius: 6px;
+}
+
+iframe {
+  border: none;
+  border-radius: 6px;
+}
+
+/* Thumbnail styling */
+.img-thumbnail {
+  border-radius: 4px;
+  transition: transform 0.2s ease;
+}
+
+.img-thumbnail:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* File type icons */
+.file-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.file-icon-container:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+/* Evidence table adjustments */
+.table td {
+  vertical-align: middle;
+}
+
+.evidence-attachment {
+  max-width: 200px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .container-fluid {
@@ -128,6 +248,19 @@
   
   h6 {
     font-size: 1rem;
+  }
+  
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+  
+  .modal-content {
+    border-radius: 0;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -175,5 +308,17 @@
   
   .align-items-md-end {
     align-items: flex-start !important;
+  }
+}
+
+/* Print styling */
+@media print {
+  .btn, .modal {
+    display: none !important;
+  }
+  
+  .card {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
   }
 }
