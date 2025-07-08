@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class Timeline
+    public class Timeline : ISoftDeletable
     {
         public string TimelineId { get; set; }
         public string CaseResultId { get; set; }

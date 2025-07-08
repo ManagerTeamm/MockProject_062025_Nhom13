@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class SceneMedia
+    public class SceneMedia : ISoftDeletable
     {
         public string SceneMediaId { get; set; }
         public string CaseId { get; set; }

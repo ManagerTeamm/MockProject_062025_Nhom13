@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class Event
+    public class Event : ISoftDeletable
     {
         public string EventId { get; set; }
         public string SuspectId { get; set; }

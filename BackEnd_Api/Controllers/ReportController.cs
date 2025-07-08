@@ -8,36 +8,37 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using System.Security.Claims;
 
 namespace BackEnd_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Report Approver")]
+    [Authorize(Roles = "Report Approver,Admin")]
     public class ReportController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly IReportRepository _reportRepository;
         private readonly IVictimRepository _victimRepository;
-        private readonly IReportVictimRepository _reportVictimRepository;
+      //  private readonly IReportVictimRepository _reportVictimRepository;
         private readonly ISuspectRepository _suspectRepository;
-        private readonly IReportSuspectRepository _reportSuspectRepository;
+      //  private readonly IReportSuspectRepository _reportSuspectRepository;
         private readonly IWitnessRepository _witnessRepository;
-        private readonly IReportWitnessRepository _reportWitnessRepository;
+      //  private readonly IReportWitnessRepository _reportWitnessRepository;
         private readonly IEvidenceRepository _evidenceRepository;
         private readonly IWebHostEnvironment _env;
         private readonly IUserRepository _userRepository;
-        public ReportController(ApplicationDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IReportVictimRepository reportVictimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository, IReportSuspectRepository reportSuspectRepository, IWitnessRepository witnessRepository, IReportWitnessRepository reportWitnessRepository, IEvidenceRepository evidenceRepository)
+        public ReportController(ApplicationDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository,  IWitnessRepository witnessRepository, IEvidenceRepository evidenceRepository)
         {
             _context = context;
             _reportRepository = reportRepository;
             _victimRepository = victimRepository;
-            _reportVictimRepository = reportVictimRepository;
+         //   _reportVictimRepository = reportVictimRepository;
             _env = env;
             _suspectRepository = suspectRepository;
-            _reportSuspectRepository = reportSuspectRepository;
+        //    _reportSuspectRepository = reportSuspectRepository;
             _witnessRepository = witnessRepository;
-            _reportWitnessRepository = reportWitnessRepository;
+        //    _reportWitnessRepository = reportWitnessRepository;
             _evidenceRepository = evidenceRepository;
             _userRepository = userRepository;
         }
@@ -47,7 +48,11 @@ namespace BackEnd_Api.Controllers
         {
             try
             {
-                var reports = await _reportRepositoty.GetAllAsync();
+                //var userPermissions = _userRepository.GetPermissions();
+                //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
+                //    return Forbid("You do not have permission to view users.");
+
+                var reports = await _reportRepository.GetAllAsync();
 
                 var response = ApiResponseHelper<List<Report>>.SuccessResult((List<Report>)reports, "Get reports completed");
 
@@ -68,10 +73,10 @@ namespace BackEnd_Api.Controllers
                 if (id != null)
                 {
                     //var userPermissions = _userRepository.GetPermissions();
-                    //if (!userPermissions.Contains("Manage_Users"))
+                    //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
                     //    return Forbid("You do not have permission to view users.");
 
-                    var reportDetail = await _reportRepositoty.GetReportDetail(id);
+                    var reportDetail = await _reportRepository.GetReportDetail(id);
 
                     if (reportDetail == null)
                     {
@@ -149,16 +154,16 @@ namespace BackEnd_Api.Controllers
                                     imageUrls = await SaveFileAsync("images", party.Attachments, "victim", victim.VictimId);
                                 }
 
-                                var reportVictim = new ReportVictim
-                                {
-                                    ReportId = report.ReportId,
-                                    VictimId = victim.VictimId,
-                                    ImageUrls = imageUrls.Count > 0
-                                                ? string.Join(";", imageUrls)
-                                                : null,
-                                    IsDeleted = false
-                                };
-                                await _reportVictimRepository.CreateReportVictimAsync(reportVictim);
+                                //var reportVictim = new ReportVictim
+                                //{
+                                //    ReportId = report.ReportId,
+                                //    VictimId = victim.VictimId,
+                                //    ImageUrls = imageUrls.Count > 0
+                                //                ? string.Join(";", imageUrls)
+                                //                : null,
+                                //    IsDeleted = false
+                                //};
+                                //await _reportVictimRepository.CreateReportVictimAsync(reportVictim);
                                 break;
                             case "suspect":
                                 var suspect = new Suspect
@@ -184,17 +189,17 @@ namespace BackEnd_Api.Controllers
                                 }
 
 
-                                var reportSuspect = new ReportSuspect
-                                {
-                                    ReportId = report.ReportId,
-                                    SuspectId = suspect.SuspectId,
-                                    ImageUrls = imageUrlsSuspect.Count > 0
-                                                ? string.Join(";", imageUrlsSuspect)
-                                                : null,
-                                    IsDeleted = false,
-                                };
+                                //var reportSuspect = new ReportSuspect
+                                //{
+                                //    ReportId = report.ReportId,
+                                //    SuspectId = suspect.SuspectId,
+                                //    ImageUrls = imageUrlsSuspect.Count > 0
+                                //                ? string.Join(";", imageUrlsSuspect)
+                                //                : null,
+                                //    IsDeleted = false,
+                                //};
 
-                                await _reportSuspectRepository.CreateReportSuspectAsync(reportSuspect);
+                                //await _reportSuspectRepository.CreateReportSuspectAsync(reportSuspect);
                                 break;
                             case "witness":
                                 var witness = new Witness
@@ -219,17 +224,17 @@ namespace BackEnd_Api.Controllers
                                 }
 
 
-                                var reportWitness = new ReportWitness
-                                {
-                                    ReportId = report.ReportId,
-                                    WitnessId = witness.WitnessId,
-                                    ImageUrls = imageUrlsWitness.Count > 0
-                                                ? string.Join(";", imageUrlsWitness)
-                                                : null,
-                                    IsDeleted = false,
-                                };
+                                //var reportWitness = new ReportWitness
+                                //{
+                                //    ReportId = report.ReportId,
+                                //    WitnessId = witness.WitnessId,
+                                //    ImageUrls = imageUrlsWitness.Count > 0
+                                //                ? string.Join(";", imageUrlsWitness)
+                                //                : null,
+                                //    IsDeleted = false,
+                                //};
 
-                                await _reportWitnessRepository.CreateReportWitnessAsync(reportWitness);
+                                //await _reportWitnessRepository.CreateReportWitnessAsync(reportWitness);
                                 break;
                             case "other":
                                 break;
