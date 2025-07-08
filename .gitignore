@@ -86,4 +86,5 @@ wwwroot/lib/
 *.sqlite
 *.bak
 
+files
 images

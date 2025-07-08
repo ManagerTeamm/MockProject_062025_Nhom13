@@ -48,6 +48,7 @@ namespace BackEnd_Api.Models
         public DbSet<SceneSuport> SceneSuports { get; set; }    
         public DbSet<VictimEvidence> VictimEvidences { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ReportParties> ReportParties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -270,6 +271,14 @@ namespace BackEnd_Api.Models
                 .HasOne(r => r.Case)
                 .WithMany(c => c.Reports)
                 .HasForeignKey(r => r.CaseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ReportParties>()
+                .HasKey(rp => rp.ReportPartiesId);
+            modelBuilder.Entity<ReportParties>()
+                .HasOne(rp => rp.Report)
+                .WithMany(r => r.ReportParties)
+                .HasForeignKey(rp => rp.ReportId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Role>()

@@ -46,10 +46,29 @@ namespace BackEnd_Api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<EvidenceDto>>> SearchEvidence([FromQuery] DateTime? from, [FromQuery] DateTime? to, [FromQuery] string status)
+        public async Task<ActionResult<IEnumerable<EvidenceDto>>> SearchEvidence([FromQuery] DateTime? from, [FromQuery] string status)
         {
-            var result = await _evidenceRepository.SearchEvidenceAsync(from, to, status);
-            return Ok(result);
+            if (from.HasValue && string.IsNullOrEmpty(status))
+            {
+                var date = from.Value.Date;
+                var nextDate = date.AddDays(1);
+                var result = await _evidenceRepository.SearchEvidenceAsync(date, nextDate.AddTicks(-1), null);
+                return Ok(result);
+            }
+            if (!from.HasValue && !string.IsNullOrEmpty(status))
+            {
+                var result = await _evidenceRepository.SearchEvidenceAsync(null, null, status);
+                return Ok(result);
+            }
+            if (from.HasValue && !string.IsNullOrEmpty(status))
+            {
+                var date = from.Value.Date;
+                var nextDate = date.AddDays(1);
+                var result = await _evidenceRepository.SearchEvidenceAsync(date, nextDate.AddTicks(-1), status);
+                return Ok(result);
+            }
+            var all = await _evidenceRepository.GetAllEvidencesAsync();
+            return Ok(all);
         }
 
         [HttpGet("paginated")]

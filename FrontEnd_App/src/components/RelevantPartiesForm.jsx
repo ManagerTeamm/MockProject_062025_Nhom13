@@ -9,8 +9,7 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
     const [gender, setGender] = useState('');
     const [nationality, setNationality] = useState('');
     const [contact, setContact] = useState('');
-    const [statement, setStatement] = useState('');
-    const [attachments, setAttachments] = useState([]); 
+    const [statement, setStatement] = useState(''); 
     const [showSubmitMessage, setShowSubmitMessage] = useState(false); 
     
     // Populate form với dữ liệu ban đầu khi edit
@@ -22,8 +21,6 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
     setNationality(initialData.nationality || '');
     setContact(initialData.contact || '');
     setStatement(initialData.statement || '');
-    // Thêm dòng này để load attachments khi edit
-    setAttachments(initialData.attachments || []);
   } else {
     // Reset form khi thêm mới
     setFullName('');
@@ -32,7 +29,6 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
     setNationality('');
     setContact('');
     setStatement('');
-    setAttachments([]);
   }
     }, [initialData]);
 
@@ -107,43 +103,6 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
         return 'bg-secondary';
     };
 
-    
-    const handleFileUpload = (event) => {
-        const files = event.target.files;
-        if (files.length > 0) {
-            const newFiles = Array.from(files).map(file => ({
-                file: file, // Store the actual File object
-                name: file.name,
-                size: (file.size / 1024).toFixed(0),
-                date: new Date().toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                }).replace(/ /g, ' '),
-                type: file.type
-            }));
-            setAttachments(prevAttachments => [...prevAttachments, ...newFiles]);
-        }
-    };
-
-  
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        e.dataTransfer.dropEffect = 'copy';
-    };
-
-    const handleDrop = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const files = e.dataTransfer.files;
-        handleFileUpload({ target: { files } });
-    };
-
-    const handleRemoveAttachment = (index) => {
-        setAttachments(prevAttachments => prevAttachments.filter((_, i) => i !== index));
-    };
-
   
     const handleCreate = () => {
          const formData = {
@@ -152,8 +111,7 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
             gender,
             nationality,
             contact,
-            statement,
-            attachments
+            statement
             };
             
             if (onSubmit) {
@@ -176,7 +134,6 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
     setNationality(initialData.nationality || '');
     setContact(initialData.contact || '');
     setStatement(initialData.statement || '');
-    setAttachments(initialData.attachments || []); // Sửa dòng này
   } else {
     // Nếu đang thêm mới, reset về trống
     setFullName('');
@@ -185,7 +142,6 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
     setNationality('');
     setContact('');
     setStatement('');
-    setAttachments([]);
   }
   setShowSubmitMessage(false);
   console.log('Form cancelled and reset.');
@@ -307,53 +263,6 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
                             ></textarea>
                         </div>
                     </div>
-
-                    <h5 className="mt-4 mb-3" style={{ color: '#333' }}>Attachments</h5>
-                    <div
-                        className="file-upload-area p-5 border border-dashed rounded text-center mb-3"
-                        onDragOver={handleDragOver}
-                        onDrop={handleDrop}
-                        style={{ borderColor: '#d1d1d1', backgroundColor: '#f9f9f9', cursor: 'pointer' }}
-                        onClick={() => document.getElementById('fileInput').click()}
-                    >
-                        <i className="bi bi-cloud-upload fs-1 text-muted"></i>
-                        <p className="mb-1 mt-2 text-dark">Drag & drop files or <span className="text-primary fw-bold">Browse</span></p>
-                        <p className="text-muted" style={{ fontSize: '0.85rem' }}>Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT</p>
-                        <input
-                            type="file"
-                            id="fileInput"
-                            multiple
-                            onChange={handleFileUpload}
-                            style={{ display: 'none' }}
-                        />
-                    </div>
-
-                    {attachments.length > 0 && (
-                        <div className="uploaded-files mt-3">
-                            <h6 className="mb-2">Uploaded:</h6>
-                            <div className="row g-2">
-                                {attachments.map((file, index) => (
-                                    <div key={index} className="col-md-6">
-                                        <div className="d-flex align-items-center p-2 border rounded bg-light">
-                                            <span className={`badge ${getFileExtensionBadge(file.name)} me-2 text-uppercase`}>
-                                                {file.name.split('.').pop()}
-                                            </span>
-                                            <div>
-                                                <div className="fw-semibold text-truncate" style={{ maxWidth: '180px' }}>{file.name}</div>
-                                                <small className="text-muted">{file.size} KB · {file.date}</small>
-                                            </div>
-                                            <button
-                                                type="button"
-                                                className="btn-close ms-auto"
-                                                aria-label="Remove"
-                                                onClick={(e) => { e.stopPropagation(); handleRemoveAttachment(index); }}
-                                            ></button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
 
                     <div className="d-flex justify-content-end gap-2 mt-4">
                         <button type="button" className="btn btn-secondary px-4 py-2" onClick={handleCancel}>Cancel</button>

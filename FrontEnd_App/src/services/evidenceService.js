@@ -9,4 +9,14 @@ export const getAllEvidence = async () => {
 export const getEvidencePaginated = async (page = 1, pageSize = 10) => {
   const response = await axios.get(`${API_URL}/paginated?page=${page}&pageSize=${pageSize}`);
   return response.data;
+};
+
+export const searchEvidence = async ({ from, to, status }) => {
+  const params = [];
+  if (from) params.push(`from=${encodeURIComponent(from)}`);
+  if (to) params.push(`to=${encodeURIComponent(to)}`);
+  if (status) params.push(`status=${encodeURIComponent(status)}`);
+  const query = params.length ? `?${params.join('&')}` : '';
+  const response = await axios.get(`${API_URL}/search${query}`);
+  return response.data;
 }; 
