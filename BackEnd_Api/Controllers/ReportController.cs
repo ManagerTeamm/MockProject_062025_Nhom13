@@ -19,25 +19,25 @@ namespace BackEnd_Api.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IReportRepository _reportRepository;
         private readonly IVictimRepository _victimRepository;
-        private readonly IReportVictimRepository _reportVictimRepository;
+      //  private readonly IReportVictimRepository _reportVictimRepository;
         private readonly ISuspectRepository _suspectRepository;
-        private readonly IReportSuspectRepository _reportSuspectRepository;
+      //  private readonly IReportSuspectRepository _reportSuspectRepository;
         private readonly IWitnessRepository _witnessRepository;
-        private readonly IReportWitnessRepository _reportWitnessRepository;
+      //  private readonly IReportWitnessRepository _reportWitnessRepository;
         private readonly IEvidenceRepository _evidenceRepository;
         private readonly IWebHostEnvironment _env;
         private readonly IUserRepository _userRepository;
-        public ReportController(ApplicationDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IReportVictimRepository reportVictimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository, IReportSuspectRepository reportSuspectRepository, IWitnessRepository witnessRepository, IReportWitnessRepository reportWitnessRepository, IEvidenceRepository evidenceRepository)
+        public ReportController(ApplicationDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository,  IWitnessRepository witnessRepository, IEvidenceRepository evidenceRepository)
         {
             _context = context;
             _reportRepository = reportRepository;
             _victimRepository = victimRepository;
-            _reportVictimRepository = reportVictimRepository;
+         //   _reportVictimRepository = reportVictimRepository;
             _env = env;
             _suspectRepository = suspectRepository;
-            _reportSuspectRepository = reportSuspectRepository;
+        //    _reportSuspectRepository = reportSuspectRepository;
             _witnessRepository = witnessRepository;
-            _reportWitnessRepository = reportWitnessRepository;
+        //    _reportWitnessRepository = reportWitnessRepository;
             _evidenceRepository = evidenceRepository;
             _userRepository = userRepository;
         }

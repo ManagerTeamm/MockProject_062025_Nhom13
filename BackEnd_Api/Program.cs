@@ -72,7 +72,7 @@ namespace BackEnd_Api
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
-            builder.Services.AddScoped<IVictimRepository, VictimRepository>();
+         //   builder.Services.AddScoped<IVictimRepository, VictimRepository>();
             builder.Services.Scan(scan => scan
                 // scan từ assembly chứa IRepository hoặc ReportRepository
                 .FromAssemblyOf<IRepository<object>>()

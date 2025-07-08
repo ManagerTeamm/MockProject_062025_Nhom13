@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
-import ProtectedRoute from "./protectedroute";
+import ProtectedRoute from "./protectedRoute";
 import LoginComponent from "../pages/login";
 import Main from "../samples/pages/admin/main";
 import AdminPage from "../samples/pages/admin/admin";
@@ -32,8 +32,6 @@ const AppRoutes = () => {
     { path: "/suspect", element: <Suspect /> },
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
-    { path: "/report-list", element: <ReportPage /> },
-    { path: "/report-detail/:reportId", element: <ReportDetail /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
     { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
     {
@@ -50,6 +48,16 @@ const AppRoutes = () => {
           path: "admin/userList",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <UserList /> }],
+        },
+        {
+          path: "admin/reports",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <ReportPage /> }],
+        },
+        {
+          path: "admin/report-detail/:reportId",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <ReportDetail /> }],
         },
         {
           path: "inmateadmission",

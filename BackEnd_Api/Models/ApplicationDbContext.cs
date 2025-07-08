@@ -48,6 +48,7 @@ namespace BackEnd_Api.Models
         public DbSet<SceneSuport> SceneSuports { get; set; }    
         public DbSet<VictimEvidence> VictimEvidences { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<ReportParties> ReportParties { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
