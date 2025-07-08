@@ -232,7 +232,7 @@ namespace BackEnd_Api.Controllers
                             await file.CopyToAsync(stream);
                         }
 
-                        var relativeUrl = $"/images/{validUrl}/{fileName}";
+                        var relativeUrl = $"/files/{validUrl}/{fileName}";
                         imageUrls.Add(relativeUrl);
                     }
                     catch (Exception ex)
