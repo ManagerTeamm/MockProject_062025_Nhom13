@@ -689,14 +689,19 @@ export default function MultiStepFormMui() {
                         {StepContent}
 
                         <Dialog
+                            PaperProps={{
+                                sx: {
+                                    boxShadow: 'none',
+                                    background: 'transparent',
+                                    maxHeight: 'none',
+                                    overflow: 'visible',
+                                }
+                            }}
                             open={openRelevantDialog}
                             onClose={handleCloseRelevantDialog}
                             fullWidth
                             maxWidth="md"
                         >
-                            <DialogTitle>
-                                {editingRelevant ? 'Edit Relevant Party' : 'Add Relevant Party'}
-                            </DialogTitle>
                             <DialogContent>
                                 <RelevantPartiesForm
                                     key={relevantFormKey}
@@ -708,6 +713,14 @@ export default function MultiStepFormMui() {
                         </Dialog>
 
                         <Dialog
+                            PaperProps={{
+                                sx: {
+                                    boxShadow: 'none',
+                                    background: 'transparent',
+                                    maxHeight: 'none',
+                                    overflow: 'visible',
+                                }
+                            }}
                             open={openEvidenceDialog}
                             onClose={handleCloseEvidenceDialog}
                             fullWidth
