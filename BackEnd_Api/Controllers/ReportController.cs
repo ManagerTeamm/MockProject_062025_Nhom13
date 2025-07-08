@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using System.Security.Claims;
 
 namespace BackEnd_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Report Approver")]
+    [Authorize(Roles = "Report Approver,Admin")]
     public class ReportController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -47,6 +48,10 @@ namespace BackEnd_Api.Controllers
         {
             try
             {
+                //var userPermissions = _userRepository.GetPermissions();
+                //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
+                //    return Forbid("You do not have permission to view users.");
+
                 var reports = await _reportRepository.GetAllAsync();
 
                 var response = ApiResponseHelper<List<Report>>.SuccessResult((List<Report>)reports, "Get reports completed");
@@ -68,7 +73,7 @@ namespace BackEnd_Api.Controllers
                 if (id != null)
                 {
                     //var userPermissions = _userRepository.GetPermissions();
-                    //if (!userPermissions.Contains("Manage_Users"))
+                    //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
                     //    return Forbid("You do not have permission to view users.");
 
                     var reportDetail = await _reportRepository.GetReportDetail(id);
