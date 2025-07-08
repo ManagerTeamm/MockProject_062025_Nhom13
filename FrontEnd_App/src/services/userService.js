@@ -49,6 +49,7 @@ export const createUser = async (userData) => {
                 "Content-Type": "application/json"
             }
         });
+        console.log("Create user: ", response.data);
         return response.data;
     } catch (error) {
         console.error("createUser error:", error);
