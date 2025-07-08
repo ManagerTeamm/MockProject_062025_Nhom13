@@ -687,6 +687,41 @@ namespace BackEnd_Api.Migrations
                     b.ToTable("Reports");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.ReportParties", b =>
+                {
+                    b.Property<string>("ReportPartiesId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("National")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReportId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TypeOfParties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReportPartiesId");
+
+                    b.HasIndex("ReportId");
+
+                    b.ToTable("ReportParties");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.Role", b =>
                 {
                     b.Property<string>("RoleId")
@@ -1552,6 +1587,17 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BackEnd_Api.Models.ReportParties", b =>
+                {
+                    b.HasOne("BackEnd_Api.Models.Report", "Report")
+                        .WithMany("ReportParties")
+                        .HasForeignKey("ReportId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Report");
+                });
+
             modelBuilder.Entity("BackEnd_Api.Models.RolePermission", b =>
                 {
                     b.HasOne("BackEnd_Api.Models.Permission", "Permission")
@@ -1915,6 +1961,8 @@ namespace BackEnd_Api.Migrations
             modelBuilder.Entity("BackEnd_Api.Models.Report", b =>
                 {
                     b.Navigation("Evidences");
+
+                    b.Navigation("ReportParties");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Role", b =>

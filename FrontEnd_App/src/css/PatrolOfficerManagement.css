@@ -1,0 +1,139 @@
+/* src/css/PatrolOfficerManagement.module.css */
+
+.container {
+  font-family: 'Arial, sans-serif';
+  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  background-color: #fff;
+}
+
+.header {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  width: 250px;
+}
+
+.selectFilter {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  min-width: 150px;
+  background-color: #f9f9f9;
+}
+
+.addButton {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* Ensure table doesn't get too small */
+}
+
+.th {
+  background-color: #f2f2f2;
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 14px;
+  color: #555;
+}
+
+.td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.rowOnAboveCase {
+  background-color: #ffdddd; /* Light red for "On Above Case" */
+}
+
+.rowOnCall {
+  background-color: #d4edda; /* Light green for "On Call" */
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 20px;
+  gap: 5px;
+}
+
+.pageButton {
+  background-color: #e9e9e9;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pageButtonActive {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}
+
+.pageInfo {
+  margin-right: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.errorMessage {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.loadingMessage {
+  text-align: center;
+  margin-top: 20px;
+  color: #007bff;
+}

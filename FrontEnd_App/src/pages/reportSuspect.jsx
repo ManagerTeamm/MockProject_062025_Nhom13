@@ -188,8 +188,7 @@ export default function MultiStepFormMui() {
                 statement: data.statement,
                 gender: data.gender,
                 nationality: data.nationality,
-                contact: data.contact,
-                attachments: data.attachments || []
+                contact: data.contact
             };
 
             setRelevantParties(prev =>
@@ -203,7 +202,6 @@ export default function MultiStepFormMui() {
                 role: data.relationship,
                 fullName: data.fullName, // Make sure this matches
                 statement: data.statement,
-                attachments: data.attachments || [],
                 gender: data.gender,
                 nationality: data.nationality,
                 contact: data.contact
@@ -303,14 +301,6 @@ export default function MultiStepFormMui() {
             fd.append(`${prefix}.Gender`, party.gender || '');
             fd.append(`${prefix}.Nationality`, party.nationality || '');
             fd.append(`${prefix}.Contact`, party.contact || '');
-
-            // Add files: use the actual File objects
-            if (party.attachments && party.attachments.length > 0) {
-                party.attachments.forEach(attachment => {
-                    // Use the actual File object stored in the 'file' property
-                    fd.append(`${prefix}.Attachments`, attachment.file);
-                });
-            }
         });
 
         // 4. Evidences (mảng)
@@ -503,7 +493,7 @@ export default function MultiStepFormMui() {
                                 name="detailedAddress"
                                 label="Detailed address"
                                 value={detailedAddress}
-                                onChange={setDetailedAddress}
+                                onChange={(e) => setDetailedAddress(e.target.value)}
                                 multiline
                                 sx={{ mb: 4 }}
                             />
@@ -516,7 +506,7 @@ export default function MultiStepFormMui() {
                                 rows={4}
                                 fullWidth
                                 value={incidentDescription}
-                                onChange={setIncidentDescription}
+                                onChange={(e) => setIncidentDescription(e.target.value)}
                                 sx={{ mb: 4 }}
                             />
 
@@ -531,7 +521,6 @@ export default function MultiStepFormMui() {
                                             <TableCell>Relevant Role</TableCell>
                                             <TableCell>Name</TableCell>
                                             <TableCell>Statement</TableCell>
-                                            <TableCell>Attachments</TableCell>
                                             <TableCell>Actions</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -552,9 +541,6 @@ export default function MultiStepFormMui() {
                                                     }}>
                                                         {relevant.statement}
                                                     </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    {renderAttachments(relevant.attachments)}
                                                 </TableCell>
                                                 <TableCell align="right" className='d-flex justify-content-center border-none'>
                                                     <IconButton

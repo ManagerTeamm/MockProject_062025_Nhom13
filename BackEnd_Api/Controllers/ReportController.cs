@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
+using System.Security.Claims;
 
 namespace BackEnd_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Report Approver")]
+    [Authorize(Roles = "Report Approver,Admin")]
     public class ReportController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
@@ -21,12 +22,7 @@ namespace BackEnd_Api.Controllers
         private readonly IWebHostEnvironment _env;
         private readonly IUserRepository _userRepository;
         private readonly IReportPartiesRepository _reportPartiesRepository;
-        public ReportController(ApplicationDbContext context,
-            IUserRepository userRepository,
-            IReportRepository reportRepository,
-            IWebHostEnvironment env,
-            IEvidenceRepository evidenceRepository,
-            IReportPartiesRepository reportPartiesRepository)
+        public ReportController(ApplicationDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository, IWitnessRepository witnessRepository, IEvidenceRepository evidenceRepository, IReportPartiesRepository reportPartiesRepository)
         {
             _reportRepository = reportRepository;
             _env = env;
@@ -40,6 +36,10 @@ namespace BackEnd_Api.Controllers
         {
             try
             {
+                //var userPermissions = _userRepository.GetPermissions();
+                //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
+                //    return Forbid("You do not have permission to view users.");
+
                 var reports = await _reportRepository.GetAllAsync();
 
                 var response = ApiResponseHelper<List<Report>>.SuccessResult((List<Report>)reports, "Get reports completed");
@@ -61,7 +61,7 @@ namespace BackEnd_Api.Controllers
                 if (id != null)
                 {
                     //var userPermissions = _userRepository.GetPermissions();
-                    //if (!userPermissions.Contains("Manage_Users"))
+                    //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
                     //    return Forbid("You do not have permission to view users.");
 
                     var reportDetail = await _reportRepository.GetReportDetail(id);
@@ -183,6 +183,9 @@ namespace BackEnd_Api.Controllers
 
             if (attachments == null || !attachments.Any())
                 return imageUrls;
+
+            var rootPath = _env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            Directory.CreateDirectory(rootPath);
 
             var dateFolder = DateTime.UtcNow.ToString("yyyyMMdd");
             var validUrl = $"{prefix}_{dateFolder}";

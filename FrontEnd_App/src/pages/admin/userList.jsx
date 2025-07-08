@@ -21,7 +21,7 @@ const UserList = () => {
     const handleCreateUser = async (userData) => {
         try {
             await createUser(userData);
-            fetchUsers();
+            await fetchUsers();
         } catch (err) {
             console.error("Failed to create user:", err);
         }
@@ -30,7 +30,8 @@ const UserList = () => {
     const handleEditUser = async (userData) => {
         try {
             await updateUser(userData);
-            fetchUsers();
+            await fetchUsers();
+            setSelectedUser(null);
         } catch (err) {
             console.error("Failed to update user:", err);
         }
@@ -39,7 +40,7 @@ const UserList = () => {
     const handleDeleteUser = async (username) => {
         try {
             await deleteUser(username);
-            fetchUsers();
+            await fetchUsers();
         } catch (err) {
             console.error("Failed to delete user:", err);
         }
@@ -128,12 +129,14 @@ const UserList = () => {
                     <div className="modal fade" id="editUserModal" tabIndex="-1" aria-hidden="true">
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
-                                <UserForm
-                                    mode="edit"
-                                    initialData={selectedUser}
-                                    onSubmit={handleEditUser}
-                                    onDelete={handleDeleteUser}
-                                />
+                                {selectedUser && (
+                                    <UserForm
+                                        mode="edit"
+                                        initialData={selectedUser}
+                                        onSubmit={handleEditUser}
+                                        onDelete={handleDeleteUser}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>

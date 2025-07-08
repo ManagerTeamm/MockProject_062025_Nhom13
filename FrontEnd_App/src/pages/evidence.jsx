@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
-import { getAllEvidence } from '../services/evidenceService';
-import { getEvidencePaginated } from '../services/evidenceService';
+import { getAllEvidence, getEvidencePaginated, searchEvidence } from '../services/evidenceService';
 
 const statusClass = status => {
   if (status === 'Waiting for Test') return 'status-waiting';
@@ -21,24 +20,34 @@ const Evidence = () => {
   const [files, setFiles] = useState([]);
   const [evidenceData, setEvidenceData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const fileInputRef = React.useRef();
+  const [statusFilter, setStatusFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
 
   useEffect(() => {
     const fetchEvidence = async () => {
       try {
-        const result = await getEvidencePaginated(currentPage, pageSize);
-        setEvidenceData(result.data);
-        setTotalPages(result.totalPages);
-        setTotalCount(result.totalCount);
+        if (statusFilter || dateFilter) {
+          const from = dateFilter ? dateFilter : undefined;
+          const result = await searchEvidence({ from, status: statusFilter });
+          setEvidenceData(result);
+          setTotalPages(1);
+          setTotalCount(result.length);
+        } else {
+          const result = await getEvidencePaginated(currentPage, pageSize);
+          setEvidenceData(result.data);
+          setTotalPages(result.totalPages);
+          setTotalCount(result.totalCount);
+        }
       } catch (error) {
         console.error('Failed to fetch evidence:', error);
       }
     };
     fetchEvidence();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, statusFilter, dateFilter]);
 
   const handleFileChange = (e) => {
     setFiles([...files, ...Array.from(e.target.files)]);
@@ -72,11 +81,16 @@ const Evidence = () => {
             <div className="filter-row">
               <div>
                 <label>Status</label>
-                <select className="filter-select"><option>Select an option</option></select>
+                <select className="filter-select" value={statusFilter} onChange={e => { setStatusFilter(e.target.value); setCurrentPage(1); }}>
+                  <option value="">Select an option</option>
+                  <option value="Waiting for Test">Waiting for Test</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Tested">Tested</option>
+                </select>
               </div>
               <div>
                 <label>Date collected</label>
-                <input type="date" className="filter-date" placeholder="Select a day" />
+                <input type="date" className="filter-date" value={dateFilter} onChange={e => { setDateFilter(e.target.value); setCurrentPage(1); }} placeholder="Select a day" />
               </div>
             </div>
             <table className="info-table">
@@ -107,6 +121,7 @@ const Evidence = () => {
             </table>
             <div className="pagination-row">
               <span>Show <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
+                <option value={5}>5</option>
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={50}>50</option>

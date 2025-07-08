@@ -22,5 +22,6 @@ namespace BackEnd_Api.Models
         public User User { get; set; }
         public bool IsDeleted { get; set; } = false;
         public ICollection<Evidence> Evidences { get; set; }
+        public ICollection<ReportParties> ReportParties { get; set; }
     }
 }

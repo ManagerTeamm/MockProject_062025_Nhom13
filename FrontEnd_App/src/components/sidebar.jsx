@@ -77,7 +77,7 @@ const Sidebar = () => {
                                 style={{ width: "60px", height: "60px" }}
                             />
                         )}
-                        <div className="fw-bold ms-3">{user.username}</div>
+                        <div className="fw-bold ms-3 text-dark">{user.username}</div>
                     </div>
 
                     {/* Navigation */}

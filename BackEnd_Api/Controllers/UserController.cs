@@ -85,9 +85,7 @@ namespace BackEnd_Api.Controllers
                     IsDeleted = false
                 };
 
-                var result = _userRepository.AddAsync(user);
-                if (result == null)
-                    return BadRequest("Failed to create user.");
+                await  _userRepository.AddAsync(user);
 
                 return Ok(ApiResponseHelper<string>.SuccessResult(null, "User created successfully"));
             }
@@ -117,7 +115,7 @@ namespace BackEnd_Api.Controllers
                 user.AvatarUrl = userDto.AvatarUrl;
                 user.RoleId = userDto.RoleId;
 
-                var response = _userRepository.Update(user);
+                await _userRepository.Update(user);
 
                 return Ok(ApiResponseHelper<string>.SuccessResult(null, "User updated successfully"));
             }
@@ -141,7 +139,7 @@ namespace BackEnd_Api.Controllers
                 if (user == null)
                     return NotFound("User not found.");
 
-                var response = _userRepository.Delete(user);
+                await _userRepository.Delete(user);
 
                 return Ok(ApiResponseHelper<string>.SuccessResult(null, "User deleted successfully"));
             }

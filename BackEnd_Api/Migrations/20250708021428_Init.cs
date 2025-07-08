@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BackEnd_Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -703,6 +703,30 @@ namespace BackEnd_Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ReportParties",
+                columns: table => new
+                {
+                    ReportPartiesId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ReportId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeOfParties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    National = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReportParties", x => x.ReportPartiesId);
+                    table.ForeignKey(
+                        name: "FK_ReportParties_Reports_ReportId",
+                        column: x => x.ReportId,
+                        principalTable: "Reports",
+                        principalColumn: "ReportId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "WarrantResults",
                 columns: table => new
                 {
@@ -1120,6 +1144,11 @@ namespace BackEnd_Api.Migrations
                 column: "EvidenceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ReportParties_ReportId",
+                table: "ReportParties",
+                column: "ReportId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reports_CaseId",
                 table: "Reports",
                 column: "CaseId");
@@ -1278,6 +1307,9 @@ namespace BackEnd_Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "RecordInfos");
+
+            migrationBuilder.DropTable(
+                name: "ReportParties");
 
             migrationBuilder.DropTable(
                 name: "RolePermissions");
