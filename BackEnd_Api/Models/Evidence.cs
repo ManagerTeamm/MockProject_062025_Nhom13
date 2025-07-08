@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class Evidence
+    public class Evidence : ISoftDeletable
     {
         public string EvidenceId { get; set; }
         public string? MeasureSurveyId { get; set; }
@@ -9,8 +11,8 @@
         public WarrantResult WarrantResult { get; set; }
         public string? ReportId { get; set; }
         public Report Report { get; set; }
-        public string CollectedBy { get; set; }
-        public User User { get; set; }
+        public string? CollectedBy { get; set; }
+        public User? User { get; set; }
         public string TypeEvidence { get; set; }
         public string? Description { get; set; }
         public DateTime? CollectedAt { get; set; }

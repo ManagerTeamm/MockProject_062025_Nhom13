@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class SceneDescription
+    public class SceneDescription : ISoftDeletable
     {
         public string SceneDescriptionId { get; set; }
         public string CaseId { get; set; }

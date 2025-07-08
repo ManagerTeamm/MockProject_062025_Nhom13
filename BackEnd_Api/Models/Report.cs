@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class Report
+    public class Report : ISoftDeletable
     {
         public string ReportId { get; set; }
         public string? CaseId { get; set; }
@@ -13,12 +15,12 @@
         public string ReporterFullname { get; set; }
         public string ReporterEmail { get; set; }
         public string ReporterPhoneNumber { get; set; }
+        public string? RelationshipToIncident { get; set; }
+        public DateTime? TimeOfOccurrence { get; set; }
+        public string? AddressReported { get; set; }
         public string? OfficerApproveId { get; set; }
         public User User { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public ICollection<ReportVictim> ReportVictims { get; set; }
-        public ICollection<ReportSuspect> ReportSuspects { get; set; }
-        public ICollection<ReportWitness> ReportWitness { get; set; }
         public ICollection<Evidence> Evidences { get; set; }
     }
 }

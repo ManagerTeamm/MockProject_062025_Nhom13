@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class MeasureSurvey
+    public class MeasureSurvey : ISoftDeletable
     {
         public string MeasureSurveyId { get; set; }
         public string TypeName { get; set; }

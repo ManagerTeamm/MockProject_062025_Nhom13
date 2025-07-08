@@ -1,6 +1,8 @@
-﻿namespace BackEnd_Api.Models
+﻿using BackEnd_Api.Repositories.Interfaces;
+
+namespace BackEnd_Api.Models
 {
-    public class User
+    public class User : ISoftDeletable
     {
         public string UserName { get; set; }
         public string Email { get; set; }
