@@ -474,10 +474,8 @@ export default function MultiStepFormMui() {
                                         value={formData.severity || ''}
                                         onChange={handleChange}
                                     >
-                                        <MenuItem value="Minor">Minor</MenuItem>
-                                        <MenuItem value="Moderate">Moderate</MenuItem>
-                                        <MenuItem value="Serious">Serious</MenuItem>
-                                        <MenuItem value="Critical">Critical</MenuItem>
+                                        <MenuItem value="Urgent">Urgent</MenuItem>
+                                        <MenuItem value="Not Urgent">Not Urgent</MenuItem>
                                     </TextField>
                                 </div>
                             </div>
