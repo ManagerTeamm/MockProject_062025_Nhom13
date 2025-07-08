@@ -169,7 +169,7 @@ const Sidebar = () => {
                             className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
                             onClick={() => {
                                 localStorage.removeItem("token");
-                                window.location.href = "/Auth/login";
+                                window.location.href = "/login";
                             }}
                         >
                             <i className="bi bi-box-arrow-right fs-4"></i>

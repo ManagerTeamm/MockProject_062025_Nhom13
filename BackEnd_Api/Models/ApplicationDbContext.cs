@@ -273,6 +273,14 @@ namespace BackEnd_Api.Models
                 .HasForeignKey(r => r.CaseId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<ReportParties>()
+                .HasKey(rp => rp.ReportPartiesId);
+            modelBuilder.Entity<ReportParties>()
+                .HasOne(rp => rp.Report)
+                .WithMany(r => r.ReportParties)
+                .HasForeignKey(rp => rp.ReportId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Role>()
                 .HasKey(r => r.RoleId);
 

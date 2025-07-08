@@ -17,7 +17,6 @@ namespace BackEnd_Api.Controllers
     [Authorize(Roles = "Report Approver,Admin")]
     public class ReportController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IReportRepository _reportRepository;
         private readonly IVictimRepository _victimRepository;
       //  private readonly IReportVictimRepository _reportVictimRepository;
@@ -28,9 +27,8 @@ namespace BackEnd_Api.Controllers
         private readonly IEvidenceRepository _evidenceRepository;
         private readonly IWebHostEnvironment _env;
         private readonly IUserRepository _userRepository;
-        public ReportController(ApplicationDbContext context, IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository,  IWitnessRepository witnessRepository, IEvidenceRepository evidenceRepository)
+        public ReportController(IUserRepository userRepository, IReportRepository reportRepository, IVictimRepository victimRepository, IWebHostEnvironment env, ISuspectRepository suspectRepository,  IWitnessRepository witnessRepository, IEvidenceRepository evidenceRepository)
         {
-            _context = context;
             _reportRepository = reportRepository;
             _victimRepository = victimRepository;
          //   _reportVictimRepository = reportVictimRepository;
