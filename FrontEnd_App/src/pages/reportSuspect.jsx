@@ -503,6 +503,9 @@ export default function MultiStepFormMui() {
                                 onChange={handleDetailedAddressChange}
                                 multiline
                                 sx={{ mb: 4 }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
 
                             <TextField
@@ -514,6 +517,9 @@ export default function MultiStepFormMui() {
                                 fullWidth
                                 onChange={handleIncidentDescriptionChange}
                                 sx={{ mb: 4 }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
 
                             <Typography variant="h6" gutterBottom>
