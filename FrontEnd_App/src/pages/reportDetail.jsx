@@ -14,7 +14,8 @@ const ReportDetail = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await reportService.getReportDetail(reportId);
+        const response = await reportService.getReportDetail(reportId);
+        console.log("Report Detail Response:", response.data);
       if (response.success) {
         setReportDetail(response.data || []);
       } else {
@@ -36,7 +37,6 @@ const ReportDetail = () => {
       setLoading(false);
     }
   }, [reportId]);
-  console.log(reportId);
   const handleBack = () => {
     navigator(-1);
   }
@@ -220,10 +220,10 @@ const ReportDetail = () => {
                     <th>Description</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {reporDetail?.reportParties?.filter(p => p.typeOfParties === "Victim").length > 0 ? (
+                  <tbody>
+                  {reporDetail?.reportParties?.filter(p => p.typeOfParties === "victim").length > 0 ? (
                     reporDetail.reportParties
-                      .filter(p => p.typeOfParties === "Victim")
+                      .filter(p => p.typeOfParties === "victim")
                       .map((victim, index) => (
                         <tr key={index}>
                           <td>#{victim.id}</td>
