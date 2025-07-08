@@ -17,8 +17,12 @@ import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 
+//sample dashboard
+import Dashboard from "../samples/dashboard";
+
+
 const AppRoutes = () => {
-  const {loading } = useAuth();
+  const { loading } = useAuth();
 
   if (loading) return <div>Loading...</div>;
 
@@ -40,12 +44,17 @@ const AppRoutes = () => {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
       children: [
-        
+
         {
           path: "admin",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <AdminPage /> }],
-          },
+        },
+        {
+          path: "admin/dashboard",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Dashboard /> }],
+        },
         {
           path: "admin/userList",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
