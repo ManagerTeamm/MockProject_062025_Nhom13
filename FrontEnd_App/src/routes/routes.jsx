@@ -17,6 +17,7 @@ import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
+import EvidenceDetail from "../pages/evidenceDetail";
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
@@ -91,6 +92,7 @@ const AppRoutes = () => {
 
     { path: "/unauthorized", element: <div>Unauthorized</div> },
     { path: "/CaseList", element: <CaseList /> },
+    { path: "/evidence/:id", element: <EvidenceDetail /> },
     { path: "*", element: <div>404 Not Found</div> },
   ]);
 

@@ -35,7 +35,7 @@ namespace BackEnd_Api.Repositories
         {
             var evidence = new Evidence
             {
-                EvidenceId = Guid.NewGuid().ToString(),
+                EvidenceId = string.IsNullOrEmpty(dto.EvidenceId) ? Guid.NewGuid().ToString() : dto.EvidenceId,
                 Description = dto.Description,
                 CollectedAt = dto.CollectedAt,
                 CollectedBy = dto.CollectedBy,
@@ -87,16 +87,51 @@ namespace BackEnd_Api.Repositories
             var evidence = await _context.Evidences
                 .Include(e => e.CaseEvidences)
                 .Include(e => e.User)
+                .Include(e => e.SuspectEvidences)
+                    .ThenInclude(se => se.Suspect)
                 .FirstOrDefaultAsync(e => e.EvidenceId == id && !e.IsDeleted);
             if (evidence == null) return null;
+
+            var caseId = evidence.CaseEvidences.FirstOrDefault()?.CaseId;
+            CaseInfoDto caseInfo = null;
+            if (!string.IsNullOrEmpty(caseId))
+            {
+                var caseEntity = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseId && !c.IsDeleted);
+                if (caseEntity != null)
+                {
+                    caseInfo = new CaseInfoDto
+                    {
+                        CaseId = caseEntity.CaseId,
+                        Type = caseEntity.TypeCase,
+                        Severity = caseEntity.Severity,
+                        Status = caseEntity.Status,
+                        Summary = caseEntity.Summary
+                    };
+                }
+            }
+
+            var suspect = evidence.SuspectEvidences.FirstOrDefault(se => !se.IsDeleted)?.Suspect;
+            SuspectInfoDto suspectInfo = null;
+            if (suspect != null && !suspect.IsDeleted)
+            {
+                suspectInfo = new SuspectInfoDto
+                {
+                    SuspectId = suspect.SuspectId,
+                    FullName = suspect.Fullname,
+                    Status = suspect.Status
+                };
+            }
+
             return new EvidenceDto
             {
                 EvidenceId = evidence.EvidenceId,
-                CaseId = evidence.CaseEvidences.FirstOrDefault()?.CaseId,
+                CaseId = caseId,
                 Description = evidence.Description,
                 CollectedAt = evidence.CollectedAt ?? DateTime.MinValue,
                 Collector = evidence.CollectedBy,
-                Status = evidence.Status
+                Status = evidence.Status,
+                CaseInfo = caseInfo,
+                SuspectInfo = suspectInfo
             };
         }
 

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
-import { getAllEvidence, getEvidencePaginated, searchEvidence } from '../services/evidenceService';
+import { getAllEvidence, getEvidencePaginated, searchEvidence, createEvidence } from '../services/evidenceService';
 
 const statusClass = status => {
   if (status === 'Waiting for Test') return 'status-waiting';
@@ -26,6 +26,13 @@ const Evidence = () => {
   const fileInputRef = React.useRef();
   const [statusFilter, setStatusFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
+  const [evidenceId, setEvidenceId] = useState("");
+  const [caseId, setCaseId] = useState("");
+  const [collectedBy, setCollectedBy] = useState("");
+  const [typeEvidence, setTypeEvidence] = useState("");
+  const [currentLocation, setCurrentLocation] = useState("");
+  const [status, setStatus] = useState("");
+  const [formError, setFormError] = useState("");
 
   useEffect(() => {
     const fetchEvidence = async () => {
@@ -62,6 +69,41 @@ const Evidence = () => {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
+  };
+
+  const handleCreateEvidence = async (e) => {
+    e.preventDefault();
+    if (!evidenceId.trim()) {
+      setFormError("Evidence ID is required.");
+      return;
+    }
+    if (!date) {
+      setFormError("Date collected is required.");
+      return;
+    }
+    setFormError("");
+    try {
+      await createEvidence({
+        evidenceId,
+        caseId,
+        description: desc,
+        collectedAt: date,
+        collectedBy,
+        typeEvidence,
+        currentLocation,
+        attachedFile: files[0]?.name || "",
+        status
+      });
+      setShowPopup(false);
+      setEvidenceId(""); setCaseId(""); setDesc(""); setDate(""); setCollectedBy(""); setTypeEvidence(""); setCurrentLocation(""); setFiles([]); setStatus("");
+      // reload data
+      const result = await getEvidencePaginated(currentPage, pageSize);
+      setEvidenceData(result.data);
+      setTotalPages(result.totalPages);
+      setTotalCount(result.totalCount);
+    } catch (err) {
+      setFormError('Tạo evidence thất bại!');
+    }
   };
 
   return (
@@ -114,7 +156,7 @@ const Evidence = () => {
                     <td>{row.collectedAt ? new Date(row.collectedAt).toLocaleDateString() : (row.date || row.dateCollected)}</td>
                     <td>{row.collector || row.collectorName}</td>
                     <td><span className={statusClass(row.status)}>{row.status}</span></td>
-                    <td><a href="#">See details</a></td>
+                    <td><a href="#" onClick={e => { e.preventDefault(); navigate(`/evidence/${row.evidenceId || row.id}`); }}>See details</a></td>
                   </tr>
                 ))}
               </tbody>
@@ -159,14 +201,44 @@ const Evidence = () => {
             <div className="popup-form">
               <h2 className="popup-title">Add the Evidence</h2>
               <div className="popup-sub">This form is used to record evidence during a crime investigation.</div>
-              <form onSubmit={e => { e.preventDefault(); setShowPopup(false); }}>
+              <form onSubmit={handleCreateEvidence}>
+                {formError && <div style={{color:'red',marginBottom:8}}>{formError}</div>}
+                <div className="form-group">
+                  <label>Evidence ID <span style={{color:'red'}}>*</span></label><br />
+                  <input type="text" value={evidenceId} onChange={e => setEvidenceId(e.target.value)} className="popup-date" required />
+                </div>
+                <div className="form-group">
+                  <label>Case ID</label><br />
+                  <input type="text" value={caseId} onChange={e => setCaseId(e.target.value)} className="popup-date" />
+                </div>
                 <div className="form-group">
                   <label>Date collected <span style={{color:'red'}}>*</span></label><br />
                   <input type="date" value={date} onChange={e => setDate(e.target.value)} className="popup-date" required />
                 </div>
                 <div className="form-group">
+                  <label>Collector</label><br />
+                  <input type="text" value={collectedBy} onChange={e => setCollectedBy(e.target.value)} className="popup-date" />
+                </div>
+                <div className="form-group">
+                  <label>Type of Evidence</label><br />
+                  <input type="text" value={typeEvidence} onChange={e => setTypeEvidence(e.target.value)} className="popup-date" />
+                </div>
+                <div className="form-group">
+                  <label>Current Location</label><br />
+                  <input type="text" value={currentLocation} onChange={e => setCurrentLocation(e.target.value)} className="popup-date" />
+                </div>
+                <div className="form-group">
+                  <label>Status</label><br />
+                  <select value={status} onChange={e => setStatus(e.target.value)} className="filter-select">
+                    <option value="">Select status</option>
+                    <option value="Waiting for Test">Waiting for Test</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Tested">Tested</option>
+                  </select>
+                </div>
+                <div className="form-group">
                   <label>Summary of important record content</label><br />
-                  <textarea className="popup-desc" value={desc} onChange={e => setDesc(e.target.value)} placeholder="Provide a clear and detailed description of the evidence (shape, material, identifying features...)"></textarea>
+                  <textarea className="popup-desc" value={desc} onChange={e => setDesc(e.target.value)} placeholder="Provide a clear and detailed description of the evidence (shape, material, identifying features...)" />
                 </div>
                 <div className="form-group">
                   <label>Attachments</label>
@@ -180,8 +252,7 @@ const Evidence = () => {
                       </div>
                     </div>
                   </div>
-                  <button type="button" className="popup-upload-btn" onClick={handleUploadClick}>Upload file</button>
-                  <div className="popup-uploaded-label">Uploaded:</div>
+                  {/* <div className="popup-uploaded-label">Uploaded:</div> */}
                   <div className="popup-uploaded-list">
                     {files.map((file, idx) => (
                       <div className="popup-uploaded-item" key={idx}>
