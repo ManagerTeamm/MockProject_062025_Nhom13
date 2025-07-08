@@ -1,4 +1,3 @@
-﻿
 using BackEnd_Api.Helpers;
 using BackEnd_Api.Models;
 using BackEnd_Api.Repositories.Interfaces;
@@ -71,6 +70,7 @@ namespace BackEnd_Api
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
+            builder.Services.AddScoped<IPatrolOfficerRepository, PatrolOfficerRepository>();
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
             builder.Services.AddScoped<IVictimRepository, VictimRepository>();
             builder.Services.Scan(scan => scan
