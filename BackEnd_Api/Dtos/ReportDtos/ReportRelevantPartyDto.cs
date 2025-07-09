@@ -8,8 +8,5 @@
         public string? Gender { get; set; }
         public string? Nationality { get; set; }
         public string? Contact { get; set; }
-
-        // files
-        public List<IFormFile>? Attachments { get; set; }
     }
 }

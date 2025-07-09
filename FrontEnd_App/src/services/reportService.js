@@ -1,10 +1,13 @@
 import axios from 'axios';
+import { getCookie } from '../utils/cookie';
 const API_BASE_URL = 'https://localhost:7064/api/Report';
 
+const token = getCookie("token");
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
     },
     timeout: 10000,
 });

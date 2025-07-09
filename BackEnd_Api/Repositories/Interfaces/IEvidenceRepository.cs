@@ -7,10 +7,10 @@ namespace BackEnd_Api.Services.Interface
     {
         Task<IEnumerable<EvidenceDto>> GetAllEvidencesAsync();
         Task<EvidenceDto> CreateEvidenceAsync(CreateEvidenceDto dto);
+        Task CreateEvidenceAsync(Evidence evidence);
         Task<EvidenceDto> GetEvidenceByIdAsync(string id);
         Task<EvidenceDto> UpdateEvidenceAsync(string id, CreateEvidenceDto dto);
         Task<IEnumerable<EvidenceDto>> SearchEvidenceAsync(DateTime? from, DateTime? to, string status);
         Task<object> GetEvidencesPaginatedAsync(int page, int pageSize);
-        Task CreateInitialEvidence(Evidence evidence);
     }
 }

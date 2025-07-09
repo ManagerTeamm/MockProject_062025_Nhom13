@@ -56,52 +56,17 @@ namespace BackEnd_Api.Repositories
                         CreateAt = r.Case.CreateAt
                     } : null,
 
-                    //// Victims
-                    //Victims = r.ReportVictims
-                    //    .Where(rv => !rv.IsDeleted)
-                    //    .Select(rv => new
-                    //    {
-                    //        Id = rv.VictimId,
-                    //        FullName = rv.Victim.Fullname,
-                    //        Gender = rv.Victim.Gender,
-                    //        Nationality = rv.Victim.National,
-                    //        Statement = rv.Victim.Description,
-                    //        Contact = rv.Victim.Contact,
-                    //        Injuries = rv.Victim.Injuries,
-                    //        Status = rv.Victim.Status,
-                    //        ImageUrls = rv.ImageUrls
-                    //    }).ToList(),
-
-                    //// Witnesses
-                    //Witnesses = r.ReportWitness
-                    //    .Where(rw => !rw.IsDeleted)
-                    //    .Select(rw => new
-                    //    {
-                    //        Id = rw.WitnessId,
-                    //        FullName = rw.Witness.Fullname,
-                    //        Gender = rw.Witness.Gender,
-                    //        Nationality = rw.Witness.National,
-                    //        Statement = rw.Witness.Statement,
-                    //        Contact = rw.Witness.Contact,
-                    //        Description = rw.Witness.Description,
-                    //        ImageUrls = rw.ImageUrls
-                    //    }).ToList(),
-
-                    //// Suspects
-                    //Suspects = r.ReportSuspects
-                    //    .Where(rs => !rs.IsDeleted)
-                    //    .Select(rs => new
-                    //    {
-                    //        Id = rs.SuspectId,
-                    //        FullName = rs.Suspect.Fullname,
-                    //        Gender = rs.Suspect.Gender,
-                    //        Nationality = rs.Suspect.National,
-                    //        Description = rs.Suspect.Description,
-                    //        Status = rs.Suspect.Status,
-                    //        Address = rs.Suspect.Address,
-                    //        PhoneNumber = rs.Suspect.PhoneNumber,
-                    //        ImageUrls = rs.ImageUrls
-                    //    }).ToList(),
+                    ReportParties = r.ReportParties
+                        .Where(p => !p.IsDeleted)
+                        .Select(p => new
+                        {
+                            Id = p.ReportPartiesId,
+                            FullName = p.FullName,
+                            TypeOfParties = p.TypeOfParties,
+                            Gender = p.Gender,
+                            National = p.National,
+                            Description = p.Description
+                        }).ToList(),
 
                     // Evidences
                     Evidences = r.Evidences
