@@ -5,8 +5,8 @@ namespace BackEnd_Api.Models
     public class Case : ISoftDeletable
     {
         public string CaseId { get; set; }
-        public string TypeCase { get; set; }
-        public string Severity { get; set; }
+        public string? TypeCase { get; set; }
+        public string? Severity { get; set; }
         public string Status { get; set; }
         public string? Summary { get; set; }
         public DateTime? CreateAt { get; set; }

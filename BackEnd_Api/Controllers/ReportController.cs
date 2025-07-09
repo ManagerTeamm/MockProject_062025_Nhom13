@@ -36,10 +36,6 @@ namespace BackEnd_Api.Controllers
         {
             try
             {
-                //var userPermissions = _userRepository.GetPermissions();
-                //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
-                //    return Forbid("You do not have permission to view users.");
-
                 var reports = await _reportRepository.GetAllAsync();
 
                 var response = ApiResponseHelper<List<Report>>.SuccessResult((List<Report>)reports, "Get reports completed");
@@ -58,12 +54,8 @@ namespace BackEnd_Api.Controllers
         {
             try
             {
-                if (id != null)
+                if (!string.IsNullOrEmpty(id))
                 {
-                    //var userPermissions = _userRepository.GetPermissions();
-                    //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
-                    //    return Forbid("You do not have permission to view users.");
-
                     var reportDetail = await _reportRepository.GetReportDetail(id);
 
                     if (reportDetail == null)

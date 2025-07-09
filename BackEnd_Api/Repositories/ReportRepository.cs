@@ -38,8 +38,8 @@ namespace BackEnd_Api.Repositories
                 var newCase = new Case
                 {
                     CaseId = $"CASE_{DateTime.Now:yyyyMMddHHmmss}_{Random.Shared.Next(1000, 9999)}",
-                    TypeCase = report.TypeReport,
-                    Severity = report.Severity,
+                 //  TypeCase = report.TypeReport,
+                 //   Severity = report.Severity,
                     Status = "New Case",
                     CreateAt = DateTime.Now,
                     IsDeleted = false
@@ -62,8 +62,8 @@ namespace BackEnd_Api.Repositories
                 return new
                 {
                     CaseId = newCase.CaseId,
-                    TypeCase = newCase.TypeCase,
-                    Severity = newCase.Severity,
+                 //   TypeCase = newCase.TypeCase,
+                  //  Severity = newCase.Severity,
                     Status = newCase.Status,
                     CreateAt = newCase.CreateAt,
                     IsDeleted = newCase.IsDeleted
