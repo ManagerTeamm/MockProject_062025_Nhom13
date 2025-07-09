@@ -17,6 +17,7 @@ import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
+import SceneProtectionForm from "../components/sceneProtectionForm";
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
@@ -39,7 +40,8 @@ const AppRoutes = () => {
     { path: "/caselist", element: <CaseList /> },
     { path: "/interviewslist", element: <InterviewsList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
-    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
+      { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
+      { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,

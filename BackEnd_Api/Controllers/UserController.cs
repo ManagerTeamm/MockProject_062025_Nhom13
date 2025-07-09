@@ -18,6 +18,7 @@ namespace BackEnd_Api.Controllers
             _userRepository = userRepository;
         }
 
+        //Lấy danh sách người dùng
         [Authorize]
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()
@@ -41,6 +42,8 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        //Lấy thông tin người dùng theo tên đăng nhập
+        [Authorize]
         [HttpGet("get-user")]
         public async Task<IActionResult> GetUser([FromQuery] string userName)
         {
@@ -58,6 +61,7 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        //Tạo người dùng mới
         [Authorize]
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
@@ -95,6 +99,7 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        //Sửa thông tin người dùng
         [Authorize]
         [HttpPut("update-user")]
         public async Task<IActionResult> EditUser([FromQuery] string username, [FromBody] UserDto userDto)
@@ -125,6 +130,7 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        //Xóa người dùng
         [Authorize]
         [HttpDelete("delete-user")]
         public async Task<IActionResult> DeleteUser([FromQuery] string username)

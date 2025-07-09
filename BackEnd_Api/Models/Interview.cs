@@ -6,9 +6,9 @@ namespace BackEnd_Api.Models
     {
         public string InterviewId { get; set; }
         public string? InvestigationPlanId { get; set; }
-        public InvestigationPlan InvestigationPlan { get; set; }
+        public InvestigationPlan? InvestigationPlan { get; set; }
         public string InterviewerId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
         public string IntervieweeId { get; set; }
         public string TypeInterviewee { get; set; }
         public string Location { get; set; }

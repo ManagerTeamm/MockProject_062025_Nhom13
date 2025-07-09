@@ -6,7 +6,7 @@ namespace BackEnd_Api.Models
     {
         public string ReportId { get; set; }
         public string? CaseId { get; set; }
-        public Case Case { get; set; }
+        public Case? Case { get; set; }
         public string TypeReport { get; set; }
         public string Severity { get; set; }
         public string? Description { get; set; }
@@ -19,7 +19,7 @@ namespace BackEnd_Api.Models
         public DateTime? TimeOfOccurrence { get; set; }
         public string? AddressReported { get; set; }
         public string? OfficerApproveId { get; set; }
-        public User User { get; set; }
+        public User? User { get; set; }
         public bool IsDeleted { get; set; } = false;
         public ICollection<Evidence> Evidences { get; set; }
         public ICollection<ReportParties> ReportParties { get; set; }

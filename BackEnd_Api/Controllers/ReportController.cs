@@ -14,7 +14,7 @@ namespace BackEnd_Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Report Approver,Admin")]
+    [Authorize(Roles = "Report Approver, Admin")]
     public class ReportController : ControllerBase
     {
         private readonly IReportRepository _reportRepository;
