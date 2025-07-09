@@ -73,6 +73,7 @@ namespace BackEnd_Api
             builder.Services.AddScoped<IPatrolOfficerRepository, PatrolOfficerRepository>();
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
             builder.Services.AddScoped<IVictimRepository, VictimRepository>();
+            builder.Services.AddScoped<ICaseRepository, CaseRepository>();
 
             // Auto register all Repositories ending with "Repository"
             builder.Services.Scan(scan => scan
