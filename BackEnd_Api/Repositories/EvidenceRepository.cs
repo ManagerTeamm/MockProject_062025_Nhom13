@@ -33,9 +33,27 @@ namespace BackEnd_Api.Repositories
 
         public async Task<EvidenceDto> CreateEvidenceAsync(CreateEvidenceDto dto)
         {
+            // Validate unique EvidenceId
+            if (await _context.Evidences.AnyAsync(e => e.EvidenceId == dto.EvidenceId && !e.IsDeleted))
+                throw new Exception("EvidenceId must be unique.");
+
+            // Validate CollectedAt không trong tương lai
+            if (dto.CollectedAt > DateTime.UtcNow)
+                throw new Exception("CollectedAt cannot be in the future.");
+
+            // Validate tồn tại User
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == dto.CollectedBy && !u.IsDeleted);
+            if (user == null)
+                throw new Exception("CollectedBy user does not exist.");
+
+            // Validate tồn tại Case
+            var caseEntity = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == dto.CaseId && !c.IsDeleted);
+            if (caseEntity == null)
+                throw new Exception("CaseId does not exist.");
+
             var evidence = new Evidence
             {
-                EvidenceId = string.IsNullOrEmpty(dto.EvidenceId) ? Guid.NewGuid().ToString() : dto.EvidenceId,
+                EvidenceId = dto.EvidenceId,
                 Description = dto.Description,
                 CollectedAt = dto.CollectedAt,
                 CollectedBy = dto.CollectedBy,
@@ -43,33 +61,21 @@ namespace BackEnd_Api.Repositories
                 CurrentLocation = dto.CurrentLocation,
                 AttachedFile = dto.AttachedFile,
                 Status = dto.Status,
-                IsDeleted = false
+                IsDeleted = false,
+                User = user
             };
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == dto.CollectedBy);
-            if (user != null)
-            {
-                evidence.User = user;
-            }
 
             _context.Evidences.Add(evidence);
             await _context.SaveChangesAsync();
 
-            if (!string.IsNullOrEmpty(dto.CaseId))
+            var caseEvidence = new CaseEvidence
             {
-                var caseEntity = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == dto.CaseId);
-                if (caseEntity != null)
-                {
-                    var caseEvidence = new CaseEvidence
-                    {
-                        CaseId = caseEntity.CaseId,
-                        EvidenceId = evidence.EvidenceId,
-                        IsDeleted = false
-                    };
-                    _context.CaseEvidences.Add(caseEvidence);
-                    await _context.SaveChangesAsync();
-                }
-            }
+                CaseId = caseEntity.CaseId,
+                EvidenceId = evidence.EvidenceId,
+                IsDeleted = false
+            };
+            _context.CaseEvidences.Add(caseEvidence);
+            await _context.SaveChangesAsync();
 
             return new EvidenceDto
             {

@@ -1,4 +1,7 @@
-﻿namespace BackEnd_Api.Dtos
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace BackEnd_Api.Dtos
 {
     public class EvidenceDto
     {
@@ -13,13 +16,30 @@
     }
     public class CreateEvidenceDto
     {
+        [Required(ErrorMessage = "EvidenceId is required.")]
+        [RegularExpression(@"^E\\d{3}$", ErrorMessage = "EvidenceId must be in format E followed by 3 digits (e.g., E001, E002).")]
         public string EvidenceId { get; set; }
+
+        [Required(ErrorMessage = "CaseId is required.")]
         public string CaseId { get; set; }
+
+        [Required(ErrorMessage = "Description is required.")]
+        [StringLength(500, MinimumLength = 10, ErrorMessage = "Description must be between 10 and 500 characters.")]
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "CollectedAt is required.")]
         public DateTime CollectedAt { get; set; }
+
+        [Required(ErrorMessage = "CollectedBy is required.")]
         public string CollectedBy { get; set; }
+
+        [Required(ErrorMessage = "TypeEvidence is required.")]
         public string TypeEvidence { get; set; }
+
+        [Required(ErrorMessage = "CurrentLocation is required.")]
+        [StringLength(100, ErrorMessage = "CurrentLocation must be at most 100 characters.")]
         public string CurrentLocation { get; set; }
+
         public string AttachedFile { get; set; }
         public string Status { get; set; }
     }

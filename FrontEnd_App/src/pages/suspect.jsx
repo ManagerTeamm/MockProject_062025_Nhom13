@@ -1,20 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
-
-const suspectData = [
-  { caseId: '#E0462', suspectId: '#20462', fullname: 'John Tran', address: '218 N 7th St, Harlingen, TX', history: 'acacac', interview: true, status: 'Waiting for Test', apprehension: true },
-  { caseId: '#E0461', suspectId: '#20462', fullname: 'Jack Tran', address: '218 N 7th St, Harlingen, TX', history: 'as', interview: true, status: 'Waiting for Test', apprehension: true },
-  { caseId: '#E0460', suspectId: '#20462', fullname: 'Tom Tran', address: '218 N 7th St, Harlingen, TX', history: 'basjdhjsad', interview: true, status: 'Waiting for Test', apprehension: true },
-  { caseId: '#E0222', suspectId: '#20400', fullname: 'Tony Tran', address: '218 N 7th St, Harlingen, TX', history: 'd', interview: true, status: 'In Progress', apprehension: true },
-  { caseId: '#34304', suspectId: '#20400', fullname: 'Maria Ton', address: '218 N 7th St, Harlingen, TX', history: 'e', interview: true, status: 'In Progress', apprehension: true },
-  { caseId: '#17188', suspectId: '#20400', fullname: 'amcidjfa', address: '218 N 7th St, Harlingen, TX', history: 'ấcvfdhbbbbbb', interview: true, status: 'Tested', apprehension: true },
-  { caseId: '#73003', suspectId: '#20400', fullname: 'amcidjfa', address: '218 N 7th St, Harlingen, TX', history: 'bbbbbbbbbbbbbb', interview: true, status: 'Waiting for Test', apprehension: true },
-  { caseId: '#58825', suspectId: '#202222', fullname: 'amcidjfainor', address: '218 N 7th St, Harlingen, TX', history: 'bbbbbbbbbbbb', interview: true, status: 'Waiting for Test', apprehension: true },
-  { caseId: '#89094', suspectId: '#202222', fullname: 'amcidjfa', address: '218 N 7th St, Harlingen, TX', history: 'fsdfasdfs', interview: true, status: 'Tested', apprehension: true },
-];
+import { getSuspectList, getSuspectPaginated, filterSuspects } from '../services/suspectService';
 
 const statusClass = status => {
   if (status === 'Waiting for Test') return 'status-waiting';
@@ -27,6 +16,7 @@ const Suspect = () => {
   const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
+  const [suspectData, setSuspectData] = useState([]);
 
   // Popup state
   const [showPopup, setShowPopup] = useState(false);
@@ -38,8 +28,32 @@ const Suspect = () => {
 
   // Pagination giả lập
   const [page, setPage] = useState(1);
-  const pageSize = 10;
-  const totalPages = 3;
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  useEffect(() => {
+    const fetchSuspects = async () => {
+      try {
+        if (statusFilter || dateFilter) {
+          const result = await filterSuspects({ status: statusFilter, catchTime: dateFilter, page, pageSize });
+          setSuspectData(result.data);
+          setTotalCount(result.totalCount);
+          setTotalPages(Math.ceil(result.totalCount / pageSize));
+        } else {
+          const result = await getSuspectPaginated(page, pageSize);
+          setSuspectData(result.data);
+          setTotalCount(result.totalCount);
+          setTotalPages(Math.ceil(result.totalCount / pageSize));
+        }
+      } catch (err) {
+        setSuspectData([]);
+        setTotalCount(0);
+        setTotalPages(1);
+      }
+    };
+    fetchSuspects();
+  }, [statusFilter, dateFilter, page, pageSize]);
 
   const handleFileChange = (e) => {
     setFiles([...files, ...Array.from(e.target.files)]);
@@ -76,7 +90,7 @@ const Suspect = () => {
                 </select>
               </div>
               <div>
-                <label>Date collected</label>
+                <label>Catch Time</label>
                 <input type="date" className="filter-date" value={dateFilter} onChange={e => setDateFilter(e.target.value)} placeholder="Select a day" />
               </div>
             </div>
@@ -87,9 +101,10 @@ const Suspect = () => {
                   <th>Suspect ID</th>
                   <th>Fullname</th>
                   <th>Address</th>
-                  <th>Criminal history</th>
+                  <th>Description</th>
                   <th>Results interviews</th>
                   <th>Status</th>
+                  <th>Catch Time</th>
                   <th>Information about the apprehension</th>
                 </tr>
               </thead>
@@ -100,22 +115,28 @@ const Suspect = () => {
                     <td>{row.suspectId}</td>
                     <td>{row.fullname}</td>
                     <td>{row.address}</td>
-                    <td>{row.history}</td>
+                    <td>{row.description}</td>
                     <td><a href="#">See details</a></td>
                     <td><span className={statusClass(row.status)}>{row.status}</span></td>
+                    <td>{row.catchTime ? new Date(row.catchTime).toLocaleString() : ''}</td>
                     <td><a href="#">See details</a></td>
                   </tr>
                 ))}
               </tbody>
             </table>
             <div className="pagination-row">
-              <span>Show <select><option>10</option></select> entries</span>
+              <span>Show <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }}>
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select> entries</span>
               <div className="pagination">
-                <button className="page-btn">Previous</button>
-                <button className="page-btn active">1</button>
-                <button className="page-btn">2</button>
-                <button className="page-btn">3</button>
-                <button className="page-btn">Next</button>
+                <button className="page-btn" onClick={() => setPage(page - 1)} disabled={page === 1}>Previous</button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+                  <button key={p} className={`page-btn ${page === p ? 'active' : ''}`} onClick={() => setPage(p)}>{p}</button>
+                ))}
+                <button className="page-btn" onClick={() => setPage(page + 1)} disabled={page === totalPages}>Next</button>
               </div>
             </div>
           </div>

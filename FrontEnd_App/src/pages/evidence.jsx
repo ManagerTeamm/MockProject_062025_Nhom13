@@ -71,14 +71,27 @@ const Evidence = () => {
     setCurrentPage(page);
   };
 
+  // Validate function for evidence form
+  const validateEvidenceForm = () => {
+    if (!evidenceId.trim()) return "Evidence ID is required.";
+    if (!/^E\d{3}$/.test(evidenceId)) return "Evidence ID must be in format E followed by 3 digits (e.g., E001, E002).";
+    if (!typeEvidence.trim()) return "Type of Evidence is required.";
+    if (!desc.trim()) return "Description is required.";
+    if (desc.length < 10 || desc.length > 500) return "Description must be between 10 and 500 characters.";
+    if (!date) return "Date collected is required.";
+    if (new Date(date) > new Date()) return "Date collected cannot be in the future.";
+    if (!collectedBy.trim()) return "Collector is required.";
+    if (!currentLocation.trim()) return "Current Location is required.";
+    if (currentLocation.length > 100) return "Current Location must be at most 100 characters.";
+    if (!caseId.trim()) return "Case ID is required.";
+    return null;
+  };
+
   const handleCreateEvidence = async (e) => {
     e.preventDefault();
-    if (!evidenceId.trim()) {
-      setFormError("Evidence ID is required.");
-      return;
-    }
-    if (!date) {
-      setFormError("Date collected is required.");
+    const error = validateEvidenceForm();
+    if (error) {
+      setFormError(error);
       return;
     }
     setFormError("");
@@ -102,7 +115,14 @@ const Evidence = () => {
       setTotalPages(result.totalPages);
       setTotalCount(result.totalCount);
     } catch (err) {
-      setFormError('Tạo evidence thất bại!');
+      // Parse backend error if possible
+      let msg = 'Failed to create evidence!';
+      if (err?.response?.data) {
+        if (typeof err.response.data === 'string') msg = err.response.data;
+        else if (err.response.data?.errors) msg = Object.values(err.response.data.errors).join(' ');
+        else if (err.response.data?.message) msg = err.response.data.message;
+      }
+      setFormError(msg);
     }
   };
 
