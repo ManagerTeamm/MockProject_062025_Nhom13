@@ -1,0 +1,17 @@
+import React from "react";
+import Sidebar from "../components/sidebar";
+import MedicalSupportForm from "../components/panel/medicalsupport";
+import "../styles/medical.css";
+
+const Medical = () => {
+  return (
+    <div className="medical-container">
+      <Sidebar />
+      <div className="medical-main">
+        <MedicalSupportForm />
+      </div>
+    </div>
+  );
+};
+
+export default Medical;

@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
-import ProtectedRoute from "./protectedRoute";
+import ProtectedRoute from "./protectedroute";
 import LoginComponent from "../pages/login";
 import Main from "../samples/pages/admin/main";
 import InmateAdmissions from "../samples/pages/inmateadmission";
@@ -20,6 +20,8 @@ import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
+//sample medical support
+import Medical from "../samples/medical";
 
 
 const AppRoutes = () => {
@@ -84,6 +86,11 @@ const AppRoutes = () => {
           path: "casefile",
           element: <ProtectedRoute allowedRoles={["Investigator"]} />,
           children: [{ index: true, element: <CaseFile /> }],
+        },
+        {
+          path: "medical",
+          element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
+          children: [{ index: true, element: <Medical /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
       ],
