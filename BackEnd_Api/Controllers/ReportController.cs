@@ -31,6 +31,16 @@ namespace BackEnd_Api.Controllers
             _reportPartiesRepository = reportPartiesRepository;
         }
 
+        /// <summary>
+        /// Retrieves all reports from the system.
+        /// </summary>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with a list of all reports if successful,
+        /// or an HTTP 500 Internal Server Error if an exception occurs.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown when an error occurs while retrieving reports from the repository.
+        /// </exception>
         [HttpGet("get-reports")]
         public async Task<IActionResult> GetReports()
         {
@@ -49,6 +59,18 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves detailed information for a specific report by ID.
+        /// </summary>
+        /// <param name="id">The unique identifier of the report to retrieve.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with the report details if found,
+        /// an HTTP 404 Not Found if the report doesn't exist,
+        /// or an HTTP 500 Internal Server Error if an exception occurs.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown when an error occurs while retrieving the report from the repository.
+        /// </exception>
         [HttpGet("report-detail/{id}")]
         public async Task<IActionResult> GetReportDetail(string id)
         {
@@ -75,6 +97,21 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Approves a report and creates a new case from it.
+        /// </summary>
+        /// <param name="id">The unique identifier of the report to approve.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with the newly created case if successful,
+        /// an HTTP 400 Bad Request if the report cannot be approved (e.g., invalid ID),
+        /// or an HTTP 500 Internal Server Error if an unexpected exception occurs.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the report ID is invalid or the report cannot be approved.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Thrown when an unexpected error occurs during the approval process.
+        /// </exception>
         [HttpPost("report-approve/{id}")]
         public async Task<IActionResult> ApproveReport(string id)
         {
