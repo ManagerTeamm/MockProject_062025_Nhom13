@@ -121,6 +121,20 @@ namespace BackEnd_Api.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<Report> DeclineReport(string id)
+        {
+            var report = await GetByIdAsync(id);
+
+            if(report != null)
+            {
+                var userName = _httpContextAccessor.HttpContext?.User.FindFirst("name")?.Value;
+                report.OfficerApproveId = userName;
+                await Delete(report);
+            }
+
+            return report;
+        }
+
         /// <summary>
         /// Retrieves detailed information for a specific report including related entities.
         /// This method returns comprehensive report data including reporter information,
@@ -146,7 +160,7 @@ namespace BackEnd_Api.Repositories
         public async Task<object> GetReportDetail(string id)
         {
             var reportDetail = await _dbSet
-                .Where(r => r.ReportId == id && !r.IsDeleted)
+                .Where(r => r.ReportId == id)
                 .Select(r => new
                 {
                     // Basic Report Info

@@ -131,6 +131,28 @@ namespace BackEnd_Api.Controllers
                 return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] { e.Message }, 500));
             }
         }
+        [HttpPatch("report-decline/{id}")]
+        public async Task<IActionResult> DeclienReport(string id)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(id))
+                {
+                    var report = await _reportRepository.DeclineReport(id);
+
+                    if(report != null)
+                    {
+                        return Ok(ApiResponseHelper<object>.SuccessResult(report));
+                    }
+                    return NotFound(ApiResponseHelper<object>.NotFoundResult("Not found report id = " + id));
+                }
+                return BadRequest(ApiResponseHelper<string>.NotFoundResult("Id report not null or empty"));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] { e.Message }, 500));
+            }
+        }
 
         [HttpPost]
         [AllowAnonymous]

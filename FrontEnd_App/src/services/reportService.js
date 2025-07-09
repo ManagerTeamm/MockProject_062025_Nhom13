@@ -12,8 +12,8 @@ const apiClient = axios.create({
     timeout: API_CONFIG.TIMEOUT,
 });
 
-export const reportService ={
-    getReports: async() => {
+export const reportService = {
+    getReports: async () => {
         try {
             const response = await apiClient.get('/get-reports');
             return response.data;
@@ -36,6 +36,15 @@ export const reportService ={
     approveReport: async (reportId) => {
         try {
             const response = await apiClient.post(`/report-approve/${reportId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error approving report:', error);
+            throw error;
+        }
+    },
+    declineReport: async (reportId) => {
+        try {
+            const response = await apiClient.patch(`/report-decline/${reportId}`);
             return response.data;
         } catch (error) {
             console.error('Error approving report:', error);
