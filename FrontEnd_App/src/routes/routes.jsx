@@ -38,7 +38,6 @@ const AppRoutes = () => {
     { path: "/suspect", element: <Suspect /> },
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
-    { path: "/caselist", element: <CaseList /> },
     { path: "/interviewslist", element: <InterviewsList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
       { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
@@ -57,6 +56,11 @@ const AppRoutes = () => {
           path: "admin/userList",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <UserList /> }],
+        },
+         {
+          path: "admin/cases",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <CaseList /> }],
         },
         {
           path: "admin/reports",
