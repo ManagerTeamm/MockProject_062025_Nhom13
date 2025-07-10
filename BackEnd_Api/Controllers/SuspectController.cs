@@ -72,5 +72,14 @@ namespace BackEnd_Api.Controllers
             }).ToList();
             return Ok(new { data = result, totalCount });
         }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateSuspect([FromBody] CreateSuspectDto dto)
+        {
+            if (dto == null)
+                return BadRequest("Invalid suspect data.");
+            await _suspectRepository.AddSuspectAsync(dto);
+            return Ok(new { message = "Suspect created successfully." });
+        }
     }
 } 

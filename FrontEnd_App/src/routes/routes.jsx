@@ -18,6 +18,7 @@ import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 import EvidenceDetail from "../pages/evidenceDetail";
+import QAList from '../pages/qaList';
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
@@ -39,6 +40,7 @@ const AppRoutes = () => {
     { path: "/evidence", element: <Evidence /> },
     { path: "/caselist", element: <CaseList /> },
     { path: "/interviewslist", element: <InterviewsList /> },
+    { path: "/qa-list", element: <QAList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
     { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
     {
@@ -87,6 +89,7 @@ const AppRoutes = () => {
           children: [{ index: true, element: <CaseFile /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
+        
       ],
     },
 

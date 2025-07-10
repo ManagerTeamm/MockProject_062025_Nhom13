@@ -97,9 +97,9 @@
   text-align: left;
 }
 .info-table th {
-  background: #f5f6fa;
-  font-weight: 600;
-  color: #222;
+  background: #ebebeb;
+  font-weight: 700;
+  color: #23294B;
 }
 .info-table tr:nth-child(even) {
   background: #f8fafc;
@@ -367,7 +367,7 @@
   -ms-overflow-style: none;
 }
 
-/* Evidence Detail Style - giống investigation */
+/* Evidence Detail Style */
 .evidence-detail-container {
   background: #fff;
   border-radius: 10px;
@@ -399,6 +399,12 @@
 .evidence-section p, .case-section p, .suspect-section p {
   margin: 6px 0;
   font-size: 1.05rem;
+}
+.error-text {
+  color: red;
+  font-size: 13px;
+  margin-top: 2px;
+  margin-bottom: 6px;
 }
 @media (max-width: 768px) {
   .evidence-detail-container {

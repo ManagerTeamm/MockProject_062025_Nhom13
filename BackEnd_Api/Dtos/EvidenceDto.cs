@@ -14,6 +14,15 @@ namespace BackEnd_Api.Dtos
         public CaseInfoDto CaseInfo { get; set; }
         public SuspectInfoDto SuspectInfo { get; set; }
     }
+    
+    public class EvidenceFilterDto
+    {
+        public string? Status { get; set; }
+        public DateTime? CollectedAt { get; set; }
+        public int Page { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+    }
+    
     public class CreateEvidenceDto
     {
         [Required(ErrorMessage = "EvidenceId is required.")]

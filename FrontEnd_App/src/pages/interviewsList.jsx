@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
@@ -26,6 +27,7 @@ const initialQA = [
 ];
 
 const InterviewsList = () => {
+  const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
   const [page, setPage] = useState(1);
@@ -75,7 +77,7 @@ const InterviewsList = () => {
         <section className="section">
           <div className="section-box">
             <div className="section-title-row" style={{marginBottom: 24}}>
-              <button className="btn-back" onClick={() => window.history.back()}>BACK <img src="/icons/Back.png" alt="back" className="icon-back" /></button>
+              <button className="btn-back" onClick={() => navigate(-1)}>BACK <img src="/icons/Back.png" alt="back" className="icon-back" /></button>
               <div style={{ flex: 1 }} />
               <button className="btn-add" onClick={() => setShowPopup(true)}><img src="/icons/add_circle.svg" alt="add" className="icon-add" /> ADD</button>
             </div>
