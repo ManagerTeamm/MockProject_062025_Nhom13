@@ -19,6 +19,7 @@ import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
+import NavbarPhase2 from '../components/navbarphase2.jsx';
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
@@ -42,6 +43,7 @@ const AppRoutes = () => {
     { path: "/evidence", element: <Evidence /> },
     { path: "/interviewslist", element: <InterviewsList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
+    { path: "/navbarphase2", element: <NavbarPhase2/>},
       { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
       { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
     {
