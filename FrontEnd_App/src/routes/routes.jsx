@@ -16,9 +16,10 @@ import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
-import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
+import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
+import ImageAndVideo from "../components/imageAndVideo";
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
@@ -41,9 +42,10 @@ const AppRoutes = () => {
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
     { path: "/interviewslist", element: <InterviewsList /> },
-    { path: "/report-suspect", element: <ReportSuspect/>},
-      { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
-      { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
+    { path: "/report-suspect", element: <ReportSuspect /> },
+    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
+    { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
+    { path: "/image-and-video", element: <ImageAndVideo /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
@@ -59,7 +61,7 @@ const AppRoutes = () => {
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <UserList /> }],
         },
-         {
+        {
           path: "admin/cases",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <CaseList /> }],
@@ -73,17 +75,17 @@ const AppRoutes = () => {
           path: "admin/report-detail/:reportId",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <ReportDetail /> }],
-          },
-          {
-              path: "admin/investigation",
-              element: <ProtectedRoute allowedRoles={["Admin"]} />,
-              children: [{ index: true, element: <Investigation /> }],
-          },
-          {
-              path: "admin/evidence",
-              element: <ProtectedRoute allowedRoles={["Admin"]} />,
-              children: [{ index: true, element: <Evidence /> }],
-          },
+        },
+        {
+          path: "admin/investigation",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Investigation /> }],
+        },
+        {
+          path: "admin/evidence",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Evidence /> }],
+        },
         {
           path: "inmateadmission",
           element: <ProtectedRoute allowedRoles={["Patrol Officer"]} />,
