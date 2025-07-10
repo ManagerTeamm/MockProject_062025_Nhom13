@@ -73,6 +73,7 @@
   background: #d6eaff;
   padding: 24px 40px 16px 40px;
   border-bottom: 1px solid #b3d1ea;
+  border-radius: 10px;
 }
 .investigation-header h1 {
   margin: 0 0 12px 0;
