@@ -9,11 +9,11 @@ namespace BackEnd_Api.Repositories
     {
         // Vẫn cần ApplicationDbContext để truy cập các DbSet khác như Reports
         // vì IRepository<T> không cung cấp GetQueryable() trên toàn bộ DbContext
-        private readonly ApplicationDbContext _appContext; // Đổi tên để tránh xung đột với _context của BaseRepository
+        private readonly ApplicationDbContext _context; // Đổi tên để tránh xung đột với _context của BaseRepository
 
         public CaseRepository(ApplicationDbContext context) : base(context)
         {
-            _appContext = context;
+            _context = context;
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace BackEnd_Api.Repositories
         public async Task<PaginatedResultDto<CaseListItemDto>> GetCasesAsync(CaseFilterDto filter)
         {
             // Truy vấn trực tiếp qua _appContext để có thể Include và xây dựng truy vấn phức tạp
-            var query = _appContext.Cases
+            var query = _context.Cases
                                    .Include(c => c.Reports) // BẮT BUỘC include Reports
                                    .Where(c => !c.IsDeleted);
 
@@ -93,8 +93,6 @@ namespace BackEnd_Api.Repositories
                 PageSize = filter.PageSize
             };
         }
-    }
-}
 
         public async Task<SceneProtection> CreateProtection(SceneProtection sceneProtection)
         {

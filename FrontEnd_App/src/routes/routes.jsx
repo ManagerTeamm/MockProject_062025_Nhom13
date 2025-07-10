@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
-import ProtectedRoute from "./protectedroute";
+import ProtectedRoute from "./protectedRoute";
 import LoginComponent from "../pages/login";
 import Main from "../samples/pages/admin/main";
 import InmateAdmissions from "../samples/pages/inmateadmission";
