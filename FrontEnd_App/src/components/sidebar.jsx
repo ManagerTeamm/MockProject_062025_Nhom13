@@ -11,6 +11,7 @@ const Sidebar = () => {
         const fetchUser = async () => {
             try {
                 const res = await getUser();
+                console.log("User data fetched:", res);
                 setUser({
                     username: res.userName,
                     avatarUrl: res.avatarUrl || "",
