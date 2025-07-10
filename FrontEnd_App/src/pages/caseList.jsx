@@ -3,7 +3,7 @@ import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
 
-const API_URL = 'https://localhost:7064/api/cases'; 
+const API_URL = 'https://localhost:7064/api/Case'; 
 
 const statusClass = (status) => {
   switch (status) {

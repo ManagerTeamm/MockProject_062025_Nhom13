@@ -14,8 +14,9 @@
   line-height: 1; /* Aligns the arrow vertically with text */
 }
 
-.sort-arrow.default {
-  color: #ccc; /* Grey out when not sorted */
+    .sort-arrow.default {
+        color: #ccc; /* Grey out when not sorted */
+    }
   
 @media (max-width: 768px) {
   .investigation-main {

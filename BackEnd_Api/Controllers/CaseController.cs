@@ -1,4 +1,5 @@
-﻿using BackEnd_Api.Helpers;
+﻿using BackEnd_Api.Dtos;
+using BackEnd_Api.Helpers;
 using BackEnd_Api.Models;
 using BackEnd_Api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,20 @@ namespace BackEnd_Api.Controllers
         {
             _caseRepository = caseRepository;
             _userRepository = userRepository;
+        }
+
+        /// <summary>
+        /// Lấy danh sách các vụ án với khả năng tìm kiếm, phân trang và sắp xếp.
+        /// </summary>
+        /// <param name="filter">Đối tượng chứa các tham số lọc, phân trang và sắp xếp (lấy từ query string).</param>
+        /// <returns>Một PaginatedResultDto chứa danh sách các vụ án và thông tin phân trang.</returns>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedResultDto<CaseListItemDto>))]
+        public async Task<ActionResult<PaginatedResultDto<CaseListItemDto>>> GetCases([FromQuery] CaseFilterDto filter)
+        {
+            // Gọi phương thức trực tiếp từ Repository
+            var result = await _caseRepository.GetCasesAsync(filter);
+            return Ok(result);
         }
 
         //Tạo mới trường hợp bảo vệ hiện trường
