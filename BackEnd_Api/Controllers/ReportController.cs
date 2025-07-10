@@ -31,15 +31,21 @@ namespace BackEnd_Api.Controllers
             _reportPartiesRepository = reportPartiesRepository;
         }
 
+        /// <summary>
+        /// Retrieves all reports from the system.
+        /// </summary>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with a list of all reports if successful,
+        /// or an HTTP 500 Internal Server Error if an exception occurs.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown when an error occurs while retrieving reports from the repository.
+        /// </exception>
         [HttpGet("get-reports")]
         public async Task<IActionResult> GetReports()
         {
             try
             {
-                //var userPermissions = _userRepository.GetPermissions();
-                //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
-                //    return Forbid("You do not have permission to view users.");
-
                 var reports = await _reportRepository.GetAllAsync();
 
                 var response = ApiResponseHelper<List<Report>>.SuccessResult((List<Report>)reports, "Get reports completed");
@@ -53,17 +59,25 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves detailed information for a specific report by ID.
+        /// </summary>
+        /// <param name="id">The unique identifier of the report to retrieve.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with the report details if found,
+        /// an HTTP 404 Not Found if the report doesn't exist,
+        /// or an HTTP 500 Internal Server Error if an exception occurs.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown when an error occurs while retrieving the report from the repository.
+        /// </exception>
         [HttpGet("report-detail/{id}")]
         public async Task<IActionResult> GetReportDetail(string id)
         {
             try
             {
-                if (id != null)
+                if (!string.IsNullOrEmpty(id))
                 {
-                    //var userPermissions = _userRepository.GetPermissions();
-                    //if (!userPermissions.Contains("Manage_Users") || !userPermissions.Contains("Admin"))
-                    //    return Forbid("You do not have permission to view users.");
-
                     var reportDetail = await _reportRepository.GetReportDetail(id);
 
                     if (reportDetail == null)
@@ -84,6 +98,62 @@ namespace BackEnd_Api.Controllers
         }
 
         /// <summary>
+        /// Approves a report and creates a new case from it.
+        /// </summary>
+        /// <param name="id">The unique identifier of the report to approve.</param>
+        /// <returns>
+        /// Returns an HTTP 200 OK response with the newly created case if successful,
+        /// an HTTP 400 Bad Request if the report cannot be approved (e.g., invalid ID),
+        /// or an HTTP 500 Internal Server Error if an unexpected exception occurs.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown when the report ID is invalid or the report cannot be approved.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Thrown when an unexpected error occurs during the approval process.
+        /// </exception>
+        [HttpPost("report-approve/{id}")]
+        public async Task<IActionResult> ApproveReport(string id)
+        {
+            try
+             {
+                var newCase = await _reportRepository.ApproveReport(id);
+
+                return Ok(ApiResponseHelper<object>.SuccessResult(newCase));
+
+
+            }catch(ArgumentException e)
+            {
+                return BadRequest(ApiResponseHelper<string>.NotFoundResult(e.Message));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] { e.Message }, 500));
+            }
+        }
+        [HttpPatch("report-decline/{id}")]
+        public async Task<IActionResult> DeclienReport(string id)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(id))
+                {
+                    var report = await _reportRepository.DeclineReport(id);
+
+                    if(report != null)
+                    {
+                        return Ok(ApiResponseHelper<object>.SuccessResult(report));
+                    }
+                    return NotFound(ApiResponseHelper<object>.NotFoundResult("Not found report id = " + id));
+                }
+                return BadRequest(ApiResponseHelper<string>.NotFoundResult("Id report not null or empty"));
+            }
+            catch(Exception e)
+            {
+                return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] { e.Message }, 500));
+            }
+        }
+
         /// Handles the creation of a new report including reporter details, incident information,
         /// relevant parties, and attached evidences. Accepts data from a form submission.
         /// </summary>
@@ -210,7 +280,7 @@ namespace BackEnd_Api.Controllers
             Directory.CreateDirectory(saveDir);
 
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp",
-    ".pdf", ".psd", ".doc", ".docx", ".ppt", ".pptx", ".ai"};
+                                            ".pdf", ".psd", ".doc", ".docx", ".ppt", ".pptx", ".ai"};
 
             foreach (var file in attachments)
             {
@@ -244,5 +314,7 @@ namespace BackEnd_Api.Controllers
 
             return imageUrls;
         }
+
+
     }
 }
