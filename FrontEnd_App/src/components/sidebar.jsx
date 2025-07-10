@@ -11,6 +11,7 @@ const Sidebar = ({ hideToggleButton = false }) => {
         const fetchUser = async () => {
             try {
                 const res = await getUser();
+                console.log("User data fetched:", res);
                 setUser({
                     username: res.userName,
                     avatarUrl: res.avatarUrl || "",
@@ -160,6 +161,17 @@ const Sidebar = ({ hideToggleButton = false }) => {
                                 >
                                     <i className={`bi bi-eye fs-4 ${isActive("/secure/admin/supervise") ? "text-primary" : "text-secondary"}`}></i>
                                     Supervise
+                                </Link>
+                            </li>
+
+                            {/*test medical*/}
+                            <li className="nav-item">
+                                <Link
+                                    to="/secure/medical"
+                                    className={`nav-link d-flex align-items-center gap-2 ${isActive("/secure/medical") ? "active text-primary fw-bold" : "text-dark"}`}
+                                >
+                                    <i className={`bi bi-briefcase-medical fs-4 ${isActive("/secure/medical") ? "text-primary" : "text-secondary"}`}></i>
+                                    Medical Panel
                                 </Link>
                             </li>
                         </ul>
