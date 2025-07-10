@@ -83,19 +83,28 @@ namespace BackEnd_Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Handles the creation of a new report including reporter details, incident information,
+        /// relevant parties, and attached evidences. Accepts data from a form submission.
+        /// </summary>
+        /// <param name="request">The report request DTO containing all necessary report data.</param>
+        /// <returns>Returns a success response if the report is created successfully, otherwise a bad request or internal server error.</returns>
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> CreateReport([FromForm] ReportRequestDto request)
         {
+            // Validate model state before proceeding
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
+                // Initialize and populate the report entity with provided incident and reporter details
                 var report = new Report
                 {
-                    ReportId = Guid.NewGuid().ToString(),
+                    ReportId = "REPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
                     CaseId = null,
                     TypeReport = request.Incident.TypeOfCrime,
                     Severity = request.Incident.Severity,
@@ -112,15 +121,17 @@ namespace BackEnd_Api.Controllers
                     IsDeleted = false
                 };
 
+                // Save the report to the database
                 await _reportRepository.CreateReportAsync(report);
 
+                // If there are relevant parties involved in the incident, save their details
                 if (request.RelevantParties != null && request.RelevantParties.Any())
                 {
                     foreach (var party in request.RelevantParties)
                     {
-                        var relevantParty = new ReportParties()
+                        var relevantParty = new ReportParties
                         {
-                            ReportPartiesId = Guid.NewGuid().ToString(),
+                            ReportPartiesId = "REPORT_PARTY_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
                             ReportId = report.ReportId,
                             FullName = party.FullName,
                             TypeOfParties = party.Role ?? "unknown",
@@ -134,6 +145,7 @@ namespace BackEnd_Api.Controllers
                     }
                 }
 
+                // If there are evidence items provided, process and save them
                 if (request.Evidences != null && request.Evidences.Any())
                 {
                     foreach (var evidenceDto in request.Evidences)
@@ -143,7 +155,7 @@ namespace BackEnd_Api.Controllers
 
                         var evidence = new Evidence
                         {
-                            EvidenceId = Guid.NewGuid().ToString(),
+                            EvidenceId = "EVIDENCE_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
                             ReportId = report.ReportId,
                             TypeEvidence = evidenceDto.TypeOfEvidence,
                             Description = evidenceDto.Description,
@@ -153,6 +165,7 @@ namespace BackEnd_Api.Controllers
                             IsDeleted = false
                         };
 
+                        // Save attached files if any and update the evidence record
                         var files = new List<string>();
 
                         if (evidenceDto.Attachments != null && evidenceDto.Attachments.Any())
@@ -161,21 +174,25 @@ namespace BackEnd_Api.Controllers
                         }
 
                         evidence.AttachedFile = files.Count > 0
-                                            ? string.Join(";", files)
-                                            : null;
+                            ? string.Join(";", files)
+                            : null;
 
                         await _evidenceRepository.CreateEvidenceAsync(evidence);
                     }
                 }
+
+                // Return success response
                 var response = ApiResponseHelper<string>.SuccessResult(null, "Report created successfully");
                 return Ok(response);
             }
             catch (Exception e)
             {
+                // Return internal server error with exception message
                 var response = ApiResponseHelper<string>.FailureResult("Failed to create report", new[] { e.Message }, 500);
                 return StatusCode(500, response);
             }
         }
+
 
         private async Task<List<string>> SaveFileAsync(string type, List<IFormFile> attachments, string prefix, string id)
         {
@@ -215,7 +232,7 @@ namespace BackEnd_Api.Controllers
                             await file.CopyToAsync(stream);
                         }
 
-                        var relativeUrl = $"/images/{validUrl}/{fileName}";
+                        var relativeUrl = $"/{type}/{validUrl}/{fileName}";
                         imageUrls.Add(relativeUrl);
                     }
                     catch (Exception ex)
