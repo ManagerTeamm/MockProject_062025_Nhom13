@@ -96,3 +96,15 @@ namespace BackEnd_Api.Repositories
     }
 }
 
+        public async Task<SceneProtection> CreateProtection(SceneProtection sceneProtection)
+        {
+            if (sceneProtection == null)
+            {
+                throw new ArgumentNullException(nameof(sceneProtection));
+            }
+            await _context.SceneProtections.AddAsync(sceneProtection);
+            await _context.SaveChangesAsync();
+            return sceneProtection;
+        }
+    }
+}

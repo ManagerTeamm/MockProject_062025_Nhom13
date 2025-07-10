@@ -105,6 +105,11 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
 
   
     const handleCreate = () => {
+        if (!relationship) {
+            alert('Please select a relationship to the incident');
+            return;
+        }
+
          const formData = {
             fullName,
             relationship,
@@ -156,7 +161,7 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
 
     return (
        
-        <div className="container-fluid d-flex justify-content-center align-items-center py-5" style={{ minHeight: '100vh'}}>
+        <div className="container-fluid d-flex justify-content-center align-items-center" style={{ minHeight: '100vh'}}>
             
             <div className="card shadow-lg p-4 my-4" style={{ 
                 maxWidth: '600px', 

@@ -3,7 +3,7 @@ import '../css/PatrolOfficerManagement.css';
 
 const API_BASE_URL = 'http://localhost:5151/api/PatrolOfficerUser';
 
-const PatrolOfficerManagement = () => {
+const PatrolOfficerManagement = ({ onSelectOfficer }) => {
   const [officers, setOfficers] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
@@ -90,14 +90,21 @@ const PatrolOfficerManagement = () => {
     }));
   };
 
-  const handleAddClick = () => {
-    const selected = Object.keys(selectedOfficerUserNames).filter(userName => selectedOfficerUserNames[userName]);
-    if (selected.length > 0) {
-      alert(`Selected officers for addition (feature not implemented in API): ${selected.join(', ')}`);
-    } else {
-      alert("Please select at least one officer to add.");
-    }
-  };
+    const handleAddClick = () => {
+        const selected = Object.keys(selectedOfficerUserNames).filter(userName => selectedOfficerUserNames[userName]);
+
+        if (selected.length > 0) {
+            const selectedOfficers = officers.filter(officer => selected.includes(officer.userName));
+            console.log("Selected Officers:", selectedOfficers);
+
+            if (onSelectOfficer) {
+                onSelectOfficer(selectedOfficers);
+            }
+        } else {
+            alert("Please select at least one officer to add.");
+        }
+    };
+
 
   const totalPages = Math.ceil(totalCount / pageSize);
   const displayedRangeStart = (pageNumber - 1) * pageSize + 1;
