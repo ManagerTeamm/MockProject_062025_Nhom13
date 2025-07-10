@@ -63,6 +63,12 @@ const InitialEvidenceForm = ({ initialData, onSubmit, onCancel }) => {
     };
 
     const handleCreate = () => {
+
+        if (!typeOfEvidence) {
+            alert('Please select a type of evidence');
+            return;
+        }
+
         const formData = { typeOfEvidence, evidenceLocation, evidenceDescription, attachments };
         if (onSubmit) onSubmit(formData);
         setShowSubmitMessage(true);

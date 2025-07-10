@@ -1,9 +1,13 @@
-﻿using BackEnd_Api.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using BackEnd_Api.Models;
 
 namespace BackEnd_Api.Repositories.Interfaces
 {
-    public interface ISuspectRepository
+    public interface ISuspectRepository : IRepository<Suspect>
     {
-        Task CreateSuspectAsync(Suspect suspect);
+        Task<List<Suspect>> GetAllSuspectsAsync();
+        Task<(List<Suspect> suspects, int totalCount)> GetSuspectsPaginatedAsync(int page, int pageSize);
+        Task<(List<Suspect> suspects, int totalCount)> FilterSuspectsAsync(string status, DateTime? catchTime, int page, int pageSize);
     }
-}
+} 
