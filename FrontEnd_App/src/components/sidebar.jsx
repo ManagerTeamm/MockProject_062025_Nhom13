@@ -161,6 +161,17 @@ const Sidebar = () => {
                                     Supervise
                                 </Link>
                             </li>
+
+                            {/*test medical*/}
+                            <li className="nav-item">
+                                <Link
+                                    to="/secure/medical"
+                                    className={`nav-link d-flex align-items-center gap-2 ${isActive("/secure/medical") ? "active text-primary fw-bold" : "text-dark"}`}
+                                >
+                                    <i className={`bi bi-briefcase-medical fs-4 ${isActive("/secure/medical") ? "text-primary" : "text-secondary"}`}></i>
+                                    Medical Panel
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 
