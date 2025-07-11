@@ -23,6 +23,9 @@ import Dashboard from "../samples/dashboard";
 //sample medical support
 import Medical from "../samples/medical";
 
+//sample nitial statement
+import ViewStatement from "../samples/viewInitialStatement";
+
 
 const AppRoutes = () => {
   const { loading } = useAuth();
@@ -91,6 +94,11 @@ const AppRoutes = () => {
           path: "medical",
           element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
           children: [{ index: true, element: <Medical /> }],
+        },
+        {
+          path: "initialstatement",
+          element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
+          children: [{ index: true, element: <ViewStatement /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
       ],
