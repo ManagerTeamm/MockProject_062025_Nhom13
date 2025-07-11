@@ -19,6 +19,7 @@ import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
+import InitialResponse from "../components/initialResponse";
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
