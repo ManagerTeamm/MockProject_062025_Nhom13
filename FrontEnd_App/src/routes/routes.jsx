@@ -22,8 +22,6 @@ import ImageAndVideo from "../components/imageAndVideo";
 import Dashboard from "../pages/dashboard";
 import QAList from '../pages/qaList';
 import NavbarPhase2 from '../components/navbarphase2.jsx';
-//sample dashboard
-import Dashboard from "../samples/dashboard";
 //sample medical support
 import Medical from "../samples/medical";
 import CaseDetailStep2 from "../pages/caseDetailStep2";

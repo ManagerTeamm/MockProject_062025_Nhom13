@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import '../css/PatrolOfficerManagement.css';
+import '../styles/PatrolOfficerManagement.css';
 
 const API_BASE_URL = 'http://localhost:5151/api/PatrolOfficerUser';
 

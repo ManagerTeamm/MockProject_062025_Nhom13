@@ -1,9 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Button, Card, Table } from 'react-bootstrap';
 import Sidebar from '../components/sidebar';
-//import { getStatementById } from '../services/statementService';
-//import { getMediaById } from '../services/mediaService';
-//import { getEvidenceById } from '../services/evidenceService';
+import ImageAndVideo from '../components/imageAndVideo';
 
 const CaseDetailStep2 = ({
     initialStatements = [],
@@ -25,56 +23,14 @@ const CaseDetailStep2 = ({
     const [evidenceIds, setEvidenceIds] = useState([]);
     const [evidences, setEvidences] = useState([]);
 
-    //const fetchStatements = async (ids) => {
-    //    try {
-    //        const detailPromises = ids.map(id => getStatementById(id));
-    //        const results = await Promise.all(detailPromises);
-    //        setStatements(results);
-    //    } catch (err) {
-    //        console.error("Failed to fetch statements", err);
-    //    }
-    //};
-
-    //const fetchMedias = async (ids) => {
-    //    try {
-    //        const detailPromises = ids.map(id => getMediaById(id));
-    //        const results = await Promise.all(detailPromises);
-    //        setMedias(results);
-    //    } catch (err) {
-    //        console.error("Failed to fetch media files", err);
-    //    }
-    //};
-
-    //const fetchEvidences = async (ids) => {
-    //    try {
-    //        const detailPromises = ids.map(id => getEvidenceById(id));
-    //        const results = await Promise.all(detailPromises);
-    //        setEvidences(results);
-    //    } catch (err) {
-    //        console.error("Failed to fetch evidences", err);
-    //    }
-    //};
-
-    //useEffect(() => {
-    //    if (statementIds.length > 0) fetchStatements(statementIds);
-    //}, [statementIds]);
-
-    //useEffect(() => {
-    //    if (mediaIds.length > 0) fetchMedias(mediaIds);
-    //}, [mediaIds]);
-
-    //useEffect(() => {
-    //    if (evidenceIds.length > 0) fetchEvidences(evidenceIds);
-    //}, [evidenceIds]);
-
     const handleAddStatement = async () => {
         const newId = await onAddStatement();
         if (newId) setStatementIds(prev => [...prev, newId]);
     };
 
     const handleAddMedia = async () => {
-        const newId = await onAddMedia();
-        if (newId) setMediaIds(prev => [...prev, newId]);
+        const newMedia = await ImageAndVideo();
+        if (newMedia?.id) setMediaIds(prev => [...prev, newMedia.id]);
     };
 
     const handleAddEvidence = async () => {
@@ -101,7 +57,7 @@ const CaseDetailStep2 = ({
                         <Card className="mb-4 shadow-sm">
                             <Card.Header className="d-flex justify-content-between align-items-center bg-light fw-bold">
                                 INITIAL STATEMENTS
-                                <Button variant="light" size="sm" onClick={handleAddStatement}>ADD</Button>
+                                <Button variant="outline-primary" size="sm" onClick={handleAddStatement}>ADD <i className="bi bi-plus-circle fs-6"></i></Button>
                             </Card.Header>
                             <Card.Body>
                                 <Table striped bordered hover responsive>
@@ -135,7 +91,7 @@ const CaseDetailStep2 = ({
                         <Card className="mb-4 shadow-sm">
                             <Card.Header className="d-flex justify-content-between align-items-center bg-light fw-bold">
                                 IMAGES AND VIDEO
-                                <Button variant="light" size="sm" onClick={handleAddMedia}>ADD</Button>
+                                <Button variant="outline-primary" size="sm" onClick={handleAddMedia}>ADD <i className="bi bi-plus-circle fs-6"></i></Button>
                             </Card.Header>
                             <Card.Body>
                                 <Table striped bordered hover responsive>
@@ -169,7 +125,7 @@ const CaseDetailStep2 = ({
                         <Card className="mb-4 shadow-sm">
                             <Card.Header className="d-flex justify-content-between align-items-center bg-light fw-bold">
                                 PRELIMINARY PHYSICAL EVIDENCE INFORMATION
-                                <Button variant="light" size="sm" onClick={handleAddEvidence}>ADD</Button>
+                                <Button variant="outline-primary" size="sm" onClick={handleAddEvidence}>ADD <i className="bi bi-plus-circle fs-6"></i></Button>
                             </Card.Header>
                             <Card.Body>
                                 <Table striped bordered hover responsive>
@@ -201,7 +157,8 @@ const CaseDetailStep2 = ({
 
                         <div className="d-flex justify-content-end gap-2">
                             <Button variant="secondary">Cancel</Button>
-                            <Button variant="primary">Save</Button>
+                            <Button variant="success">Save</Button>
+                            <Button variant="primary">Next page</Button>
                         </div>
 
                     </Card.Body>

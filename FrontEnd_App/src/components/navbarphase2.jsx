@@ -1,6 +1,6 @@
 // src/components/navbarphase2.jsx
 import React, { useState } from 'react';
-import '../css/navbarphase2.css';
+import '../styles/navbarphase2.css';
 
 const NavbarPhase2 = () => {
     const [openItem, setOpenItem] = useState('Initial Response');

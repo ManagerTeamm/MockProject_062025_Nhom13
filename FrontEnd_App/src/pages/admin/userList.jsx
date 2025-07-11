@@ -73,7 +73,6 @@ const UserList = () => {
                             <h2 className="mb-0">User Management</h2>
                     </div>
                 </div>
-
                     <div className="d-flex justify-content-end mb-3">
                         <button
                             className="btn btn-primary"
