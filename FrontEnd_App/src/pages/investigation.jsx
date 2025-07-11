@@ -230,7 +230,7 @@ const Investigation = () => {
           </div>
         </section>
         <footer className="investigation-footer">
-          <button className="btn-back">Back</button>
+          <button className="btn-back" onClick={() => navigate(-1)}>Back</button>
           <button className="btn-not-approved">Not approved</button>
           <button className="btn-accept">Accept</button>
         </footer>

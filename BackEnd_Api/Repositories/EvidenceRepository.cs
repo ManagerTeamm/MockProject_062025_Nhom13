@@ -186,33 +186,7 @@ namespace BackEnd_Api.Repositories
             };
         }
 
-        public async Task<IEnumerable<EvidenceDto>> SearchEvidenceAsync(DateTime? from, DateTime? to, string status)
-        {
-            var query = _context.Evidences
-                .Where(e => !e.IsDeleted);
-
-            if (from.HasValue)
-                query = query.Where(e => e.CollectedAt >= from);
-            if (to.HasValue)
-                query = query.Where(e => e.CollectedAt <= to);
-            if (!string.IsNullOrEmpty(status))
-                query = query.Where(e => e.Status == status);
-
-            return await query
-                .Include(e => e.User)
-                .Include(e => e.CaseEvidences)
-                .Select(e => new EvidenceDto
-                {
-                    EvidenceId = e.EvidenceId,
-                    CaseId = e.CaseEvidences.FirstOrDefault().CaseId,
-                    Description = e.Description,
-                    CollectedAt = (DateTime)e.CollectedAt,
-                    Collector = e.User.FullName,
-                    Status = e.Status
-                })
-                .ToListAsync();
-        }
-
+        
         public async Task<object> GetEvidencesPaginatedAsync(int page, int pageSize)
         {
             var totalCount = await _context.Evidences.Where(e => !e.IsDeleted).CountAsync();
@@ -253,6 +227,64 @@ namespace BackEnd_Api.Repositories
         {
             await _dbSet.AddAsync(evidence);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<object> FilterEvidencesAsync(EvidenceFilterDto filterDto)
+        {
+            var query = _context.Evidences
+                .Where(e => !e.IsDeleted)
+                .Include(e => e.User)
+                .Include(e => e.CaseEvidences)
+                .AsQueryable();
+
+            // Filter theo Status
+            if (!string.IsNullOrEmpty(filterDto.Status))
+            {
+                query = query.Where(e => e.Status == filterDto.Status);
+            }
+
+            // Filter theo CollectedAt (một ngày cụ thể)
+            if (filterDto.CollectedAt.HasValue)
+            {
+                var filterDate = filterDto.CollectedAt.Value.Date;
+                query = query.Where(e => e.CollectedAt.HasValue && e.CollectedAt.Value.Date == filterDate);
+            }
+
+            // Get total count before pagination
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / filterDto.PageSize);
+            var skip = (filterDto.Page - 1) * filterDto.PageSize;
+
+            // Apply pagination
+            var evidences = await query
+                .Skip(skip)
+                .Take(filterDto.PageSize)
+                .Select(e => new EvidenceDto
+                {
+                    EvidenceId = e.EvidenceId,
+                    CaseId = e.CaseEvidences.FirstOrDefault().CaseId,
+                    Description = e.Description,
+                    CollectedAt = (DateTime)e.CollectedAt,
+                    Collector = e.User.FullName,
+                    Status = e.Status
+                })
+                .ToListAsync();
+
+            return new
+            {
+                Data = evidences,
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto.Page,
+                PageSize = filterDto.PageSize,
+                HasNextPage = filterDto.Page < totalPages,
+                HasPreviousPage = filterDto.Page > 1,
+                Filters = new
+                {
+                    Status = filterDto.Status,
+                    CollectedAt = filterDto.CollectedAt
+                }
+            };
         }
     }
 }

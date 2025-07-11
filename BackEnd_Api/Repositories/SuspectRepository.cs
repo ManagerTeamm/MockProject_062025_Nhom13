@@ -49,5 +49,30 @@ namespace BackEnd_Api.Repositories
                 .ToListAsync();
             return (suspects, totalCount);
         }
+
+        public async Task AddSuspectAsync(CreateSuspectDto dto)
+        {
+            var suspect = new Suspect
+            {
+                SuspectId = dto.SuspectId,
+                CaseId = dto.CaseId,
+                Fullname = dto.Fullname,
+                Gender = dto.Gender,
+                Dob = dto.Dob is not null ? new DateTime(dto.Dob.Year, dto.Dob.Month, dto.Dob.Day) : (DateTime?)null,
+                National = dto.Nationality,
+                Identification = dto.Identification,
+                CatchTime = dto.CatchTime,
+                Status = dto.Status,
+                Address = dto.Address,
+                Description = dto.Description,
+                PhoneNumber = dto.PhoneNumber,
+                MugshotUrl = dto.MugshotUrl,
+                FingerPrintsHash = dto.FingerprintHash,
+                HealthStatus = dto.HealthStatus,
+                IsDeleted = false
+            };
+            await _context.Suspects.AddAsync(suspect);
+            await _context.SaveChangesAsync();
+        }
     }
 } 

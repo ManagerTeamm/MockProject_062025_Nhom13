@@ -19,6 +19,11 @@ import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
 import Dashboard from "../pages/dashboard";
+import QAList from '../pages/qaList';
+import NavbarPhase2 from '../components/navbarphase2.jsx';
+//sample dashboard
+import Dashboard from "../samples/dashboard";
+//sample medical support
 import Medical from "../samples/medical";
 import CaseDetailStep2 from "../pages/caseDetailStep2";
 
@@ -38,7 +43,9 @@ const AppRoutes = () => {
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
     { path: "/interviewslist", element: <InterviewsList /> },
+    { path: "/qa-list", element: <QAList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
+    { path: "/navbarphase2", element: <NavbarPhase2/>},
       { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
       { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
       { path: "/caseDetailStep2", element: <CaseDetailStep2 /> },
@@ -98,6 +105,7 @@ const AppRoutes = () => {
           children: [{ index: true, element: <Medical /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
+        
       ],
     },
 
