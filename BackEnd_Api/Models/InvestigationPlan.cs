@@ -6,9 +6,9 @@ namespace BackEnd_Api.Models
     {
         public string InvestigationPlanId { get; set; }
         public string CreatedOfficerId { get; set; }
-        public User CreatedOfficer { get; set; }
+        public User? CreatedOfficer { get; set; }
         public string CaseId { get; set; }
-        public Case Case { get; set; }
+        public Case? Case { get; set; }
         public DateTime? DeadlineDate { get; set; }
         public string? Result { get; set; }
         public string Status { get; set; }

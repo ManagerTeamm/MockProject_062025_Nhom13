@@ -7,7 +7,7 @@ namespace BackEnd_Api.Models
     {
         public string CaseResultId { get; set; }
         public string CaseId { get; set; }
-        public Case Case { get; set; }
+        public Case? Case { get; set; }
         public DateTime? ReportTime { get; set; }
         public string? ReportAnalyst { get; set; }
         public string? Summary { get; set; }

@@ -17,11 +17,15 @@ import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
+import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
 import QAList from '../pages/qaList';
+import NavbarPhase2 from '../components/navbarphase2.jsx';
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
+//sample medical support
+import Medical from "../samples/medical";
 
 
 const AppRoutes = () => {
@@ -38,11 +42,12 @@ const AppRoutes = () => {
     { path: "/suspect", element: <Suspect /> },
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
-    { path: "/caselist", element: <CaseList /> },
     { path: "/interviewslist", element: <InterviewsList /> },
     { path: "/qa-list", element: <QAList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
-    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
+    { path: "/navbarphase2", element: <NavbarPhase2/>},
+      { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
+      { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
@@ -57,6 +62,11 @@ const AppRoutes = () => {
           path: "admin/userList",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <UserList /> }],
+        },
+         {
+          path: "admin/cases",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <CaseList /> }],
         },
         {
           path: "admin/reports",
@@ -87,6 +97,11 @@ const AppRoutes = () => {
           path: "casefile",
           element: <ProtectedRoute allowedRoles={["Investigator"]} />,
           children: [{ index: true, element: <CaseFile /> }],
+        },
+        {
+          path: "medical",
+          element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
+          children: [{ index: true, element: <Medical /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
         

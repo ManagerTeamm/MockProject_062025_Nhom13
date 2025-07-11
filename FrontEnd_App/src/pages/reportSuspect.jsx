@@ -474,10 +474,8 @@ export default function MultiStepFormMui() {
                                         value={formData.severity || ''}
                                         onChange={handleChange}
                                     >
-                                        <MenuItem value="Minor">Minor</MenuItem>
-                                        <MenuItem value="Moderate">Moderate</MenuItem>
-                                        <MenuItem value="Serious">Serious</MenuItem>
-                                        <MenuItem value="Critical">Critical</MenuItem>
+                                        <MenuItem value="Urgent">Urgent</MenuItem>
+                                        <MenuItem value="Not Urgent">Not Urgent</MenuItem>
                                     </TextField>
                                 </div>
                             </div>
@@ -503,6 +501,9 @@ export default function MultiStepFormMui() {
                                 onChange={handleDetailedAddressChange}
                                 multiline
                                 sx={{ mb: 4 }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
 
                             <TextField
@@ -514,6 +515,9 @@ export default function MultiStepFormMui() {
                                 fullWidth
                                 onChange={handleIncidentDescriptionChange}
                                 sx={{ mb: 4 }}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
 
                             <Typography variant="h6" gutterBottom>
@@ -683,14 +687,19 @@ export default function MultiStepFormMui() {
                         {StepContent}
 
                         <Dialog
+                            PaperProps={{
+                                sx: {
+                                    boxShadow: 'none',
+                                    background: 'transparent',
+                                    maxHeight: 'none',
+                                    overflow: 'visible',
+                                }
+                            }}
                             open={openRelevantDialog}
                             onClose={handleCloseRelevantDialog}
                             fullWidth
                             maxWidth="md"
                         >
-                            <DialogTitle>
-                                {editingRelevant ? 'Edit Relevant Party' : 'Add Relevant Party'}
-                            </DialogTitle>
                             <DialogContent>
                                 <RelevantPartiesForm
                                     key={relevantFormKey}
@@ -702,6 +711,14 @@ export default function MultiStepFormMui() {
                         </Dialog>
 
                         <Dialog
+                            PaperProps={{
+                                sx: {
+                                    boxShadow: 'none',
+                                    background: 'transparent',
+                                    maxHeight: 'none',
+                                    overflow: 'visible',
+                                }
+                            }}
                             open={openEvidenceDialog}
                             onClose={handleCloseEvidenceDialog}
                             fullWidth
