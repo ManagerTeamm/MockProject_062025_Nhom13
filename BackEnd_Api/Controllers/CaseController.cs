@@ -83,39 +83,145 @@ namespace BackEnd_Api.Controllers
         [HasPermission("Edit_Case")]
         public async Task<ActionResult<InitialResponseDto>> GetInitialResponse(string caseId)
         {
-            var protections = await _sceneProtectionRepository.GetSceneProtectionsByCaseIdAsync(caseId);
-            var supports = await _sceneSupportRepository.GetSceneSupportsByCaseIdAsync(caseId);
-            var initialResponse = new InitialResponseDto()
+            try
             {
-                CaseId = caseId,
-                DispatchTime = "",
-                SceneAssessment = "",
-            };
+                // Kiểm tra case có tồn tại không
+                var caseModel = await _caseRepository.GetByIdAsync(caseId);
+                if (caseModel == null)
+                {
+                    return new JsonResult(ApiResponseHelper<string>.NotFoundResult("Case not found."));
+                }
 
-            if (protections == null && supports == null)
-            {
-                return new JsonResult(ApiResponseHelper<string>.NotFoundResult("Not found."));
-            }
-            else
-            {
-                if(protections.Count > 0)
+                // Lấy dữ liệu từ các repository
+                var protections = await _sceneProtectionRepository.GetSceneProtectionsByCaseIdAsync(caseId);
+                var supports = await _sceneSupportRepository.GetSceneSupportsByCaseIdAsync(caseId);
+
+                // Khởi tạo InitialResponseDto
+                var initialResponse = new InitialResponseDto()
                 {
-                    initialResponse.PreservationMeasures = protections.Select(x => new SceneProtectionDto
-                    {
-                        SceneProtectionId = x.SceneProtectionId,
-                        //Description = x.Description,
-                    }).ToList();
-                }
-                
-                if(supports.Count > 0)
+                    CaseId = caseId,
+                    DispatchTime = "",
+                    ArrivalTime = "",
+                    SceneAssessment = "",
+                    PreservationMeasures = new List<SceneProtectionDto>(),
+                    MedicalRescueInfo = new List<SceneSupportDto>()
+                };
+
+                // Parse thông tin từ Case Summary nếu có
+                if (!string.IsNullOrEmpty(caseModel.Summary))
                 {
-                    initialResponse.MedicalRescueInfo = supports.Select(x => new SceneSupportDto
+                    var summaryLines = caseModel.Summary.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (var line in summaryLines)
                     {
-                        SceneSupportId = x.SceneSuportId,
-                        LocationAssigned = x.LocationAssigned,
-                    }).ToList();
+                        if (line.StartsWith("Dispatch time: "))
+                        {
+                            initialResponse.DispatchTime = line.Substring("Dispatch time: ".Length).Trim();
+                        }
+                        else if (line.StartsWith("Arrival time: "))
+                        {
+                            initialResponse.ArrivalTime = line.Substring("Arrival time: ".Length).Trim();
+                        }
+                        else if (line.StartsWith("Scene Assessment: "))
+                        {
+                            initialResponse.SceneAssessment = line.Substring("Scene Assessment: ".Length).Trim();
+                        }
+                    }
                 }
+
+                // Xử lý Scene Protection data
+                if (protections != null && protections.Any())
+                {
+                    var protectionDtos = new List<SceneProtectionDto>();
+
+                    foreach (var protection in protections.Where(p => !p.IsDeleted))
+                    {
+                        var protectionDto = new SceneProtectionDto
+                        {
+                            SceneProtectionId = protection.SceneProtectionId,
+                            StartTime = protection.TimeStart?.ToString("yyyy-MM-ddTHH:mm:ss") ?? "",
+                            EndTime = protection.TimeEnd?.ToString("yyyy-MM-ddTHH:mm:ss") ?? "",
+                            AreaCovered = protection.LocationCover ?? "",
+                            ProtectionMethods = "",
+                            OfficerUserName = "",
+                            SpecialInstructions = "",
+                            Files = new List<IFormFile>() // Sẽ không có file khi GET, chỉ có đường dẫn
+                        };
+
+                        // Parse Description để lấy thông tin chi tiết
+                        if (!string.IsNullOrEmpty(protection.Description))
+                        {
+                            var descriptionLines = protection.Description.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+                            foreach (var line in descriptionLines)
+                            {
+                                if (line.StartsWith("Protection method: "))
+                                {
+                                    protectionDto.ProtectionMethods = line.Substring("Protection method: ".Length).Trim();
+                                }
+                                else if (line.StartsWith("Assigned officer: "))
+                                {
+                                    var officerInfo = line.Substring("Assigned officer: ".Length).Trim();
+                                    // Extract username từ format "Full Name (username)"
+                                    var match = System.Text.RegularExpressions.Regex.Match(officerInfo, @"\(([^)]+)\)$");
+                                    if (match.Success)
+                                    {
+                                        protectionDto.OfficerUserName = match.Groups[1].Value;
+                                    }
+                                }
+                                else if (line.StartsWith("Special instructions: "))
+                                {
+                                    protectionDto.SpecialInstructions = line.Substring("Special instructions: ".Length).Trim();
+                                }
+                            }
+                        }
+
+                        // Thêm thông tin file paths (nếu có)
+                        if (!string.IsNullOrEmpty(protection.AttachedFiles))
+                        {
+                            protectionDto.AttachedFilePaths = protection.AttachedFiles.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+                        }
+
+                        protectionDtos.Add(protectionDto);
+                    }
+
+                    initialResponse.PreservationMeasures = protectionDtos;
+                }
+
+                // Xử lý Scene Support data
+                if (supports != null && supports.Any())
+                {
+                    var supportDtos = new List<SceneSupportDto>();
+
+                    foreach (var support in supports.Where(s => !s.IsDeleted))
+                    {
+                        var supportDto = new SceneSupportDto
+                        {
+                            SceneSupportId = support.SceneSuportId,
+                            LocationAssigned = support.LocationAssigned ?? "",
+                            SupportType = support.TypeSuport ?? "Unknown",
+                            Files = new List<IFormFile>() // Sẽ không có file khi GET, chỉ có đường dẫn
+                        };
+
+                        // Thêm thông tin file paths (nếu có)
+                        if (!string.IsNullOrEmpty(support.AttachedFiles))
+                        {
+                            supportDto.AttachedFilePaths = support.AttachedFiles.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+                        }
+
+                        supportDtos.Add(supportDto);
+                    }
+
+                    initialResponse.MedicalRescueInfo = supportDtos;
+                }
+
                 return new JsonResult(ApiResponseHelper<InitialResponseDto>.SuccessResult(initialResponse, "Initial response retrieved successfully."));
+            }
+            catch (Exception ex)
+            {
+                // Log error here
+                Console.WriteLine($"Error in GetInitialResponse: {ex.Message}");
+                return new JsonResult(ApiResponseHelper<string>.FailureResult("An error occurred while retrieving initial response.", new List<string> { ex.Message }, 500));
             }
         }
 

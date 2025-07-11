@@ -6,35 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BackEnd_Api.Dtos.Cases
 {
-    // Để binding FormData, mình sẽ đánh dấu [FromForm] ở controller hoặc trên class này
     public class InitialResponseDto
     {
-        [FromForm]
         [JsonPropertyName("caseId")]
         public string CaseId { get; set; }
 
-        // Nếu vẫn muốn giữ string "HH:mm" thì để nguyên, controller có thể parse thành TimeSpan nếu cần
-        [FromForm]
         [JsonPropertyName("dispatchTime")]
         public string? DispatchTime { get; set; }
 
-        [FromForm]
         [JsonPropertyName("arrivalTime")]
         public string? ArrivalTime { get; set; }
 
-        [FromForm]
         [JsonPropertyName("sceneAssessment")]
         public string? SceneAssessment { get; set; }
 
-        [FromForm]
         [JsonPropertyName("assignedOfficers")]
         public List<OfficerDto> AssignedOfficers { get; set; } = new();
 
-        [FromForm]
         [JsonPropertyName("preservationMeasures")]
         public List<SceneProtectionDto> PreservationMeasures { get; set; } = new();
 
-        [FromForm]
         [JsonPropertyName("medicalRescueInfo")]
         public List<SceneSupportDto> MedicalRescueInfo { get; set; } = new();
 
@@ -55,68 +46,69 @@ namespace BackEnd_Api.Dtos.Cases
 
         public class SceneProtectionDto
         {
-            [JsonPropertyName("id")]
+            [JsonPropertyName("sceneProtectionId")]
             public string? SceneProtectionId { get; set; }
 
-            [FromForm(Name = "officerUserName")]
+            [JsonPropertyName("officerUserName")]
             public string OfficerUserName { get; set; }
 
-            [FromForm(Name = "caseId")]
+            [JsonPropertyName("caseId")]
             public string CaseId { get; set; }
 
-            [FromForm(Name = "startTime")]
+            [JsonPropertyName("startTime")]
             public string StartTime { get; set; }
 
-            [FromForm(Name = "endTime")]
+            [JsonPropertyName("endTime")]
             public string EndTime { get; set; }
 
-            [FromForm(Name = "protectionMethods")]
+            [JsonPropertyName("protectionMethods")]
             public string ProtectionMethods { get; set; }
 
-            [FromForm(Name = "areaCovered")]
+            [JsonPropertyName("areaCovered")]
             public string AreaCovered { get; set; }
 
-            [FromForm(Name = "specialInstructions")]
+            [JsonPropertyName("specialInstructions")]
             public string SpecialInstructions { get; set; }
 
-            [FromForm(Name = "preservationMeasuresFiles")]
-            [JsonIgnore] // tránh serialize chung với JSON nếu controller trả về
+            // For form submission (POST/PUT)
+            [JsonIgnore]
             public List<IFormFile> Files { get; set; } = new();
+
+            // For GET responses - file paths
+            [JsonPropertyName("attachedFilePaths")]
+            public List<string> AttachedFilePaths { get; set; } = new List<string>();
         }
 
         public class SceneSupportDto
         {
-            [JsonPropertyName("id")]
+            [JsonPropertyName("sceneSupportId")]
             public string? SceneSupportId { get; set; }
 
-            [FromForm]
             [JsonPropertyName("unitId")]
             public string UnitId { get; set; }
 
-            [FromForm]
             [JsonPropertyName("supportType")]
             public string SupportType { get; set; }
 
-            // Giữ string để đơn giản, parse TimeSpan/DateTime trong controller nếu cần
-            [FromForm]
             [JsonPropertyName("arrivalTime")]
             public string ArrivalTime { get; set; }
 
-            [FromForm]
             [JsonPropertyName("personnelAssigned")]
             public string? PersonnelAssigned { get; set; }
 
-            [FromForm]
             [JsonPropertyName("locationAssigned")]
             public string? LocationAssigned { get; set; }
 
-            [FromForm]
             [JsonPropertyName("remarks")]
             public string? Remarks { get; set; }
 
-            [FromForm(Name = "medicalFiles")]
+            // For form submission (POST/PUT)
             [JsonIgnore]
             public List<IFormFile> Files { get; set; } = new();
+
+            // For GET responses - file paths
+            [JsonPropertyName("attachedFilePaths")]
+            public List<string> AttachedFilePaths { get; set; } = new List<string>();
         }
     }
 }

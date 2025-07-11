@@ -66,26 +66,72 @@ export default function InitialResponse() {
   const fetchInitialResponseData = async () => {
     try {
       const token = getCookie("token");
-        console.log("token:", token);
-        if (!token) throw new Error("No token found");
+      console.log("token:", token);
+      if (!token) throw new Error("No token found");
 
-        const response = await fetch(`${INITIAL_RESPONSE_API_URL}/${caseId}`, {
-          headers: new Headers({
+      const response = await fetch(`${INITIAL_RESPONSE_API_URL}/${caseId}`, {
+        headers: new Headers({
           'Authorization': `Bearer ${token}`
-          })
+        })
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const result = await response.json();
-      if (result.StatusCode === 200) {
+      console.log("API Response:", result); // Debug log
+
+      if (result.StatusCode === 200 || result.statusCode === 200) {
         const data = result.data;
+        console.log("Response data:", data); // Debug log
+
+        // Transform preservation measures from server format to client format
+        const transformedPreservationMeasures = (data.preservationMeasures || []).map((measure, index) => ({
+          id: measure.sceneProtectionId || index + 1,
+          SceneProtectionId: measure.sceneProtectionId,
+          measure: measure.protectionMethods || '',
+          officer: measure.officerUserName || '',
+          startTime: measure.startTime ? measure.startTime.split('T')[1]?.substring(0, 5) : '',
+          endTime: measure.endTime ? measure.endTime.split('T')[1]?.substring(0, 5) : '',
+          areaCovered: measure.areaCovered || '',
+          specialInstructions: measure.specialInstructions || '',
+          attachment: measure.attachedFilePaths || []
+        }));
+
+        // Transform medical rescue info from server format to client format
+        const transformedMedicalRescueInfo = (data.medicalRescueInfo || []).map((info, index) => ({
+          id: info.sceneSupportId || index + 1,
+          SceneSupportId: info.sceneSupportId,
+          unitId: info.unitId || '',
+          supportType: info.supportType || '',
+          arrivalTime: info.arrivalTime || '',
+          personnelAssigned: info.personnelAssigned || '',
+          locationAssigned: info.locationAssigned || '',
+          remarks: info.remarks || '',
+          attachment: info.attachedFilePaths || []
+        }));
+
         setFormData({
           dispatchTime: data.dispatchTime || '',
           arrivalTime: data.arrivalTime || '',
           sceneAssessment: data.sceneAssessment || '',
           assignedOfficers: data.assignedOfficers || [],
-          preservationMeasures: data.preservationMeasures || [],
-          medicalRescueInfo: data.medicalRescueInfo || []
+          preservationMeasures: transformedPreservationMeasures,
+          medicalRescueInfo: transformedMedicalRescueInfo
         });
-      } else if (result.StatusCode === 404) {
+
+        console.log("Transformed formData:", {
+          dispatchTime: data.dispatchTime || '',
+          arrivalTime: data.arrivalTime || '',
+          sceneAssessment: data.sceneAssessment || '',
+          assignedOfficers: data.assignedOfficers || [],
+          preservationMeasures: transformedPreservationMeasures,
+          medicalRescueInfo: transformedMedicalRescueInfo
+        });
+
+      } else if (result.StatusCode === 404 || result.statusCode === 404) {
+        console.log("No initial response data found, using empty form");
         setFormData({
           dispatchTime: '',
           arrivalTime: '',
@@ -94,27 +140,38 @@ export default function InitialResponse() {
           preservationMeasures: [],
           medicalRescueInfo: []
         });
+      } else {
+        throw new Error(`API returned error: ${result.message || 'Unknown error'}`);
       }
     } catch (err) {
       console.error('Error fetching initial response data:', err);
+      setError('Failed to load initial response data');
     }
   };
 
   // Fetch case + initial data
   useEffect(() => {
     if (!caseId) return;
+    
     const fetchCaseData = async () => {
       try {
         const token = getCookie("token");
         console.log("token:", token);
         if (!token) throw new Error("No token found");
+        
         const resp = await fetch(`${API_URL}/${caseId}`, {
           headers: new Headers({
-          'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`
           })
-      });
+        });
+
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
 
         const res = await resp.json();
+        console.log("Case data response:", res); // Debug log
+        
         if (res.statusCode === 404) {
           setError('Case not found');
         } else {
@@ -123,12 +180,16 @@ export default function InitialResponse() {
       } catch (err) {
         setError('Error fetching case');
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
-    fetchCaseData();
-    fetchInitialResponseData();
+
+    const fetchAllData = async () => {
+      setLoading(true);
+      await Promise.all([fetchCaseData(), fetchInitialResponseData()]);
+      setLoading(false);
+    };
+
+    fetchAllData();
   }, [caseId]);
 
   // 5. Save handler
@@ -176,7 +237,7 @@ export default function InitialResponse() {
         });
       });
 
-      // Debug: trong nội dung FormData
+      // Debug: log FormData contents
       for (const [key, value] of form.entries()) {
         if (value instanceof File) {
           console.log(`${key}: [File] name=${value.name}`);
@@ -184,22 +245,29 @@ export default function InitialResponse() {
           console.log(`${key}: ${value}`);
         }
       }
-const token = getCookie("token");
-        console.log("token:", token);
-        if (!token) throw new Error("No token found");
+
+      const token = getCookie("token");
+      console.log("token:", token);
+      if (!token) throw new Error("No token found");
+
       // Gửi lên API
       const resp = await fetch(INITIAL_RESPONSE_API_URL, {
         method: 'POST',
         body: form,
         headers: new Headers({
           'Authorization': `Bearer ${token}`
-          })
+        })
       });
+
       if (!resp.ok) throw new Error(`Status ${resp.status}`);
+      
+      const result = await resp.json();
+      console.log("Save result:", result);
+      
       alert('Saved successfully');
     } catch (err) {
       console.error('Error saving:', err);
-      alert('Save failed');
+      alert('Save failed: ' + err.message);
     }
   };
 
@@ -216,7 +284,8 @@ const token = getCookie("token");
     console.log('>>> attachment:', data.attachment);
     console.log('is File?', data.attachment instanceof File);
     if (editingPreservationMeasure) {
-      const updated = { ...editingPreservationMeasure,
+      const updated = { 
+        ...editingPreservationMeasure,
         measure: data.protectionMethods,
         officer: data.officerUserName,
         startTime: data.startTime,
@@ -230,7 +299,8 @@ const token = getCookie("token");
       const newId = formData.preservationMeasures.length
         ? Math.max(...formData.preservationMeasures.map(m => m.id)) + 1
         : 1;
-      const newMeasure = { id: newId,
+      const newMeasure = { 
+        id: newId,
         measure: data.protectionMethods,
         officer: data.officerUserName,
         startTime: data.startTime,
@@ -249,7 +319,8 @@ const token = getCookie("token");
     console.log('>>> Medical Support attachment:', data.attachment);
     console.log('>>> is File?', data.attachment instanceof File);
     if (editingMedicalInfo) {
-      const updated = { ...editingMedicalInfo,
+      const updated = { 
+        ...editingMedicalInfo,
         unitId: data.unitId,
         supportType: data.supportType,
         arrivalTime: data.arrivalTime,
@@ -263,7 +334,8 @@ const token = getCookie("token");
       const newId = formData.medicalRescueInfo.length
         ? Math.max(...formData.medicalRescueInfo.map(m => m.id)) + 1
         : 1;
-      const newInfo = { id: newId,
+      const newInfo = { 
+        id: newId,
         unitId: data.unitId,
         supportType: data.supportType,
         arrivalTime: data.arrivalTime,
@@ -291,7 +363,9 @@ const token = getCookie("token");
 
   return (
     <div className="d-flex">
-      <div className="bg-light border-end min-vh-100" style={{ width: 250 }}><Sidebar /></div>
+      <div className="bg-light border-end min-vh-100" style={{ width: 250 }}>
+        <Sidebar />
+      </div>
       <div className="container my-5 font-montserrat">
         {caseData && (
           <div className="text-end mb-4">
@@ -302,37 +376,58 @@ const token = getCookie("token");
         )}
         <h3 className="fw-bold fs-4 mb-4">INITIAL RESPONSE</h3>
 
+        {/* Debug info - Remove this in production */}
+        <div className="mb-3 p-3 bg-light border rounded">
+          <h6>Debug Information:</h6>
+          <p>Dispatch Time: {formData.dispatchTime || 'Empty'}</p>
+          <p>Arrival Time: {formData.arrivalTime || 'Empty'}</p>
+          <p>Scene Assessment: {formData.sceneAssessment || 'Empty'}</p>
+          <p>Assigned Officers: {formData.assignedOfficers.length} officers</p>
+          <p>Preservation Measures: {formData.preservationMeasures.length} measures</p>
+          <p>Medical Rescue Info: {formData.medicalRescueInfo.length} items</p>
+        </div>
+
         {/* Time fields */}
         <Row className="mb-3">
           <Form.Label className="fw-bold">TIME OF DISPATCHING FORCES</Form.Label>
-          <Col><Form.Control
-            type="time"
-            value={formData.dispatchTime}
-            onChange={e => updateFormData('dispatchTime', e.target.value)}
-            required
-          /></Col>
+          <Col>
+            <Form.Control
+              type="time"
+              value={formData.dispatchTime}
+              onChange={e => updateFormData('dispatchTime', e.target.value)}
+              required
+            />
+          </Col>
         </Row>
         <Row className="mb-3">
           <Form.Label className="fw-bold">TIME OF ARRIVAL</Form.Label>
-          <Col><Form.Control
-            type="time"
-            value={formData.arrivalTime}
-            onChange={e => updateFormData('arrivalTime', e.target.value)}
-            required
-          /></Col>
+          <Col>
+            <Form.Control
+              type="time"
+              value={formData.arrivalTime}
+              onChange={e => updateFormData('arrivalTime', e.target.value)}
+              required
+            />
+          </Col>
         </Row>
 
         {/* Officers */}
         <div className="mb-4">
           <label className="form-label fw-semibold text-uppercase small">LIST OF OFFICERS</label>
-          <div className="text-end mb-2"><Button size="sm" onClick={() => setShowModal(true)}>View</Button></div>
+          <div className="text-end mb-2">
+            <Button size="sm" onClick={() => setShowModal(true)}>View</Button>
+          </div>
           <table className="table table-bordered">
             <thead className="table-light text-uppercase small">
               <tr><th>Name</th><th>Role</th><th>Phone</th></tr>
             </thead>
             <tbody>
               {formData.assignedOfficers.length ? formData.assignedOfficers.map(o => (
-                <tr key={o.userName}><td>{o.fullName}</td><td>{o.role}</td><td>{o.phoneNumber}</td></tr>
+                <tr key={o.userName}>
+                  <td>{o.fullName}</td>
+                  <td>{o.role}</td>
+                  <td>{o.phoneNumber}</td>
+                </tr>
               )) : (
                 <tr><td colSpan={3} className="text-center">No officers assigned.</td></tr>
               )}
@@ -360,12 +455,14 @@ const token = getCookie("token");
           </div>
           <table className="table table-bordered">
             <thead className="table-light text-uppercase small">
-              <tr><th>#</th><th>Measure</th><th>Officer</th><th>Time</th><th/></tr>
+              <tr><th>#</th><th>Measure</th><th>Officer</th><th>Time</th><th>Actions</th></tr>
             </thead>
             <tbody>
               {formData.preservationMeasures.length ? formData.preservationMeasures.map((m, i) => (
                 <tr key={m.id}>
-                  <td>{i+1}</td><td>{m.measure}</td><td>{m.officer || 'N/A'}</td>
+                  <td>{i+1}</td>
+                  <td>{m.measure}</td>
+                  <td>{m.officer || 'N/A'}</td>
                   <td>{m.startTime && m.endTime ? `${m.startTime} - ${m.endTime}` : 'N/A'}</td>
                   <td>
                     <Button size="sm" onClick={() => { setEditingPreservationMeasure(m); setShowSceneProtectionModal(true); }}>Edit</Button>
@@ -388,13 +485,16 @@ const token = getCookie("token");
           </div>
           <table className="table table-bordered">
             <thead className="table-light text-uppercase small">
-              <tr><th>Unit ID</th><th>Support</th><th>Personnel</th><th>Arrival</th><th>Location</th><th/></tr>
+              <tr><th>Unit ID</th><th>Support</th><th>Personnel</th><th>Arrival</th><th>Location</th><th>Actions</th></tr>
             </thead>
             <tbody>
               {formData.medicalRescueInfo.length ? formData.medicalRescueInfo.map(info => (
                 <tr key={info.id}>
-                  <td>{info.unitId}</td><td>{info.supportType}</td><td>{info.personnelAssigned || 'N/A'}</td>
-                  <td>{info.arrivalTime}</td><td>{info.locationAssigned || 'N/A'}</td>
+                  <td>{info.unitId}</td>
+                  <td>{info.supportType}</td>
+                  <td>{info.personnelAssigned || 'N/A'}</td>
+                  <td>{info.arrivalTime}</td>
+                  <td>{info.locationAssigned || 'N/A'}</td>
                   <td>
                     <Button size="sm" onClick={() => { setEditingMedicalInfo(info); setShowMedicalModal(true); }}>Edit</Button>
                     {' '}
@@ -423,8 +523,13 @@ const token = getCookie("token");
           <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog modal-lg">
               <div className="modal-content">
-                <div className="modal-header"><h5>Select Patrol Officers</h5><button className="btn-close" onClick={() => setShowModal(false)} /></div>
-                <div className="modal-body"><PatrolOfficerManagement onSelectOfficer={handleSelectOfficers} /></div>
+                <div className="modal-header">
+                  <h5>Select Patrol Officers</h5>
+                  <button className="btn-close" onClick={() => setShowModal(false)} />
+                </div>
+                <div className="modal-body">
+                  <PatrolOfficerManagement onSelectOfficer={handleSelectOfficers} />
+                </div>
               </div>
             </div>
           </div>
@@ -434,7 +539,9 @@ const token = getCookie("token");
           <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog modal-lg">
               <div className="modal-content">
-                <div className="modal-header"><button className="btn-close" onClick={() => { setShowSceneProtectionModal(false); setEditingPreservationMeasure(null); }} /></div>
+                <div className="modal-header">
+                  <button className="btn-close" onClick={() => { setShowSceneProtectionModal(false); setEditingPreservationMeasure(null); }} />
+                </div>
                 <div className="modal-body">
                   <SceneProtectionForm
                     caseId={caseId}
@@ -452,7 +559,9 @@ const token = getCookie("token");
           <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
             <div className="modal-dialog modal-lg">
               <div className="modal-content">
-                <div className="modal-header"><button className="btn-close" onClick={() => { setShowMedicalModal(false); setEditingMedicalInfo(null); }} /></div>
+                <div className="modal-header">
+                  <button className="btn-close" onClick={() => { setShowMedicalModal(false); setEditingMedicalInfo(null); }} />
+                </div>
                 <div className="modal-body">
                   <MedicalSupportForm
                     onSave={handleMedicalSupportSave}
