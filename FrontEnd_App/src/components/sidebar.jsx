@@ -178,7 +178,7 @@ const Sidebar = ({ hideToggleButton = false }) => {
                     </div>
 
                     {/* Footer */}
-                    <div className="p-3 border-top">
+                    <div className="p-3 border-top mb-3">
                         <button
                             className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
                             onClick={() => {

@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
 import ProtectedRoute from "./protectedRoute";
 import LoginComponent from "../pages/login";
-import Main from "../samples/pages/admin/main";
 import InmateAdmissions from "../samples/pages/inmateadmission";
 import CaseFile from "../samples/pages/casefile";
 import Home from "../pages/home";
@@ -19,11 +18,9 @@ import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
-
-//sample dashboard
-import Dashboard from "../samples/dashboard";
-//sample medical support
+import Dashboard from "../pages/dashboard";
 import Medical from "../samples/medical";
+import CaseDetailStep2 from "../pages/caseDetailStep2";
 
 
 const AppRoutes = () => {
@@ -44,6 +41,7 @@ const AppRoutes = () => {
     { path: "/report-suspect", element: <ReportSuspect/>},
       { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
       { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
+      { path: "/caseDetailStep2", element: <CaseDetailStep2 /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,

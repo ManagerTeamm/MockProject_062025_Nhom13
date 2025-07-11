@@ -16,8 +16,8 @@ namespace BackEnd_Api.Migrations
                 columns: table => new
                 {
                     CaseId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TypeCase = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Severity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypeCase = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Severity = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Summary = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: true),
