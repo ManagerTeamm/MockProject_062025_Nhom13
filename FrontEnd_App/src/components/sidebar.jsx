@@ -174,6 +174,17 @@ const Sidebar = ({ hideToggleButton = false }) => {
                                     Medical Panel
                                 </Link>
                             </li>
+
+                            {/*test statement*/}
+                            <li className="nav-item">
+                                <Link
+                                    to="/secure/initialstatement"
+                                    className={`nav-link d-flex align-items-center gap-2 ${isActive("/secure/initialstatement") ? "active text-primary fw-bold" : "text-dark"}`}
+                                >
+                                    <i className={`bi bi-briefcase-medical fs-4 ${isActive("/secure/initialstatement") ? "text-primary" : "text-secondary"}`}></i>
+                                    View Initial Statement
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 
