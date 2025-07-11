@@ -178,17 +178,18 @@ const ReportPage = () => {
             )}
 
             {/* Desktop Sidebar */}
-            <div className="d-none d-lg-block bg-light border-end min-vh-100" style={{ width: "250px" }}>
+            <div className="bg-light border-end min-vh-100" style={{ width: "250px" }}>
                 <Sidebar />
             </div>
 
             {/* Main Content */}
-            <div className="flex-grow-1">
+            <div className="flex-grow-1" style={{ backgroundColor: "#667A8A", minHeight: "100vh" }}>
                 <div className="container-fluid p-2 p-md-4" style={{ paddingTop: "70px" }}>
                 {/* Header - Responsive */}
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 mb-md-4 gap-2">
-                    <h2 className="mb-0 fs-4 fs-md-2 d-none d-lg-block">Reports Management</h2>
-                    <h2 className="mb-0 fs-5 d-lg-none">Reports</h2>
+                <div className="card shadow-sm mb-4">
+                    <div className="card-body text-center">
+                        <h2 className="mb-0">Reports Management</h2>
+                    </div>
                 </div>
 
                 {/* Filters - Improved Responsive */}

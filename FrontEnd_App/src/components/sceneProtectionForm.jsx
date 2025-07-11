@@ -49,7 +49,6 @@ const SceneProtectionForm = ({ caseId }) => {
     };
 
     return (
-        <Container className="my-4">
             <Card className="mx-auto" style={{ maxWidth: '900px' }}>
                 <Card.Header style={{ backgroundColor: '#C8E3FF' }} className="text-dark">
                     <strong>INFORMATION PROTECTION FIELD</strong>
@@ -70,27 +69,35 @@ const SceneProtectionForm = ({ caseId }) => {
 
                         <Row className="mb-3">
                             <Form.Label className="fw-bold">TIME OF ARRIVAL AT THE SCENE</Form.Label>
-                            <Col xs={12} md={6}>
-                                <Form.Label>Start time</Form.Label>
-                                <Form.Control
-                                    type="time"
-                                    name="startTime"
-                                    value={form.startTime}
-                                    onChange={handleChange}
-                                    required
-                                />
+                            <Col xs={12}>
+                                <div className="d-flex justify-content-between align-items-center mb-2">
+                                    <Form.Label className="mb-0">Start time</Form.Label>
+                                    <Form.Control
+                                        type="time"
+                                        name="startTime"
+                                        value={form.startTime}
+                                        onChange={handleChange}
+                                        required
+                                        style={{ maxWidth: '100px', maxHeight: '40px' }}
+                                    />
+                                </div>
                             </Col>
-                            <Col xs={12} md={6}>
-                                <Form.Label>End time</Form.Label>
-                                <Form.Control
-                                    type="time"
-                                    name="endTime"
-                                    value={form.endTime}
-                                    onChange={handleChange}
-                                    required
-                                />
+
+                            <Col xs={12}>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <Form.Label className="mb-0">End time</Form.Label>
+                                    <Form.Control
+                                        type="time"
+                                        name="endTime"
+                                        value={form.endTime}
+                                        onChange={handleChange}
+                                        required
+                                        style={{ maxWidth: '100px', maxHeight: '40px' }}
+                                    />
+                                </div>
                             </Col>
                         </Row>
+
 
                         <Form.Group className="mb-3">
                             <Form.Label className="fw-bold">DESCRIPTION OF SCENE PROTECTION METHODS</Form.Label>
@@ -117,26 +124,26 @@ const SceneProtectionForm = ({ caseId }) => {
                         </div>
                     </Form>
                 </Card.Body>
+                {/* Officer Selection Modal */}
+                <Modal
+                    show={showOfficerModal}
+                    onHide={() => setShowOfficerModal(false)}
+                    backdrop="static"
+                    scrollable
+                    dialogClassName="custom-width-modal"
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Select Patrol Officer</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <PatrolOfficerManagement
+                            onSelectOfficer={(officerName) => handleAddOfficerList(officerName)}
+                        />
+                    </Modal.Body>
+                </Modal>
             </Card>
 
-            {/* Officer Selection Modal */}
-            <Modal
-                show={showOfficerModal}
-                onHide={() => setShowOfficerModal(false)}
-                backdrop="static"
-                scrollable
-                dialogClassName="custom-width-modal"
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Select Patrol Officer</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <PatrolOfficerManagement
-                        onSelectOfficer={(officerName) => handleAddOfficerList(officerName)}
-                    />
-                </Modal.Body>
-            </Modal>
-        </Container>
+            
     );
 };
 

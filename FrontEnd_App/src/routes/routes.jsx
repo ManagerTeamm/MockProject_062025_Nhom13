@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
 import ProtectedRoute from "./protectedRoute";
 import LoginComponent from "../pages/login";
-import Main from "../samples/pages/admin/main";
 import InmateAdmissions from "../samples/pages/inmateadmission";
 import CaseFile from "../samples/pages/casefile";
 import Home from "../pages/home";
@@ -16,15 +15,15 @@ import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
-import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
+import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
-import InitialResponse from "../components/initialResponse";
 
 //sample dashboard
 import Dashboard from "../samples/dashboard";
 //sample medical support
 import Medical from "../samples/medical";
+import CaseDetailStep2 from "../pages/caseDetailStep2";
 
 
 const AppRoutes = () => {
@@ -42,9 +41,13 @@ const AppRoutes = () => {
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
     { path: "/interviewslist", element: <InterviewsList /> },
+    { path: "/image-and-video", element: <ImageAndVideo /> },
+    { path: "/qa-list", element: <QAList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
+    { path: "/navbarphase2", element: <NavbarPhase2/>},
       { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
       { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
+      { path: "/caseDetailStep2", element: <CaseDetailStep2 /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
@@ -60,7 +63,7 @@ const AppRoutes = () => {
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <UserList /> }],
         },
-         {
+        {
           path: "admin/cases",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <CaseList /> }],
@@ -74,17 +77,17 @@ const AppRoutes = () => {
           path: "admin/report-detail/:reportId",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <ReportDetail /> }],
-          },
-          {
-              path: "admin/investigation",
-              element: <ProtectedRoute allowedRoles={["Admin"]} />,
-              children: [{ index: true, element: <Investigation /> }],
-          },
-          {
-              path: "admin/evidence",
-              element: <ProtectedRoute allowedRoles={["Admin"]} />,
-              children: [{ index: true, element: <Evidence /> }],
-          },
+        },
+        {
+          path: "admin/investigation",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Investigation /> }],
+        },
+        {
+          path: "admin/evidence",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Evidence /> }],
+        },
         {
           path: "inmateadmission",
           element: <ProtectedRoute allowedRoles={["Patrol Officer"]} />,
@@ -101,6 +104,7 @@ const AppRoutes = () => {
           children: [{ index: true, element: <Medical /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
+        
       ],
     },
 
