@@ -178,16 +178,16 @@
 
 .modal-header {
   border-bottom: 1px solid #dee2e6;
-  padding: 1rem 1.5rem;
+  padding: 1rem;
 }
 
 .modal-body {
-  padding: 1.5rem;
+  padding: 0.5rem;
 }
 
 .modal-footer {
   border-top: 1px solid #dee2e6;
-  padding: 1rem 1.5rem;
+  padding: 1rem;
 }
 
 /* Action buttons styling */
