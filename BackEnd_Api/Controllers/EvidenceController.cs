@@ -45,36 +45,28 @@ namespace BackEnd_Api.Controllers
             return Ok(updated);
         }
 
-        [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<EvidenceDto>>> SearchEvidence([FromQuery] DateTime? from, [FromQuery] string status)
-        {
-            if (from.HasValue && string.IsNullOrEmpty(status))
-            {
-                var date = from.Value.Date;
-                var nextDate = date.AddDays(1);
-                var result = await _evidenceRepository.SearchEvidenceAsync(date, nextDate.AddTicks(-1), null);
-                return Ok(result);
-            }
-            if (!from.HasValue && !string.IsNullOrEmpty(status))
-            {
-                var result = await _evidenceRepository.SearchEvidenceAsync(null, null, status);
-                return Ok(result);
-            }
-            if (from.HasValue && !string.IsNullOrEmpty(status))
-            {
-                var date = from.Value.Date;
-                var nextDate = date.AddDays(1);
-                var result = await _evidenceRepository.SearchEvidenceAsync(date, nextDate.AddTicks(-1), status);
-                return Ok(result);
-            }
-            var all = await _evidenceRepository.GetAllEvidencesAsync();
-            return Ok(all);
-        }
-
         [HttpGet("paginated")]
         public async Task<ActionResult<object>> GetEvidencesPaginated([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
             var result = await _evidenceRepository.GetEvidencesPaginatedAsync(page, pageSize);
+            return Ok(result);
+        }
+
+        [HttpGet("filter")]
+        public async Task<ActionResult<object>> FilterEvidences([FromQuery] string? status = null, 
+            [FromQuery] DateTime? collectedAt = null,
+            [FromQuery] int page = 1, 
+            [FromQuery] int pageSize = 10)
+        {
+            var filterDto = new EvidenceFilterDto
+            {
+                Status = status,
+                CollectedAt = collectedAt,
+                Page = page,
+                PageSize = pageSize
+            };
+
+            var result = await _evidenceRepository.FilterEvidencesAsync(filterDto);
             return Ok(result);
         }
     }

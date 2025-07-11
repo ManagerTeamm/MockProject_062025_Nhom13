@@ -19,6 +19,7 @@ import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
+import QAList from '../pages/qaList';
 import NavbarPhase2 from '../components/navbarphase2.jsx';
 
 //sample dashboard
@@ -42,6 +43,7 @@ const AppRoutes = () => {
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
     { path: "/interviewslist", element: <InterviewsList /> },
+    { path: "/qa-list", element: <QAList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
     { path: "/navbarphase2", element: <NavbarPhase2/>},
       { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
@@ -102,6 +104,7 @@ const AppRoutes = () => {
           children: [{ index: true, element: <Medical /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
+        
       ],
     },
 
