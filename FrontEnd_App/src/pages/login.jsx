@@ -18,13 +18,10 @@ const LoginComponent = () => {
     e.preventDefault();
     try {
       const data = await login(username, password);
-      console.log("Login success:", data);
 
       saveCookie("token", data);
-      const role = getUserRoleFromToken();
-      console.log("User role:", role);
       
-      role=="Admin"? navigate("/secure/admin/dashboard") : navigate("/home");
+      window.location.href = "/secure/admin/dashboard";
     } catch (error) {
       console.error("Login error:", error);
       alert("Login failed: " + (error.response?.data || error.message));

@@ -85,7 +85,7 @@ const CaseList = () => {
 
   return (
     <div className="investigation-container">
-      <div className="bg-light border-end min-vh-100" style={{ width: "250px" }}>
+      <div className="bg-light border-end min-vh-100">
           <Sidebar />
       </div>
       <main className="investigation-main">

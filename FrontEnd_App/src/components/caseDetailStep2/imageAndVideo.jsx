@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Upload, X } from 'lucide-react';
-import '../styles/imageAndVideo.css';
+import '../../styles/imageAndVideo.css';
 import { useDropzone } from 'react-dropzone';
 
-const ImageAndVideo = () => {
-  const [dateTaken, setDateTaken] = useState('');
-  const [description, setDescription] = useState('');
-  const [capturedBy, setCapturedBy] = useState('');
-  const [sceneSketchFiles, setSceneSketchFiles] = useState([]);
-  const [mediaFiles, setMediaFiles] = useState([]);
+const ImageAndVideo = ({ onSubmit, onCancel, initialData }) => {
+    const [dateTaken, setDateTaken] = useState(initialData?.date || '');
+    const [description, setDescription] = useState(initialData?.description || '');
+    const [capturedBy, setCapturedBy] = useState(initialData?.capturedBy || '');
+    const [sceneSketchFiles, setSceneSketchFiles] = useState([]);
+    const [mediaFiles, setMediaFiles] = useState(
+        initialData?.preview
+            ? [{
+                preview: initialData.preview,
+                name: initialData.fileName,
+                type: initialData.type
+            }]
+            : []
+    );
 
   // Dropzone configuration for scene sketches
   const sceneSketchDropzone = useDropzone({
@@ -74,20 +82,25 @@ const ImageAndVideo = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you would typically send the files and form data to your backend
-    const formData = {
-      dateTaken,
-      description,
-      capturedBy,
-      sceneSketchFiles,
-      mediaFiles
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('Clicked');
+
+        if (onSubmit && typeof onSubmit === 'function') {
+            const newMedia = {
+                id: initialData?.id || Date.now().toString(),
+                date: dateTaken,
+                description,
+                capturedBy,
+                fileName: mediaFiles[0]?.name || 'unknown',
+                preview: mediaFiles[0]?.preview || '',
+                type: mediaFiles[0]?.type || '',
+            };
+            console.log('Submitted Media:', newMedia);
+
+            onSubmit(newMedia); // gửi object media về component cha
+        }
     };
-    
-    console.log('Form submitted with data:', formData);
-    // You would use your API service here to send the data
-  };
 
   return (
     <div className="card mb-4 images-video-container">
@@ -266,7 +279,11 @@ const ImageAndVideo = () => {
 
           {/* ACTION BUTTONS */}
           <div className="d-flex justify-content-center gap-3 mt-5">
-            <button type="button" className="btn btn-secondary px-4">
+            <button
+              type="button"
+              className="btn btn-secondary px-4"
+              onClick={onCancel}
+            >
               Cancel
             </button>
             <button type="submit" className="btn btn-primary px-4">

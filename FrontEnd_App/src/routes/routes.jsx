@@ -18,7 +18,7 @@ import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
-import ImageAndVideo from "../components/imageAndVideo";
+import ImageAndVideo from "../components/caseDetailStep2/imageAndVideo";
 import Dashboard from "../pages/dashboard";
 import QAList from '../pages/qaList';
 import NavbarPhase2 from '../components/navbarphase2.jsx';
