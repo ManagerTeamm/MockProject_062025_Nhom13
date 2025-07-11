@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
 import ProtectedRoute from "./protectedRoute";
 import LoginComponent from "../pages/login";
-import Main from "../samples/pages/admin/main";
 import InmateAdmissions from "../samples/pages/inmateadmission";
 import CaseFile from "../samples/pages/casefile";
 import Home from "../pages/home";
@@ -20,11 +19,14 @@ import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
 import ImageAndVideo from "../components/imageAndVideo";
-
+import Dashboard from "../pages/dashboard";
+import QAList from '../pages/qaList';
+import NavbarPhase2 from '../components/navbarphase2.jsx';
 //sample dashboard
 import Dashboard from "../samples/dashboard";
 //sample medical support
 import Medical from "../samples/medical";
+import CaseDetailStep2 from "../pages/caseDetailStep2";
 
 
 const AppRoutes = () => {
@@ -42,10 +44,13 @@ const AppRoutes = () => {
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
     { path: "/interviewslist", element: <InterviewsList /> },
-    { path: "/report-suspect", element: <ReportSuspect /> },
-    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
-    { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
     { path: "/image-and-video", element: <ImageAndVideo /> },
+    { path: "/qa-list", element: <QAList /> },
+    { path: "/report-suspect", element: <ReportSuspect/>},
+    { path: "/navbarphase2", element: <NavbarPhase2/>},
+      { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
+      { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
+      { path: "/caseDetailStep2", element: <CaseDetailStep2 /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
@@ -102,6 +107,7 @@ const AppRoutes = () => {
           children: [{ index: true, element: <Medical /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
+        
       ],
     },
 

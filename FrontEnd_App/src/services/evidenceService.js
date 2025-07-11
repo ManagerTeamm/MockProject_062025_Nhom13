@@ -21,6 +21,18 @@ export const searchEvidence = async ({ from, to, status }) => {
   return response.data;
 };
 
+export const filterEvidence = async ({ status, collectedAt, page = 1, pageSize = 10 }) => {
+  const params = [];
+  if (status) params.push(`status=${encodeURIComponent(status)}`);
+  if (collectedAt) params.push(`collectedAt=${encodeURIComponent(collectedAt)}`);
+  params.push(`page=${page}`);
+  params.push(`pageSize=${pageSize}`);
+  
+  const query = params.length ? `?${params.join('&')}` : '';
+  const response = await axios.get(`${API_URL}/filter${query}`);
+  return response.data;
+};
+
 export const getEvidenceById = async (id) => {
   const response = await axios.get(`${API_URL}/${id}`);
   return response.data;

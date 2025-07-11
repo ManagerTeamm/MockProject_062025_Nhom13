@@ -85,11 +85,15 @@ const CaseList = () => {
 
   return (
     <div className="investigation-container">
-      <Sidebar />
+      <div className="bg-light border-end min-vh-100" style={{ width: "250px" }}>
+          <Sidebar />
+      </div>
       <main className="investigation-main">
-        <header className="investigation-header">
-          <h1>List of cases</h1>
-        </header>
+        <div className="card shadow-sm mb-4">
+            <div className="card-body text-center">
+                <h2 className="mb-0">List of Cases</h2>
+            </div>
+        </div>
 
         <section className="section">
           <div className="section-box">
