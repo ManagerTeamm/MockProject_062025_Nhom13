@@ -33,9 +33,27 @@ namespace BackEnd_Api.Repositories
 
         public async Task<EvidenceDto> CreateEvidenceAsync(CreateEvidenceDto dto)
         {
+            // Validate unique EvidenceId
+            if (await _context.Evidences.AnyAsync(e => e.EvidenceId == dto.EvidenceId && !e.IsDeleted))
+                throw new Exception("EvidenceId must be unique.");
+
+            // Validate CollectedAt không trong tương lai
+            if (dto.CollectedAt > DateTime.UtcNow)
+                throw new Exception("CollectedAt cannot be in the future.");
+
+            // Validate tồn tại User
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == dto.CollectedBy && !u.IsDeleted);
+            if (user == null)
+                throw new Exception("CollectedBy user does not exist.");
+
+            // Validate tồn tại Case
+            var caseEntity = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == dto.CaseId && !c.IsDeleted);
+            if (caseEntity == null)
+                throw new Exception("CaseId does not exist.");
+
             var evidence = new Evidence
             {
-                EvidenceId = Guid.NewGuid().ToString(),
+                EvidenceId = dto.EvidenceId,
                 Description = dto.Description,
                 CollectedAt = dto.CollectedAt,
                 CollectedBy = dto.CollectedBy,
@@ -43,33 +61,21 @@ namespace BackEnd_Api.Repositories
                 CurrentLocation = dto.CurrentLocation,
                 AttachedFile = dto.AttachedFile,
                 Status = dto.Status,
-                IsDeleted = false
+                IsDeleted = false,
+                User = user
             };
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == dto.CollectedBy);
-            if (user != null)
-            {
-                evidence.User = user;
-            }
 
             _context.Evidences.Add(evidence);
             await _context.SaveChangesAsync();
 
-            if (!string.IsNullOrEmpty(dto.CaseId))
+            var caseEvidence = new CaseEvidence
             {
-                var caseEntity = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == dto.CaseId);
-                if (caseEntity != null)
-                {
-                    var caseEvidence = new CaseEvidence
-                    {
-                        CaseId = caseEntity.CaseId,
-                        EvidenceId = evidence.EvidenceId,
-                        IsDeleted = false
-                    };
-                    _context.CaseEvidences.Add(caseEvidence);
-                    await _context.SaveChangesAsync();
-                }
-            }
+                CaseId = caseEntity.CaseId,
+                EvidenceId = evidence.EvidenceId,
+                IsDeleted = false
+            };
+            _context.CaseEvidences.Add(caseEvidence);
+            await _context.SaveChangesAsync();
 
             return new EvidenceDto
             {
@@ -87,16 +93,51 @@ namespace BackEnd_Api.Repositories
             var evidence = await _context.Evidences
                 .Include(e => e.CaseEvidences)
                 .Include(e => e.User)
+                .Include(e => e.SuspectEvidences)
+                    .ThenInclude(se => se.Suspect)
                 .FirstOrDefaultAsync(e => e.EvidenceId == id && !e.IsDeleted);
             if (evidence == null) return null;
+
+            var caseId = evidence.CaseEvidences.FirstOrDefault()?.CaseId;
+            CaseInfoDto caseInfo = null;
+            if (!string.IsNullOrEmpty(caseId))
+            {
+                var caseEntity = await _context.Cases.FirstOrDefaultAsync(c => c.CaseId == caseId && !c.IsDeleted);
+                if (caseEntity != null)
+                {
+                    caseInfo = new CaseInfoDto
+                    {
+                        CaseId = caseEntity.CaseId,
+                        Type = caseEntity.TypeCase,
+                        Severity = caseEntity.Severity,
+                        Status = caseEntity.Status,
+                        Summary = caseEntity.Summary
+                    };
+                }
+            }
+
+            var suspect = evidence.SuspectEvidences.FirstOrDefault(se => !se.IsDeleted)?.Suspect;
+            SuspectInfoDto suspectInfo = null;
+            if (suspect != null && !suspect.IsDeleted)
+            {
+                suspectInfo = new SuspectInfoDto
+                {
+                    SuspectId = suspect.SuspectId,
+                    FullName = suspect.Fullname,
+                    Status = suspect.Status
+                };
+            }
+
             return new EvidenceDto
             {
                 EvidenceId = evidence.EvidenceId,
-                CaseId = evidence.CaseEvidences.FirstOrDefault()?.CaseId,
+                CaseId = caseId,
                 Description = evidence.Description,
                 CollectedAt = evidence.CollectedAt ?? DateTime.MinValue,
                 Collector = evidence.CollectedBy,
-                Status = evidence.Status
+                Status = evidence.Status,
+                CaseInfo = caseInfo,
+                SuspectInfo = suspectInfo
             };
         }
 
@@ -145,33 +186,7 @@ namespace BackEnd_Api.Repositories
             };
         }
 
-        public async Task<IEnumerable<EvidenceDto>> SearchEvidenceAsync(DateTime? from, DateTime? to, string status)
-        {
-            var query = _context.Evidences
-                .Where(e => !e.IsDeleted);
-
-            if (from.HasValue)
-                query = query.Where(e => e.CollectedAt >= from);
-            if (to.HasValue)
-                query = query.Where(e => e.CollectedAt <= to);
-            if (!string.IsNullOrEmpty(status))
-                query = query.Where(e => e.Status == status);
-
-            return await query
-                .Include(e => e.User)
-                .Include(e => e.CaseEvidences)
-                .Select(e => new EvidenceDto
-                {
-                    EvidenceId = e.EvidenceId,
-                    CaseId = e.CaseEvidences.FirstOrDefault().CaseId,
-                    Description = e.Description,
-                    CollectedAt = (DateTime)e.CollectedAt,
-                    Collector = e.User.FullName,
-                    Status = e.Status
-                })
-                .ToListAsync();
-        }
-
+        
         public async Task<object> GetEvidencesPaginatedAsync(int page, int pageSize)
         {
             var totalCount = await _context.Evidences.Where(e => !e.IsDeleted).CountAsync();
@@ -212,6 +227,64 @@ namespace BackEnd_Api.Repositories
         {
             await _dbSet.AddAsync(evidence);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<object> FilterEvidencesAsync(EvidenceFilterDto filterDto)
+        {
+            var query = _context.Evidences
+                .Where(e => !e.IsDeleted)
+                .Include(e => e.User)
+                .Include(e => e.CaseEvidences)
+                .AsQueryable();
+
+            // Filter theo Status
+            if (!string.IsNullOrEmpty(filterDto.Status))
+            {
+                query = query.Where(e => e.Status == filterDto.Status);
+            }
+
+            // Filter theo CollectedAt (một ngày cụ thể)
+            if (filterDto.CollectedAt.HasValue)
+            {
+                var filterDate = filterDto.CollectedAt.Value.Date;
+                query = query.Where(e => e.CollectedAt.HasValue && e.CollectedAt.Value.Date == filterDate);
+            }
+
+            // Get total count before pagination
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalCount / filterDto.PageSize);
+            var skip = (filterDto.Page - 1) * filterDto.PageSize;
+
+            // Apply pagination
+            var evidences = await query
+                .Skip(skip)
+                .Take(filterDto.PageSize)
+                .Select(e => new EvidenceDto
+                {
+                    EvidenceId = e.EvidenceId,
+                    CaseId = e.CaseEvidences.FirstOrDefault().CaseId,
+                    Description = e.Description,
+                    CollectedAt = (DateTime)e.CollectedAt,
+                    Collector = e.User.FullName,
+                    Status = e.Status
+                })
+                .ToListAsync();
+
+            return new
+            {
+                Data = evidences,
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                CurrentPage = filterDto.Page,
+                PageSize = filterDto.PageSize,
+                HasNextPage = filterDto.Page < totalPages,
+                HasPreviousPage = filterDto.Page > 1,
+                Filters = new
+                {
+                    Status = filterDto.Status,
+                    CollectedAt = filterDto.CollectedAt
+                }
+            };
         }
     }
 }

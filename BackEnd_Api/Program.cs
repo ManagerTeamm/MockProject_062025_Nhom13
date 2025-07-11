@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
 using System.Text;
 using BackEnd_Api.Services.Interface;
 
@@ -19,6 +18,7 @@ namespace BackEnd_Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -27,7 +27,7 @@ namespace BackEnd_Api
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Insert: 'Bearer {token}'",
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer {token}'",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
@@ -64,7 +64,7 @@ namespace BackEnd_Api
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            //Services
+            // Services
             builder.Services.AddScoped<JwtTokenHelper>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -72,13 +72,14 @@ namespace BackEnd_Api
             builder.Services.AddScoped<IEvidenceRepository, EvidenceRepository>();
             builder.Services.AddScoped<IPatrolOfficerRepository, PatrolOfficerRepository>();
             builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
+            builder.Services.AddScoped<IVictimRepository, VictimRepository>();
+            builder.Services.AddScoped<ICaseRepository, CaseRepository>();
+            builder.Services.AddScoped<ISuspectRepository, SuspectRepository>();
          //   builder.Services.AddScoped<IVictimRepository, VictimRepository>();
             builder.Services.Scan(scan => scan
-                // scan từ assembly chứa IRepository hoặc ReportRepository
                 .FromAssemblyOf<IRepository<object>>()
-                // chọn tất cả class có tên kết thúc bằng "Repository"
                 .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Repository")))
-                // đăng ký chúng dưới tất cả interface mà chúng implement
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
             );
@@ -90,7 +91,7 @@ namespace BackEnd_Api
             })
             .AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = new()
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
@@ -119,7 +120,7 @@ namespace BackEnd_Api
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication(); 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseStaticFiles();

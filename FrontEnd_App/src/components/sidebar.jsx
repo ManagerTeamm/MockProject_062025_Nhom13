@@ -2,7 +2,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { getUser } from "../services/userService";
 
-const Sidebar = () => {
+const Sidebar = ({ hideToggleButton = false }) => {
     const location = useLocation();
     const [user, setUser] = useState({ username: "", avatarUrl: "" });
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 700);
@@ -11,6 +11,7 @@ const Sidebar = () => {
         const fetchUser = async () => {
             try {
                 const res = await getUser();
+                console.log("User data fetched:", res);
                 setUser({
                     username: res.userName,
                     avatarUrl: res.avatarUrl || "",
@@ -36,15 +37,17 @@ const Sidebar = () => {
 
     return (
         <>
-            <button
-                className="btn btn-light d-md-none position-fixed top-0 start-0 m-2 z-3"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#sidebarOffcanvas"
-                aria-controls="sidebarOffcanvas"
-            >
-                <i className="bi bi-list fs-3"></i>
-            </button>
+            {!hideToggleButton && (
+                <button
+                    className="btn btn-light d-md-none position-fixed top-0 start-0 m-2 z-3"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarOffcanvas"
+                    aria-controls="sidebarOffcanvas"
+                >
+                    <i className="bi bi-list fs-3"></i>
+                </button>
+            )}
 
             <div
                 className={`sidebar ${isSmallScreen ? "offcanvas" : "offcanvas-md"} offcanvas-start bg-light`}
@@ -186,7 +189,7 @@ const Sidebar = () => {
                     </div>
 
                     {/* Footer */}
-                    <div className="p-3 border-top">
+                    <div className="p-3 border-top mb-3">
                         <button
                             className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
                             onClick={() => {

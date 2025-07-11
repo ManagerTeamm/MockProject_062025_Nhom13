@@ -6,7 +6,7 @@ namespace BackEnd_Api.Models
     {
         public string TimelineId { get; set; }
         public string CaseResultId { get; set; }
-        public CaseResult CaseResult { get; set; }
+        public CaseResult? CaseResult { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public string? AttachedFile { get; set; }

@@ -1,9 +1,8 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useAuth } from "../providers/authProvider";
-import ProtectedRoute from "./protectedroute";
+import ProtectedRoute from "./protectedRoute";
 import LoginComponent from "../pages/login";
-import Main from "../samples/pages/admin/main";
 import InmateAdmissions from "../samples/pages/inmateadmission";
 import CaseFile from "../samples/pages/casefile";
 import Home from "../pages/home";
@@ -16,12 +15,16 @@ import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
-import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
-
-//sample dashboard
-import Dashboard from "../samples/dashboard";
+import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
+import SceneProtectionForm from "../components/sceneProtectionForm";
+import EvidenceDetail from "../pages/evidenceDetail";
+import ImageAndVideo from "../components/imageAndVideo";
+import Dashboard from "../pages/dashboard";
+import QAList from '../pages/qaList';
+import NavbarPhase2 from '../components/navbarphase2.jsx';
 //sample medical support
 import Medical from "../samples/medical";
+import CaseDetailStep2 from "../pages/caseDetailStep2";
 
 //sample nitial statement
 import ViewStatement from "../samples/viewInitialStatement";
@@ -41,10 +44,14 @@ const AppRoutes = () => {
     { path: "/suspect", element: <Suspect /> },
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
-    { path: "/caselist", element: <CaseList /> },
     { path: "/interviewslist", element: <InterviewsList /> },
+    { path: "/image-and-video", element: <ImageAndVideo /> },
+    { path: "/qa-list", element: <QAList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
-    { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement />},
+    { path: "/navbarphase2", element: <NavbarPhase2/>},
+      { path: "/PatrolOfficerManagement", element: <PatrolOfficerManagement /> },
+      { path: "/sceneProtectionForm", element: <SceneProtectionForm /> },
+      { path: "/caseDetailStep2", element: <CaseDetailStep2 /> },
     {
       path: "/secure",
       element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
@@ -61,6 +68,11 @@ const AppRoutes = () => {
           children: [{ index: true, element: <UserList /> }],
         },
         {
+          path: "admin/cases",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <CaseList /> }],
+        },
+        {
           path: "admin/reports",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <ReportPage /> }],
@@ -69,17 +81,17 @@ const AppRoutes = () => {
           path: "admin/report-detail/:reportId",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <ReportDetail /> }],
-          },
-          {
-              path: "admin/investigation",
-              element: <ProtectedRoute allowedRoles={["Admin"]} />,
-              children: [{ index: true, element: <Investigation /> }],
-          },
-          {
-              path: "admin/evidence",
-              element: <ProtectedRoute allowedRoles={["Admin"]} />,
-              children: [{ index: true, element: <Evidence /> }],
-          },
+        },
+        {
+          path: "admin/investigation",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Investigation /> }],
+        },
+        {
+          path: "admin/evidence",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Evidence /> }],
+        },
         {
           path: "inmateadmission",
           element: <ProtectedRoute allowedRoles={["Patrol Officer"]} />,
@@ -101,11 +113,13 @@ const AppRoutes = () => {
           children: [{ index: true, element: <ViewStatement /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
+        
       ],
     },
 
     { path: "/unauthorized", element: <div>Unauthorized</div> },
     { path: "/CaseList", element: <CaseList /> },
+    { path: "/evidence/:id", element: <EvidenceDetail /> },
     { path: "*", element: <div>404 Not Found</div> },
   ]);
 

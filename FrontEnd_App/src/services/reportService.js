@@ -1,19 +1,19 @@
 import axios from 'axios';
 import { getCookie } from '../utils/cookie';
-const API_BASE_URL = 'https://localhost:7064/api/Report';
+import { API_CONFIG } from '../utils/apiConfig';
 
 const token = getCookie("token");
 const apiClient = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: API_CONFIG.API_REPORT_URL,
     headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
     },
-    timeout: 10000,
+    timeout: API_CONFIG.TIMEOUT,
 });
 
-export const reportService ={
-    getReports: async() => {
+export const reportService = {
+    getReports: async () => {
         try {
             const response = await apiClient.get('/get-reports');
             return response.data;
@@ -29,6 +29,25 @@ export const reportService ={
             return response.data;
         } catch (error) {
             console.error('Error fetching report detail:', error);
+            throw error;
+        }
+    },
+
+    approveReport: async (reportId) => {
+        try {
+            const response = await apiClient.post(`/report-approve/${reportId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error approving report:', error);
+            throw error;
+        }
+    },
+    declineReport: async (reportId) => {
+        try {
+            const response = await apiClient.patch(`/report-decline/${reportId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error approving report:', error);
             throw error;
         }
     }

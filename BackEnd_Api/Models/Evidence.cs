@@ -6,11 +6,11 @@ namespace BackEnd_Api.Models
     {
         public string EvidenceId { get; set; }
         public string? MeasureSurveyId { get; set; }
-        public MeasureSurvey MeasureSurvey { get; set; }
+        public MeasureSurvey? MeasureSurvey { get; set; }
         public string? WarrantResultId { get; set; }
-        public WarrantResult WarrantResult { get; set; }
+        public WarrantResult? WarrantResult { get; set; }
         public string? ReportId { get; set; }
-        public Report Report { get; set; }
+        public Report? Report { get; set; }
         public string? CollectedBy { get; set; }
         public User? User { get; set; }
         public string TypeEvidence { get; set; }

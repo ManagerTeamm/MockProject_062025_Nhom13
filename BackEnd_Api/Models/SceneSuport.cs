@@ -6,7 +6,7 @@ namespace BackEnd_Api.Models
     {
         public string SceneSuportId { get; set; }
         public string CaseId { get; set; }
-        public Case Case { get; set; }
+        public Case? Case { get; set; }
         public  string TypeSuport { get; set; }
         public string? LocationAssigned { get; set; }
         public string? Notes { get; set; }

@@ -1,0 +1,311 @@
+/* Reports Page Responsive CSS */
+
+/* Mobile Navigation Header */
+.mobile-nav-header {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Mobile Sidebar Overlay Styles */
+.sidebar-overlay {
+  z-index: 1040;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-sidebar {
+  z-index: 1041;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.mobile-sidebar.show {
+  transform: translateX(0);
+}
+
+/* Override Sidebar component's Bootstrap offcanvas styles when used in custom overlay */
+.mobile-sidebar .sidebar-content .offcanvas,
+.mobile-sidebar .sidebar-content .offcanvas-start {
+  position: static !important;
+  transform: none !important;
+  width: 100% !important;
+  height: auto !important;
+  visibility: visible !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.mobile-sidebar .sidebar-content .offcanvas-header {
+  display: none !important;
+}
+
+.mobile-sidebar .sidebar-content .d-flex.flex-column.vh-100 {
+  height: auto !important;
+}
+
+/* Filter Section Responsive */
+@media (max-width: 768px) {
+  .filter-section {
+    padding: 1rem 0.5rem;
+  }
+  
+  .filter-section .form-select {
+    margin-bottom: 0.5rem;
+  }
+  
+  .filter-section .fw-bold {
+    margin-bottom: 0.5rem;
+    display: block;
+    width: 100%;
+  }
+}
+
+/* Mobile Card Improvements */
+.mobile-report-card {
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.mobile-report-card:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-report-card .badge {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+}
+
+/* Table Responsive Improvements */
+@media (max-width: 992px) {
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.85rem;
+  }
+  
+  .table th:nth-child(n+5),
+  .table td:nth-child(n+5) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .table th:nth-child(n+4),
+  .table td:nth-child(n+4) {
+    display: none;
+  }
+}
+
+/* Status Badge Responsive */
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+@media (max-width: 576px) {
+  .badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+/* Button Responsive */
+.btn-outline-primary {
+  border-width: 1.5px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.25);
+}
+
+@media (max-width: 576px) {
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Pagination Responsive */
+.pagination {
+  margin-bottom: 0;
+}
+
+@media (max-width: 576px) {
+  .pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .page-link {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  .pagination li:nth-child(n+3):nth-child(-n+5) {
+    display: none;
+  }
+}
+
+/* Loading State */
+.loading-container {
+  min-height: 300px;
+}
+
+.spinner-border {
+  color: #0d6efd;
+}
+
+/* Empty State */
+.empty-state {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.empty-state i {
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.empty-state p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state small {
+  color: #adb5bd;
+  font-size: 0.9rem;
+}
+
+/* Card Enhancements */
+.card {
+  border: 1px solid #e3e6f0;
+  border-radius: 10px;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+  transition: all 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 0.25rem 2rem 0 rgba(58, 59, 69, 0.2);
+}
+
+/* Tablet Card Improvements */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-title {
+    font-size: 0.9rem;
+  }
+  
+  .btn-outline-primary {
+    font-size: 0.8rem;
+  }
+}
+
+/* Better spacing for tablet */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .container-fluid {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+  
+  .filter-section .form-select {
+    font-size: 0.85rem;
+  }
+}
+
+/* Header Responsive */
+.page-header {
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .page-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Utilities */
+.text-primary {
+  color: #0d6efd !important;
+}
+
+.bg-light-custom {
+  background-color: #f8f9fa !important;
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus States for Accessibility */
+.form-select:focus,
+.btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  border-color: #86b7fe;
+}
+
+/* Print Styles */
+@media print {
+  .mobile-nav-header,
+  .sidebar-overlay,
+  .mobile-sidebar,
+  .d-lg-none,
+  .btn,
+  .pagination {
+    display: none !important;
+  }
+  
+  .card {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+  
+  .container-fluid {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
+/* Dark Mode Support (if needed) */
+/*@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .mobile-nav-header {
+    background-color: #2d3748 !important;
+    border-color: #4a5568 !important;
+  }
+}*/

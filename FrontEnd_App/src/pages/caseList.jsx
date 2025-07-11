@@ -1,92 +1,178 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
 
-const caseData = [
-  { caseId: '#E0462', type: 'Robbery case', severity: 'Urgent', status: 'Processing in phase 3', reportTime: '2h00 am - 12/12/2024' },
-  { caseId: '#E0461', type: 'Robbery case', severity: 'Not urgent', status: 'Processing in phase 3', reportTime: '2h00 am - 10/12/2024' },
-];
+const API_URL = 'https://localhost:7064/api/Case'; 
 
-const statusClass = status => {
-  if (status === 'Processing in phase 3') return 'status-processing';
-  return '';
+const statusClass = (status) => {
+  switch (status) {
+    case 'New Case':
+      return 'badge status-new';
+    case 'Processing in phase 2':
+      return 'badge status-processing-phase2';
+    case 'Pending approve for phase 3':
+      return 'badge status-pending-phase3';
+    case 'Processing in phase 3':
+      return 'badge status-processing-phase3';
+    case 'Done':
+      return 'badge status-done';
+    default:
+      return 'badge';
+  }
 };
 
-const CaseList = () => {
-  const [statusFilter, setStatusFilter] = useState('');
-  const [dateFilter, setDateFilter] = useState('');
-  const [page, setPage] = useState(1);
-  const pageSize = 10;
-  const totalPages = 3;
 
-  // Lọc dữ liệu theo filter
-  const filteredData = caseData.filter(row => {
-    const statusMatch = statusFilter ? row.status === statusFilter : true;
-    const dateMatch = dateFilter ? row.reportTime.includes(dateFilter) : true;
-    return statusMatch && dateMatch;
-  });
+const CaseList = () => {
+  const [cases, setCases] = useState([]);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+  const [entries, setEntries] = useState(10);
+  const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [sortBy, setSortBy] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc'); 
+
+  useEffect(() => {
+    fetchCases();
+  }, [search, statusFilter, entries, page, sortBy, sortOrder]);
+
+  const fetchCases = async () => {
+    const params = new URLSearchParams({
+      PageNumber: page,
+      PageSize: entries,
+      SortBy: sortBy,
+      SortOrder: sortOrder,
+    });
+
+    if (search) {
+      params.append('SearchQuery', search);
+    }
+
+    if (statusFilter) {
+      params.append('SearchQuery', statusFilter); // Assuming statusFilter can also be part of SearchQuery
+    }
+
+    try {
+      const response = await fetch(`${API_URL}?${params}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setCases(data.items);
+      setTotalCount(data.totalCount);
+    } catch (error) {
+      console.error('Error fetching case data:', error);
+    }
+  };
+
+  const toggleSort = (field) => {
+    if (sortBy === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortBy(field);
+      setSortOrder('asc'); // Default to ascending when sorting a new column
+    }
+    setPage(1); // Reset to first page when sorting
+  };
+
+  const renderSortArrow = (field) => {
+    if (sortBy === field) {
+      return sortOrder === 'asc' ? <span className="sort-arrow asc">&#9650;</span> : <span className="sort-arrow desc">&#9660;</span>;
+    }
+    return <span className="sort-arrow default">&#9650;&#9660;</span>; // Both arrows when not sorted
+  };
 
   return (
     <div className="investigation-container">
-      <Sidebar />
+      <div className="bg-light border-end min-vh-100" style={{ width: "250px" }}>
+          <Sidebar />
+      </div>
       <main className="investigation-main">
-        <header className="investigation-header">
-          <h1>List of cases</h1>
-        </header>
+        <div className="card shadow-sm mb-4">
+            <div className="card-body text-center">
+                <h2 className="mb-0">List of Cases</h2>
+            </div>
+        </div>
+
         <section className="section">
           <div className="section-box">
-            <div className="filter-row" style={{marginBottom: 24}}>
-              <div>
-                <label>Status</label>
-                <select className="filter-select" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
-                  <option value="">Select an option</option>
-                  <option value="Processing in phase 3">Processing in phase 3</option>
+
+            <div className="filter-row" style={{ marginBottom: 24 }}>
+              <label>Show
+                <select value={entries} onChange={(e) => setEntries(parseInt(e.target.value))}>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
                 </select>
-              </div>
-              <div>
-                <label>Date collected</label>
-                <input type="date" className="filter-date" value={dateFilter} onChange={e => setDateFilter(e.target.value)} placeholder="Select a day" />
-              </div>
+                entries
+              </label>
+
+              <input
+                type="text"
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="filter-input"
+              />
+
+              <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="filter-select">
+                <option value="">All Statuses</option>
+                <option value="New Case">New Case</option>
+                <option value="Processing in phase 2">Processing in phase 2</option>
+                <option value="Pending approve for phase 3">Pending approve for phase 3</option>
+                <option value="Processing in phase 3">Processing in phase 3</option>
+                <option value="Done">Done</option>
+
+              </select>
             </div>
+
             <table className="info-table">
               <thead>
                 <tr>
+                  {/* Case ID - No sort */}
                   <th>Case ID</th>
-                  <th>Type of case</th>
-                  <th>Severity</th>
-                  <th>Status</th>
-                  <th>Report time</th>
+                  {/* Type of Crime - With sort */}
+                  <th onClick={() => toggleSort('TypeOfCrime')}>Type of Crime {renderSortArrow('TypeOfCrime')}</th>
+                  {/* Level of severity - With sort */}
+                  <th onClick={() => toggleSort('LevelOfSeverity')}>Level of severity {renderSortArrow('LevelOfSeverity')}</th>
+                  {/* Date - With sort */}
+                  <th onClick={() => toggleSort('Date')}>Date {renderSortArrow('Date')}</th>
+                  {/* Reporter - No sort */}
+                  <th>Reporter</th>
+                  {/* Location - No sort */}
+                  <th>Location</th>
+                  {/* Status - With sort */}
+                  <th onClick={() => toggleSort('Status')}>Status {renderSortArrow('Status')}</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((row, idx) => (
-                  <tr key={row.caseId}>
-                    <td>{row.caseId}</td>
-                    <td>{row.type}</td>
-                    <td>{row.severity}</td>
-                    <td><span className={statusClass(row.status)}>{row.status}</span></td>
-                    <td>{row.reportTime}</td>
+                {cases.length > 0 ? (
+                  cases.map((c) => (
+                    <tr key={c.caseId}>
+                      <td>{c.caseId}</td>
+                      <td>{c.typeOfCrime}</td>
+                      <td>{c.levelOfSeverity}</td>
+                      <td>{new Date(c.date).toLocaleDateString()}</td>
+                      <td>{c.reporter}</td>
+                      <td>{c.location}</td>
+                      <td><span className={statusClass(c.status)}>{c.status}</span></td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" style={{ textAlign: 'center' }}>No cases found.</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
+
             <div className="pagination-row">
-              <span>Show <select><option>10</option></select> entries</span>
-              <div className="pagination">
-                <button className="page-btn">Previous</button>
-                <button className="page-btn active">1</button>
-                <button className="page-btn">2</button>
-                <button className="page-btn">3</button>
-                <button className="page-btn">Next</button>
-              </div>
+              <button disabled={page <= 1} onClick={() => setPage(p => p - 1)} className="page-btn">Previous</button>
+              <span className="page-btn active">{page}</span>
+              <button disabled={(page * entries) >= totalCount} onClick={() => setPage(p => p + 1)} className="page-btn">Next</button>
             </div>
-            <div className="section-title-row" style={{marginTop: 32}}>
-              <span>EVIDENCE</span>
-              <button className="btn-list" onClick={() => window.location.href='/evidence'}>
-                <img src="/icons/calendar_today.svg" alt="calendar" className="icon-calendar" /> LIST
-              </button>
-            </div>
+
           </div>
         </section>
       </main>
@@ -94,4 +180,4 @@ const CaseList = () => {
   );
 };
 
-export default CaseList; 
+export default CaseList;

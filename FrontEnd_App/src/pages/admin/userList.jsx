@@ -8,11 +8,20 @@ import UserForm from '../../components/userForm';
 const UserList = () => {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 10;
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    const totalPages = Math.ceil(users.length / usersPerPage);
+
+
 
     const fetchUsers = async () => {
         try {
             const data = await getAllUsers();
             setUsers(data);
+            setCurrentPage(1);
         } catch (err) {
             console.error('Failed to fetch users:', err);
         }
@@ -59,12 +68,11 @@ const UserList = () => {
 
                 {/* Main content chiếm phần còn lại */}
                 <div className="flex-grow-1 py-4 px-5" style={{ backgroundColor: "#667A8A", minHeight: "100vh" }}>
-                    <div className="card shadow-sm mb-4">
-                        <div className="card-body text-center">
+                <div className="card shadow-sm mb-4">
+                    <div className="card-body text-center">
                             <h2 className="mb-0">User Management</h2>
-                        </div>
                     </div>
-
+                </div>
                     <div className="d-flex justify-content-end mb-3">
                         <button
                             className="btn btn-primary"
@@ -88,7 +96,7 @@ const UserList = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map((user, index) => (
+                                {currentUsers.map((user, index) => (
                                     <tr key={index} style={{
                                         backgroundColor: index % 2 === 0 ? "#ffffff" : "#F4F6F8",
                                     }}>
@@ -115,6 +123,30 @@ const UserList = () => {
                             </tbody>
                         </table>
                     </div>
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                    <div className="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            Showing {indexOfFirstUser + 1} to {Math.min(indexOfLastUser, users.length)} of {users.length} users
+                        </div>
+                        <nav>
+                            <ul className="pagination mb-0">
+                                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => setCurrentPage(prev => prev - 1)}>Previous</button>
+                                </li>
+                                {[...Array(totalPages)].map((_, index) => (
+                                    <li key={index} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                        <button className="page-link" onClick={() => setCurrentPage(index + 1)}>{index + 1}</button>
+                                    </li>
+                                ))}
+                                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                    <button className="page-link" onClick={() => setCurrentPage(prev => prev + 1)}>Next</button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    )}
 
                     {/* Create Modal */}
                     <div className="modal fade" id="createUserModal" tabIndex="-1" aria-hidden="true">

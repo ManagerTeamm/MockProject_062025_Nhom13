@@ -97,9 +97,9 @@
   text-align: left;
 }
 .info-table th {
-  background: #f5f6fa;
-  font-weight: 600;
-  color: #222;
+  background: #ebebeb;
+  font-weight: 700;
+  color: #23294B;
 }
 .info-table tr:nth-child(even) {
   background: #f8fafc;
@@ -203,6 +203,13 @@
   min-width: 600px;
   max-width: 98vw;
   position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+.popup-form::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }
 .popup-title {
   text-align: center;
@@ -221,13 +228,16 @@
   margin-bottom: 22px;
 }
 .popup-date {
-  width: 220px;
+  width: 100%;
+  min-width: 220px;
+  max-width: 100%;
   padding: 10px 16px;
   border: 1.5px solid #d1d5db;
   border-radius: 8px;
   background: #f5f6fa;
   font-size: 1rem;
   font-family: inherit;
+  box-sizing: border-box;
 }
 .popup-desc {
   width: 100%;
@@ -355,4 +365,56 @@
 .hide-scrollbar {
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+/* Evidence Detail Style */
+.evidence-detail-container {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 32px 40px 32px 40px;
+  margin: 24px 40px 0 40px;
+  width: auto;
+}
+.evidence-detail-container h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #2ed0fa;
+}
+.evidence-section, .case-section, .suspect-section {
+  margin-bottom: 28px;
+  padding: 18px 24px;
+  background: #f5f6fa;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px #0001;
+}
+.evidence-section h3, .case-section h3, .suspect-section h3 {
+  margin-top: 0;
+  color: #648fd8;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+.evidence-section p, .case-section p, .suspect-section p {
+  margin: 6px 0;
+  font-size: 1.05rem;
+}
+.error-text {
+  color: red;
+  font-size: 13px;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+@media (max-width: 768px) {
+  .evidence-detail-container {
+    padding: 16px 8px;
+    margin: 16px 4px 0 4px;
+  }
+  .evidence-section, .case-section, .suspect-section {
+    padding: 10px 8px;
+  }
+  .evidence-detail-container h2 {
+    font-size: 1.3rem;
+  }
 } 

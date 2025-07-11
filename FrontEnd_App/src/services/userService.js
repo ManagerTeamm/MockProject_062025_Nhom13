@@ -25,13 +25,30 @@ export const getAllUsers = async () => {
 export const getUser = async () => {
     try {
         const userName = getUserNameFromToken();
+        const token = getCookie("token");
+        const response = await axios.get(`${Api_Url}/get-user`, {
+            params: { userName },
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data.data;
+    } catch (error) {
+        console.error("getUser error:", error);
+        throw error;
+    }
+};
+
+export const getUserFormUserName = async (userName) => {
+    try {
         const response = await axios.get(`${Api_Url}/get-user`, {
             params: { userName },
             headers: {
                 "Content-Type": "application/json"
             }
         });
-
         return response.data.data;
     } catch (error) {
         console.error("getUser error:", error);
