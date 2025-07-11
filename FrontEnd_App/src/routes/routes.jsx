@@ -15,9 +15,10 @@ import UserList from "../pages/admin/userList";
 import ReportSuspect from "../pages/reportSuspect";
 import ReportDetail from "../pages/reportDetail";
 import ReportPage from "../pages/report";
-import PatrolOfficerManagement from '../components/PatrolOfficerManagement'; 
+import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
+import ImageAndVideo from "../components/imageAndVideo";
 import Dashboard from "../pages/dashboard";
 import QAList from '../pages/qaList';
 import NavbarPhase2 from '../components/navbarphase2.jsx';
@@ -43,6 +44,7 @@ const AppRoutes = () => {
     { path: "/investigation", element: <Investigation /> },
     { path: "/evidence", element: <Evidence /> },
     { path: "/interviewslist", element: <InterviewsList /> },
+    { path: "/image-and-video", element: <ImageAndVideo /> },
     { path: "/qa-list", element: <QAList /> },
     { path: "/report-suspect", element: <ReportSuspect/>},
     { path: "/navbarphase2", element: <NavbarPhase2/>},
@@ -64,7 +66,7 @@ const AppRoutes = () => {
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <UserList /> }],
         },
-         {
+        {
           path: "admin/cases",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <CaseList /> }],
@@ -78,17 +80,17 @@ const AppRoutes = () => {
           path: "admin/report-detail/:reportId",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <ReportDetail /> }],
-          },
-          {
-              path: "admin/investigation",
-              element: <ProtectedRoute allowedRoles={["Admin"]} />,
-              children: [{ index: true, element: <Investigation /> }],
-          },
-          {
-              path: "admin/evidence",
-              element: <ProtectedRoute allowedRoles={["Admin"]} />,
-              children: [{ index: true, element: <Evidence /> }],
-          },
+        },
+        {
+          path: "admin/investigation",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Investigation /> }],
+        },
+        {
+          path: "admin/evidence",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <Evidence /> }],
+        },
         {
           path: "inmateadmission",
           element: <ProtectedRoute allowedRoles={["Patrol Officer"]} />,
