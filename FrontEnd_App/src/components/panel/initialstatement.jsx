@@ -31,7 +31,7 @@ const StatementForm = () => {
 
   const onSubmit = (formData) => {
     console.log("Submitted Data:", formData);
-    // Save logic goes here
+    // will handle save funct here
   };
 
   return (
@@ -41,7 +41,6 @@ const StatementForm = () => {
       </div>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
-        {/* Initial Information */}
         <div className="statement-box">
           <div className="section-title">Initial Information</div>
           <div className="section-content">
@@ -118,7 +117,6 @@ const StatementForm = () => {
           </div>
         </div>
 
-        {/* Detailed Statement */}
         <div className="statement-box">
           <div className="section-title">Detailed Statement</div>
           <div className="section-content">
@@ -143,7 +141,6 @@ const StatementForm = () => {
           </div>
         </div>
 
-        {/* Evidence Link */}
         <div className="statement-box">
           <div className="section-title d-flex justify-content-between">
             <span>Evidence Link</span>
@@ -180,7 +177,6 @@ const StatementForm = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="statement-actions">
           <Button variant="secondary" type="button">
             Back
