@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar';
+import { useNavigate } from 'react-router-dom';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
 
@@ -24,6 +25,7 @@ const statusClass = (status) => {
 
 
 const CaseList = () => {
+  const navigate = useNavigate();
   const [cases, setCases] = useState([]);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -64,6 +66,11 @@ const CaseList = () => {
     } catch (error) {
       console.error('Error fetching case data:', error);
     }
+  };
+
+  const handleCaseClick = (caseId) => {
+    // Navigate to Initial Response page with case ID
+    navigate(`/secure/admin/initial-response/${caseId}`);
   };
 
   const toggleSort = (field) => {
@@ -144,6 +151,7 @@ const CaseList = () => {
                   <th>Location</th>
                   {/* Status - With sort */}
                   <th onClick={() => toggleSort('Status')}>Status {renderSortArrow('Status')}</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,6 +165,14 @@ const CaseList = () => {
                       <td>{c.reporter}</td>
                       <td>{c.location}</td>
                       <td><span className={statusClass(c.status)}>{c.status}</span></td>
+                      <td>
+                        <button 
+                          className="btn btn-primary btn-sm"
+                          onClick={() => handleCaseClick(c.caseId)}
+                        >
+                          View Details
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (

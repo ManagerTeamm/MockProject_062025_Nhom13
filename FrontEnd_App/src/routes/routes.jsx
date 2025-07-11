@@ -18,12 +18,16 @@ import ReportPage from "../pages/report";
 import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
+import InitialResponse from "../components/initialResponse";
 
-//sample dashboard
-import Dashboard from "../samples/dashboard";
+import ImageAndVideo from "../components/imageAndVideo";
+import Dashboard from "../pages/dashboard";
+import QAList from '../pages/qaList';
+import NavbarPhase2 from '../components/navbarphase2.jsx';
 //sample medical support
 import Medical from "../samples/medical";
 import CaseDetailStep2 from "../pages/caseDetailStep2";
+
 
 
 const AppRoutes = () => {
@@ -67,6 +71,11 @@ const AppRoutes = () => {
           path: "admin/cases",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <CaseList /> }],
+        },
+        {
+          path: "admin/initial-response/:caseId",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <InitialResponse /> }],
         },
         {
           path: "admin/reports",

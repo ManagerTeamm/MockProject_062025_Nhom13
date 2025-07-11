@@ -1,9 +1,10 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BackEnd_Api.Dtos;
 using BackEnd_Api.Models;
 using BackEnd_Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BackEnd_Api.Repositories
 {
@@ -58,7 +59,7 @@ namespace BackEnd_Api.Repositories
                 CaseId = dto.CaseId,
                 Fullname = dto.Fullname,
                 Gender = dto.Gender,
-                Dob = dto.Dob is not null ? new DateTime(dto.Dob.Year, dto.Dob.Month, dto.Dob.Day) : (DateTime?)null,
+                Dob = dto.Dob != default ? new DateTime(dto.Dob.Year, dto.Dob.Month, dto.Dob.Day) : (DateTime?)null,
                 National = dto.Nationality,
                 Identification = dto.Identification,
                 CatchTime = dto.CatchTime,

@@ -1,26 +1,14 @@
-// src/components/navbarphase2.jsx
+// src/components/NavbarPhase2.jsx
 import React, { useState } from 'react';
-import '../css/navbarphase2.css';
+import styles from '../css/navbarphase2.module.css';
 
 const NavbarPhase2 = () => {
     const [openItem, setOpenItem] = useState('Initial Response');
 
     const navItems = [
-        {
-            id: 'Initial Response',
-            title: 'Initial Response',
-           
-        },
-        {
-            id: 'Scene Information',
-            title: 'Scene Information',
-            
-        },
-        {
-            id: 'Field Report Summary',
-            title: 'Field Report Summary',
-           
-        },
+        { id: 'Initial Response', title: 'Initial Response' },
+        { id: 'Scene Information', title: 'Scene Information' },
+        { id: 'Field Report Summary', title: 'Field Report Summary' },
     ];
 
     const toggleItem = (itemId) => {
@@ -28,15 +16,15 @@ const NavbarPhase2 = () => {
     };
 
     return (
-        <div className="navbar-container">
-            <div className="navbar-header">
+        <div className={styles.navbarContainer}>
+            <div className={styles.navbarHeader}>
                 {navItems.map((item) => (
                     <div
                         key={item.id}
-                        className={`navbar-item ${openItem === item.id ? 'active' : ''}`}
+                        className={`${styles.navbarItem} ${openItem === item.id ? styles.active : ''}`}
                         onClick={() => toggleItem(item.id)}
                     >
-                        <span className="dropdown-icon">
+                        <span className={styles.dropdownIcon}>
                             {openItem === item.id ? '▼' : '►'}
                         </span>
                         {item.title}
@@ -46,7 +34,7 @@ const NavbarPhase2 = () => {
 
             {navItems.map((item) =>
                 openItem === item.id && item.content ? (
-                    <div key={item.id} className="navbar-content show">
+                    <div key={item.id} className={styles.navbarContent}>
                         {item.content}
                     </div>
                 ) : null
