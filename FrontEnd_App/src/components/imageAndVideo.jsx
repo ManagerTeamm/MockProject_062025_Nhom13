@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Upload, X } from 'lucide-react';
-import '../css/imageAndVideo.css';
+import '../styles/imageAndVideo.css';
 import { useDropzone } from 'react-dropzone';
 
 const ImageAndVideo = () => {

@@ -28,6 +28,9 @@ import NavbarPhase2 from '../components/navbarphase2.jsx';
 import Medical from "../samples/medical";
 import CaseDetailStep2 from "../pages/caseDetailStep2";
 
+//sample nitial statement
+import ViewStatement from "../samples/viewInitialStatement";
+
 
 
 const AppRoutes = () => {
@@ -111,6 +114,11 @@ const AppRoutes = () => {
           path: "medical",
           element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
           children: [{ index: true, element: <Medical /> }],
+        },
+        {
+          path: "initialstatement",
+          element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
+          children: [{ index: true, element: <ViewStatement /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
         
