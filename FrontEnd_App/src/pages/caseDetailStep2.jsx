@@ -5,8 +5,9 @@ import StatementTable from '../components/caseDetailStep2/statementTable';
 import MediaTable from '../components/caseDetailStep2/mediaTable';
 import EvidenceTable from '../components/caseDetailStep2/evidenceTable';
 import ImageAndVideo from '../components/caseDetailStep2/imageAndVideo';
-//import StatementForm from '../components/caseDetailStep2/statementForm';
+import StatementForm from '../components/caseDetailStep2/initialStatement';
 //import EvidenceForm from '../components/caseDetailStep2/evidenceForm';
+import NavbarPhase2 from '../components/navbarphase2';
 
 const CaseDetailStep2 = ({
     initialStatements = [],
@@ -130,54 +131,66 @@ const CaseDetailStep2 = ({
                 <Sidebar />
             </div>
 
-            <div className="flex-grow-1 bg-white p-4">
-                <Card className="shadow">
-                    <Card.Header
-                        style={{ backgroundColor: '#C8E3FF' }}
-                        className="text-dark fw-bold text-center fs-5"
-                    >
-                        INFORMATION PROTECTION FIELD
-                    </Card.Header>
+            <div className="flex-grow-1 d-flex flex-column">
+                {/* Nội dung chính */}
+                <div className="flex-grow-1 p-4 bg-white">
+                    <NavbarPhase2 activeItem="Scene Information" onChange={(newItem) => console.log(newItem)} />
 
-                    <Card.Body>
-                        {showAddMediaForm ? (
-                            <ImageAndVideo
-                                onSubmit={handleSubmitMedia}
-                                onCancel={handleCancelMedia}
-                                initialData={editingMedia}
-                            />
-                        )  : (
-                            <>
-                                <StatementTable
-                                    statements={statements}
-                                    onAdd={handleAddStatement}
-                                    onEdit={handleEditStatement}
-                                    onDelete={handleDeleteStatement}
+                    <Card className="shadow mt-4">
+                        <Card.Header
+                            style={{ backgroundColor: '#C8E3FF' }}
+                            className="text-dark fw-bold text-center fs-5"
+                        >
+                            INFORMATION PROTECTION FIELD
+                        </Card.Header>
+
+                        <Card.Body>
+                            {showAddMediaForm ? (
+                                <ImageAndVideo
+                                    onSubmit={handleSubmitMedia}
+                                    onCancel={handleCancelMedia}
+                                    initialData={editingMedia}
                                 />
+                            ) :
+                                showAddStatementForm ? (
+                                    <StatementForm
+                                        onSubmit={handleSubmitStatement}
+                                        onCancel={handleCancelStatement}
+                                        initialData={editingStatement}
+                                    />
+                                ) :                            (
+                                <>
+                                    <StatementTable
+                                        statements={statements}
+                                        onAdd={handleAddStatement}
+                                        onEdit={handleEditStatement}
+                                        onDelete={handleDeleteStatement}
+                                    />
 
-                                <MediaTable
-                                    medias={medias}
-                                    onAdd={handleAddMedia}
-                                    onEdit={handleEditMedia}
-                                    onDelete={handleDeleteMedia}
-                                />
+                                    <MediaTable
+                                        medias={medias}
+                                        onAdd={handleAddMedia}
+                                        onEdit={handleEditMedia}
+                                        onDelete={handleDeleteMedia}
+                                    />
 
-                                <EvidenceTable
-                                    evidences={evidences}
-                                    onAdd={handleAddEvidence}
-                                    onEdit={handleEditEvidence}
-                                    onDelete={handleDeleteEvidence}
-                                />
+                                    <EvidenceTable
+                                        evidences={evidences}
+                                        onAdd={handleAddEvidence}
+                                        onEdit={handleEditEvidence}
+                                        onDelete={handleDeleteEvidence}
+                                    />
 
-                                <div className="d-flex justify-content-end gap-2 mt-4">
-                                    <Button variant="secondary">Back</Button>
-                                    <Button variant="success">Save</Button>
-                                    <Button variant="primary">Next page</Button>
-                                </div>
-                            </>
-                        )}
-                    </Card.Body>
-                </Card>
+                                    <div className="d-flex justify-content-end gap-2 mt-4">
+                                        <Button variant="secondary">Back</Button>
+                                        <Button variant="success">Save</Button>
+                                        <Button variant="primary">Next page</Button>
+                                    </div>
+                                </>
+                            )}
+                        </Card.Body>
+                    </Card>
+                </div>
             </div>
         </div>
     );

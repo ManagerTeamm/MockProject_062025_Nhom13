@@ -23,8 +23,8 @@ const StatementTable = ({ statements, onAdd, onEdit, onDelete }) => {
                         {statements.map((s, idx) => (
                             <tr key={s.id || idx}>
                                 <td>{idx + 1}</td>
-                                <td>{s.type}</td>
-                                <td>{s.provider}</td>
+                                <td>{s.role}</td>
+                                <td>{s.initialName}</td>
                                 <td>{s.date}</td>
                                 <td>
                                     <Button variant="outline-secondary" size="sm" onClick={() => onEdit(s)}>✎</Button>{' '}

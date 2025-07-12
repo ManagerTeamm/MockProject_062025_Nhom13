@@ -1,34 +1,29 @@
-// src/components/navbarphase2.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/navbarphase2.css';
 
-const NavbarPhase2 = () => {
-    const [openItem, setOpenItem] = useState('Initial Response');
-
+const NavbarPhase2 = ({ activeItem, onChange }) => {
     const navItems = [
-        {
-            id: 'Initial Response',
-            title: 'Initial Response',
-           
-        },
-        {
-            id: 'Scene Information',
-            title: 'Scene Information',
-            
-        },
-        {
-            id: 'Field Report Summary',
-            title: 'Field Report Summary',
-           
-        },
+        { id: 'Initial Response', title: 'Initial Response' },
+        { id: 'Scene Information', title: 'Scene Information' },
+        { id: 'Field Report Summary', title: 'Field Report Summary' },
     ];
 
+    const [openItem, setOpenItem] = useState(activeItem || navItems[0].id);
+
+    useEffect(() => {
+        if (activeItem) {
+            setOpenItem(activeItem); // Update if activeItem prop changes
+        }
+    }, [activeItem]);
+
     const toggleItem = (itemId) => {
-        setOpenItem(openItem === itemId ? null : itemId);
+        const newItem = openItem === itemId ? null : itemId;
+        setOpenItem(newItem);
+        if (onChange) onChange(newItem); // optional callback
     };
 
     return (
-        <div className="navbar-container">
+        <div className="navbar-wrapper">
             <div className="navbar-header">
                 {navItems.map((item) => (
                     <div
@@ -43,14 +38,6 @@ const NavbarPhase2 = () => {
                     </div>
                 ))}
             </div>
-
-            {navItems.map((item) =>
-                openItem === item.id && item.content ? (
-                    <div key={item.id} className="navbar-content show">
-                        {item.content}
-                    </div>
-                ) : null
-            )}
         </div>
     );
 };

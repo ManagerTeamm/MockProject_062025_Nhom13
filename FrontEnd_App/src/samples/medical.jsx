@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../components/sidebar";
-import MedicalSupportForm from "../components/panel/medicalsupport";
+import MedicalSupportForm from "../components/panel/medicalSupport";
 import "../styles/medical.css";
 
 const Medical = () => {
