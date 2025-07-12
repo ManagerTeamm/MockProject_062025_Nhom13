@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackEnd_Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250711025835_Initial")]
-    partial class Initial
+    [Migration("20250712071002_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,7 +71,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Severity")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -82,7 +81,6 @@ namespace BackEnd_Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TypeCase")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CaseId");

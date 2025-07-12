@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  # Database
+  database:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Crime123@
+    ports:
+      - "1433:1433"
+    volumes:
+      - db_data:/var/opt/mssql
+
+  # Backend API
+  backend:
+    build: ./BackEnd_Api
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=database,1433;Database=CrimeDB;User Id=sa;Password=Crime123@;TrustServerCertificate=true;
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+
+  # Frontend
+  frontend:
+    build: ./FrontEnd_App
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=http://localhost:5000
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

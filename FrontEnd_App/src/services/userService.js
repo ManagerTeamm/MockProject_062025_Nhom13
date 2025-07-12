@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { getCookie } from '../utils/cookie';
 import { getUserNameFromToken } from '../utils/jwt';
-const Api_Url = 'https://localhost:7064/api/User';
+import { API_CONFIG, buildUserEndpoint, logEnvironmentInfo } from '../utils/apiConfig';
+
+// Log environment info for debugging
+logEnvironmentInfo();
 
 
 export const getAllUsers = async () => {
@@ -10,7 +13,7 @@ export const getAllUsers = async () => {
         console.log("token:", token);
         if (!token) throw new Error("No token found");
 
-        const response = await axios.get(`${Api_Url}/users`, {
+        const response = await axios.get(buildUserEndpoint('/users'), {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -26,7 +29,7 @@ export const getUser = async () => {
     try {
         const userName = getUserNameFromToken();
         const token = getCookie("token");
-        const response = await axios.get(`${Api_Url}/get-user`, {
+        const response = await axios.get(buildUserEndpoint('/get-user'), {
             params: { userName },
             headers: {
                 "Content-Type": "application/json",
@@ -44,7 +47,7 @@ export const getUser = async () => {
 export const getUserFormUserName = async (userName) => {
     try {
         const token = getCookie("token");
-        const response = await axios.get(`${Api_Url}/get-user`, {
+        const response = await axios.get(buildUserEndpoint('/get-user'), {
             params: { userName },
             headers: {
                 "Content-Type": "application/json",
@@ -62,7 +65,7 @@ export const createUser = async (userData) => {
     try {
         const token = getCookie("token");
         if (!token) throw new Error("No token found");
-        const response = await axios.post(`${Api_Url}/create-user`, userData, {
+        const response = await axios.post(buildUserEndpoint('/create-user'), userData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
@@ -81,7 +84,7 @@ export const updateUser = async (userData) => {
         const token = getCookie("token");
         if (!token) throw new Error("No token found");
         console.log("data", userData);
-        const response = await axios.put(`${Api_Url}/update-user?username=${userData.userName}`, userData, {
+        const response = await axios.put(buildUserEndpoint(`/update-user?username=${userData.userName}`), userData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"
@@ -99,7 +102,7 @@ export const deleteUser = async (username) => {
     try {
         const token = getCookie("token");
         if (!token) throw new Error("No token found");
-        const response = await axios.delete(`${Api_Url}/delete-user?username=${username}`, {
+        const response = await axios.delete(buildUserEndpoint(`/delete-user?username=${username}`), {
             headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json"

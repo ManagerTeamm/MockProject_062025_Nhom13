@@ -18,6 +18,12 @@ namespace BackEnd_Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Configure Kestrel to listen on all interfaces for Docker
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(5000); // HTTP
+            });
+
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -112,13 +118,19 @@ namespace BackEnd_Api
 
             app.UseCors("AllowAllOrigins");
 
-            if (app.Environment.IsDevelopment())
+            // Enable Swagger for API testing (including Docker)
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Crime Investigation API v1");
+                c.RoutePrefix = "swagger"; // Sets Swagger UI at /swagger
+            });
 
-            app.UseHttpsRedirection();
+            // Only use HTTPS redirection in production, not in Docker environment
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();

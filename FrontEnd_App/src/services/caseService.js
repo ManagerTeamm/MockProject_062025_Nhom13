@@ -1,11 +1,14 @@
 ﻿import axios from 'axios';
 import { getCookie } from '../utils/cookie';
-const API_URL = 'https://localhost:7064/api/Case';
+import { buildCaseEndpoint, logEnvironmentInfo } from '../utils/apiConfig';
+
+// Log environment info for debugging
+logEnvironmentInfo();
 
 //Lưu bảo vệ hiện trường
 export const saveSceneProtection = async (formData) => {
     const token = getCookie("token");
-    const response = await axios.post(`${API_URL}/create-protection`, formData, {
+    const response = await axios.post(buildCaseEndpoint('/create-protection'), formData, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'multipart/form-data'

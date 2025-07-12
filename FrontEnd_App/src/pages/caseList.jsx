@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/sidebar';
 import { useNavigate } from 'react-router-dom';
+import { buildCaseEndpoint, logEnvironmentInfo } from '../utils/apiConfig';
 import '../styles/investigation.css';
 import '../styles/evidence.css';
 
-const API_URL = 'https://localhost:7064/api/Case'; 
+// Log environment info for debugging
+logEnvironmentInfo(); 
 
 const statusClass = (status) => {
   switch (status) {
@@ -56,7 +58,7 @@ const CaseList = () => {
     }
 
     try {
-      const response = await fetch(`${API_URL}?${params}`);
+      const response = await fetch(buildCaseEndpoint(`?${params}`));
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

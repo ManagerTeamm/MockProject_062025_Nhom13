@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from '../css/PatrolOfficerManagement.module.css';
-const API_BASE_URL = 'http://localhost:5151/api/PatrolOfficerUser';
+import { buildPatrolOfficerEndpoint, logEnvironmentInfo } from '../utils/apiConfig';
+
+// Log environment info for debugging
+logEnvironmentInfo();
 
 const PatrolOfficerManagement = ({ onSelectOfficer }) => {
   const [officers, setOfficers] = useState([]);
@@ -40,7 +43,7 @@ const PatrolOfficerManagement = ({ onSelectOfficer }) => {
       if (presentStatus) params.append('presentStatus', presentStatus);
       if (zone) params.append('zone', zone);
 
-      const response = await fetch(`${API_BASE_URL}?${params.toString()}`);
+      const response = await fetch(`${buildPatrolOfficerEndpoint('')}?${params.toString()}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

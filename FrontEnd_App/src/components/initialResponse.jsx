@@ -7,9 +7,10 @@ import MedicalSupportForm from './MedicalSupportForm';
 import Sidebar from '../components/sidebar';
 import { Form, Button, Row, Col, Alert } from 'react-bootstrap';
 import { getCookie } from '../utils/cookie';
+import { buildCaseEndpoint, buildInitialResponseEndpoint, logEnvironmentInfo } from '../utils/apiConfig';
 
-const API_URL = 'https://localhost:7064/api/Case';
-const INITIAL_RESPONSE_API_URL = 'https://localhost:7064/api/initial-response';
+// Log environment info for debugging
+logEnvironmentInfo();
 
 export default function InitialResponse() {
   const { caseId } = useParams();
@@ -69,7 +70,7 @@ export default function InitialResponse() {
       console.log("token:", token);
       if (!token) throw new Error("No token found");
 
-      const response = await fetch(`${INITIAL_RESPONSE_API_URL}/${caseId}`, {
+      const response = await fetch(buildInitialResponseEndpoint(`/${caseId}`), {
         headers: new Headers({
           'Authorization': `Bearer ${token}`
         })
@@ -159,7 +160,7 @@ export default function InitialResponse() {
         console.log("token:", token);
         if (!token) throw new Error("No token found");
         
-        const resp = await fetch(`${API_URL}/${caseId}`, {
+        const resp = await fetch(buildCaseEndpoint(`/${caseId}`), {
           headers: new Headers({
             'Authorization': `Bearer ${token}`
           })
@@ -251,7 +252,7 @@ export default function InitialResponse() {
       if (!token) throw new Error("No token found");
 
       // Gửi lên API
-      const resp = await fetch(INITIAL_RESPONSE_API_URL, {
+      const resp = await fetch(buildInitialResponseEndpoint(''), {
         method: 'POST',
         body: form,
         headers: new Headers({

@@ -1,6 +1,7 @@
 import Layout from '../components/baseLayout';
 import React, { useState, useMemo, useCallback } from 'react';
 import axios from 'axios';
+import { buildReportEndpoint, logEnvironmentInfo } from '../utils/apiConfig';
 import {
     Box,
     Button,
@@ -337,9 +338,12 @@ export default function MultiStepFormMui() {
             }
         }
 
+        // Log environment info for debugging
+        logEnvironmentInfo();
+        
         // Send FormData
         try {
-            await axios.post("https://localhost:7064/api/report", fd, {
+            await axios.post(buildReportEndpoint(''), fd, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

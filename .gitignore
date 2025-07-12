@@ -32,6 +32,7 @@ Desktop.ini
 .vscode/
 .vs/
 .idea/
+.vsidx
 *.sublime-workspace
 *.sublime-project
 
@@ -88,3 +89,6 @@ wwwroot/lib/
 
 files
 images
+
+# Docker
+.dockerignore
