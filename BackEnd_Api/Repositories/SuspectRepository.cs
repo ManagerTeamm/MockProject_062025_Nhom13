@@ -5,6 +5,9 @@ using BackEnd_Api.Dtos;
 using BackEnd_Api.Models;
 using BackEnd_Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BackEnd_Api.Repositories
 {
