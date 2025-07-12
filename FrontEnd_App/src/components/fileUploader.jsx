@@ -21,11 +21,10 @@ const FileUploader = ({ onFileSelected }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
     const onDrop = useCallback((acceptedFiles) => {
-        const fileNames = acceptedFiles.map(file => file.name);
         setSelectedFiles(prev => [...prev, ...acceptedFiles]);
-
-        const combined = fileNames.join(','); // Gộp tên file cách nhau bằng dấu phẩy
-        onFileSelected && onFileSelected(combined);
+        
+        // FIX: Trả về File objects thật thay vì tên file
+        onFileSelected && onFileSelected(acceptedFiles);
     }, [onFileSelected]);
 
     const { getRootProps, getInputProps } = useDropzone({

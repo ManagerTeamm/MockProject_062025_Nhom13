@@ -19,12 +19,17 @@ import PatrolOfficerManagement from '../components/PatrolOfficerManagement';
 import SceneProtectionForm from "../components/sceneProtectionForm";
 import EvidenceDetail from "../pages/evidenceDetail";
 import ImageAndVideo from "../components/caseDetailStep2/imageAndVideo";
+import InitialResponse from "../components/initialResponse";
 import Dashboard from "../pages/dashboard";
 import QAList from '../pages/qaList';
 import NavbarPhase2 from '../components/navbarphase2.jsx';
 //sample medical support
 import Medical from "../samples/medical";
 import CaseDetailStep2 from "../pages/caseDetailStep2";
+
+//sample nitial statement
+import ViewStatement from "../samples/viewInitialStatement";
+
 
 
 const AppRoutes = () => {
@@ -70,6 +75,11 @@ const AppRoutes = () => {
           children: [{ index: true, element: <CaseList /> }],
         },
         {
+          path: "admin/initial-response/:caseId",
+          element: <ProtectedRoute allowedRoles={["Admin"]} />,
+          children: [{ index: true, element: <InitialResponse /> }],
+        },
+        {
           path: "admin/reports",
           element: <ProtectedRoute allowedRoles={["Admin"]} />,
           children: [{ index: true, element: <ReportPage /> }],
@@ -103,6 +113,11 @@ const AppRoutes = () => {
           path: "medical",
           element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
           children: [{ index: true, element: <Medical /> }],
+        },
+        {
+          path: "initialstatement",
+          element: <ProtectedRoute allowedRoles={["Admin", "Patrol Officer", "Investigator"]} />,
+          children: [{ index: true, element: <ViewStatement /> }],
         },
         { path: "logout", element: <div>Logging out...</div> },
         

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/navbarphase2.css';
+import styles from '../css/navbarphase2.module.css';
 
 const NavbarPhase2 = ({ activeItem, onChange }) => {
     const navItems = [
@@ -23,21 +23,28 @@ const NavbarPhase2 = ({ activeItem, onChange }) => {
     };
 
     return (
-        <div className="navbar-wrapper">
-            <div className="navbar-header">
+        <div className={styles.navbarContainer}>
+            <div className={styles.navbarHeader}>
                 {navItems.map((item) => (
                     <div
                         key={item.id}
-                        className={`navbar-item ${openItem === item.id ? 'active' : ''}`}
+                        className={`${styles.navbarItem} ${openItem === item.id ? styles.active : ''}`}
                         onClick={() => toggleItem(item.id)}
                     >
-                        <span className="dropdown-icon">
+                        <span className={styles.dropdownIcon}>
                             {openItem === item.id ? '▼' : '►'}
                         </span>
                         {item.title}
                     </div>
                 ))}
             </div>
+            {navItems.map((item) =>
+                openItem === item.id && item.content ? (
+                    <div key={item.id} className={styles.navbarContent}>
+                        {item.content}
+                    </div>
+                ) : null
+            )}
         </div>
     );
 };

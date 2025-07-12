@@ -43,10 +43,12 @@ export const getUser = async () => {
 
 export const getUserFormUserName = async (userName) => {
     try {
+        const token = getCookie("token");
         const response = await axios.get(`${Api_Url}/get-user`, {
             params: { userName },
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
             }
         });
         return response.data.data;

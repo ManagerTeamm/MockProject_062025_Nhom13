@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import '../styles/PatrolOfficerManagement.css';
-
+import styles from '../css/PatrolOfficerManagement.module.css';
 const API_BASE_URL = 'http://localhost:5151/api/PatrolOfficerUser';
 
 const PatrolOfficerManagement = ({ onSelectOfficer }) => {
@@ -90,102 +89,109 @@ const PatrolOfficerManagement = ({ onSelectOfficer }) => {
     }));
   };
 
-    const handleAddClick = () => {
-        const selected = Object.keys(selectedOfficerUserNames).filter(userName => selectedOfficerUserNames[userName]);
+  const handleAddClick = () => {
+    const selected = Object.keys(selectedOfficerUserNames).filter(userName => selectedOfficerUserNames[userName]);
 
-        if (selected.length > 0) {
-            const selectedOfficers = officers.filter(officer => selected.includes(officer.userName));
-            console.log("Selected Officers:", selectedOfficers);
-
-            if (onSelectOfficer) {
-                onSelectOfficer(selectedOfficers);
-            }
-        } else {
-            alert("Please select at least one officer to add.");
-        }
-    };
-
+    if (selected.length > 0) {
+      const selectedOfficers = officers.filter(officer => selected.includes(officer.userName));
+      if (onSelectOfficer) {
+        onSelectOfficer(selectedOfficers);
+      }
+    } else {
+      alert("Please select at least one officer to add.");
+    }
+  };
 
   const totalPages = Math.ceil(totalCount / pageSize);
   const displayedRangeStart = (pageNumber - 1) * pageSize + 1;
   const displayedRangeEnd = Math.min(pageNumber * pageSize, totalCount);
 
   return (
-    <div className="container">
-      <div className="header">ADD PATROL OFFICER TO SCENE</div>
+    <div className={styles.container}>
+      <div className={styles.header}>ADD PATROL OFFICER TO SCENE</div>
 
-      <div className="controls">
-        <div className="filterGroup">
+      <div className={styles.controls}>
+        <div className={styles.filterGroup}>
           <input
             type="text"
             placeholder="Search"
             value={searchQuery}
             onChange={handleSearchChange}
-            className="searchInput"
+            className={styles.searchInput}
           />
-          <select value={presentStatus} onChange={handleStatusChange} className="selectFilter">
+          <select value={presentStatus} onChange={handleStatusChange} className={styles.selectFilter}>
             {statusOptions.map(option => (
               <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </select>
-          <select value={zone} onChange={handleZoneChange} className="selectFilter">
+          <select value={zone} onChange={handleZoneChange} className={styles.selectFilter}>
             {zoneOptions.map(option => (
               <option key={option.value} value={option.value}>{option.label}</option>
             ))}
           </select>
         </div>
-        <button onClick={handleAddClick} className="addButton">ADD</button>
+        <button onClick={handleAddClick} className={styles.addButton}>ADD</button>
       </div>
 
-      {loading && <p className="loadingMessage">Loading patrol officers...</p>}
-      {error && <p className="errorMessage">Error: {error}</p>}
+      {loading && <p className={styles.loadingMessage}>Loading patrol officers...</p>}
+      {error && <p className={styles.errorMessage}>Error: {error}</p>}
       {!loading && !error && (
         <>
-          <div className="tableWrapper">
-            <table className="table">
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
               <thead>
-                <tr><th className="th">Serial</th><th className="th">Select</th><th className="th">Full Name</th><th className="th">Present Status</th><th className="th">Role</th><th className="th">Phone Number</th><th className="th">Zone</th></tr>
+                <tr>
+                  <th className={styles.th}>Serial</th>
+                  <th className={styles.th}>Select</th>
+                  <th className={styles.th}>Full Name</th>
+                  <th className={styles.th}>Present Status</th>
+                  <th className={styles.th}>Role</th>
+                  <th className={styles.th}>Phone Number</th>
+                  <th className={styles.th}>Zone</th>
+                </tr>
               </thead>
               <tbody>
                 {officers.length > 0 ? (
-                  officers.map((officer, index) => (
-                    <tr
-                      key={officer.userName}
-                      className={officer.presentStatus === 'On Above Case' ? 'rowOnAboveCase' :
-                               (officer.presentStatus === 'On Call' ? 'rowOnCall' : '')}
-                    >
-                      <td className="td">{(pageNumber - 1) * pageSize + index + 1}</td>
-                      <td className="td">
-                        <input
-                          type="checkbox"
-                          checked={!!selectedOfficerUserNames[officer.userName]}
-                          onChange={() => handleCheckboxChange(officer.userName)}
-                        />
-                      </td>
-                      <td className="td">{officer.fullName}</td>
-                      <td className="td">{officer.presentStatus}</td>
-                      <td className="td">{officer.role}</td>
-                      <td className="td">{officer.phoneNumber}</td>
-                      <td className="td">{officer.zone}</td>
-                    </tr>
-                  ))
+                  officers.map((officer, index) => {
+                    const rowClass = officer.presentStatus === 'OnAboveCase'
+                      ? styles.rowOnAboveCase
+                      : (officer.presentStatus === 'OnCall' ? styles.rowOnCall : '');
+
+                    return (
+                      <tr key={officer.userName} className={rowClass}>
+                        <td className={styles.td}>{displayedRangeStart + index}</td>
+                        <td className={styles.td}>
+                          <input
+                            type="checkbox"
+                            checked={!!selectedOfficerUserNames[officer.userName]}
+                            onChange={() => handleCheckboxChange(officer.userName)}
+                          />
+                        </td>
+                        <td className={styles.td}>{officer.fullName}</td>
+                        <td className={styles.td}>{officer.presentStatus}</td>
+                        <td className={styles.td}>{officer.role}</td>
+                        <td className={styles.td}>{officer.phoneNumber}</td>
+                        <td className={styles.td}>{officer.zone}</td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
-                    <td colSpan="7" className="td" style={{ textAlign: 'center' }}>No patrol officers found.</td>
+                    <td colSpan="7" className={styles.td} style={{ textAlign: 'center' }}>No patrol officers found.</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
 
-          <div className="pagination">
-            <span className="pageInfo">
+          <div className={styles.pagination}>
+            <span className={styles.pageInfo}>
               Showing {displayedRangeStart} to {displayedRangeEnd} / Total {totalCount} records
             </span>
             <button
               onClick={() => handlePageChange(pageNumber - 1)}
               disabled={pageNumber <= 1}
-              className="pageButton"
+              className={styles.pageButton}
             >
               &lt;
             </button>
@@ -193,7 +199,7 @@ const PatrolOfficerManagement = ({ onSelectOfficer }) => {
               <button
                 key={pNum}
                 onClick={() => handlePageChange(pNum)}
-                className={pNum === pageNumber ? 'pageButton pageButtonActive' : 'pageButton'}
+                className={pNum === pageNumber ? `${styles.pageButton} ${styles.pageButtonActive}` : styles.pageButton}
               >
                 {pNum}
               </button>
@@ -201,7 +207,7 @@ const PatrolOfficerManagement = ({ onSelectOfficer }) => {
             <button
               onClick={() => handlePageChange(pageNumber + 1)}
               disabled={pageNumber >= totalPages}
-              className="pageButton"
+              className={styles.pageButton}
             >
               &gt;
             </button>
