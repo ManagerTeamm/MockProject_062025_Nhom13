@@ -1,31 +1,26 @@
-/* src/css/navbarphase2.css */
-
+/* Reset body layout override */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-/*    padding: 20px;*/
     background-color: #f0f2f5;
-/*    display: flex;*/
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
 }
 
-.navbar-container {
+/* Navbar Full Width Wrapper */
+.navbar-wrapper {
     width: 100%;
-    max-width: 900px;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+/* Top horizontal navbar bar */
 .navbar-header {
     display: flex;
     border-bottom: 1px solid #ccc;
     background-color: #e0e0e0;
+    width: 100%;
 }
 
+/* Each item in navbar */
 .navbar-item {
     flex: 1;
     padding: 12px 16px;
@@ -40,23 +35,24 @@ body {
     border-right: 1px solid #ccc;
 }
 
-.navbar-item:last-child {
-    border-right: none;
-}
+    .navbar-item:last-child {
+        border-right: none;
+    }
 
-.navbar-item:hover {
-    background-color: #d1d1d1;
-}
+    .navbar-item:hover {
+        background-color: #d1d1d1;
+    }
 
-.navbar-item.active {
-    background-color: #bad3ff;
-}
+    .navbar-item.active {
+        background-color: #bad3ff;
+    }
 
 .dropdown-icon {
     margin-right: 6px;
     font-size: 0.9em;
 }
 
+/* Optional dropdown content below navbar */
 .navbar-content {
     padding: 15px 20px;
     background-color: #fff;
@@ -69,25 +65,9 @@ body {
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.navbar-content ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.navbar-content ul li {
-    padding: 6px 0;
-    color: #555;
-    font-size: 0.95em;
-    cursor: pointer;
-}
-
-.navbar-content ul li:hover {
-    color: #007bff;
 }
