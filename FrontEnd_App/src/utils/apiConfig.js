@@ -10,8 +10,8 @@ const ENVIRONMENTS = {
     API_URL: 'https://localhost:7064/api',
   },
   production: {
-    BASE_URL: 'http://localhost:5000',
-    API_URL: 'http://localhost:5000/api',
+    BASE_URL: '/api',  // Use nginx proxy
+    API_URL: '/api',   // Use nginx proxy
   }
 };
 
@@ -32,17 +32,17 @@ const currentConfig = getCurrentConfig();
 
 export const API_CONFIG = {
   BASE_URL: process.env.REACT_APP_API_URL || currentConfig.BASE_URL,
-  API_URL: process.env.REACT_APP_API_URL ? `${process.env.REACT_APP_API_URL}/api` : currentConfig.API_URL,
+  API_URL: process.env.REACT_APP_API_URL || currentConfig.API_URL,
   
-  // Specific endpoint URLs
-  AUTH_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Auth`,
-  USER_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/User`,
-  CASE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Case`,
-  REPORT_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Report`,
-  EVIDENCE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Evidence`,
-  SUSPECT_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Suspect`,
-  INITIAL_RESPONSE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/initial-response`,
-  PATROL_OFFICER_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/PatrolOfficerUser`,
+  // Specific endpoint URLs - Use consistent base URL
+  AUTH_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Auth`,
+  USER_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/User`,
+  CASE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Case`,
+  REPORT_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Report`,
+  EVIDENCE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Evidence`,
+  SUSPECT_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Suspect`,
+  INITIAL_RESPONSE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/initial-response`,
+  PATROL_OFFICER_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/PatrolOfficerUser`,
   
   TIMEOUT: 50000,
   

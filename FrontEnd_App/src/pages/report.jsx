@@ -37,6 +37,7 @@ const ReportPage = () => {
         setLoading(true);
         try {
             const response = await reportService.getReports();
+            console.log(response);
             if (response.success) {
                 setReports(response.data || []);
             } else {

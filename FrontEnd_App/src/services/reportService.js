@@ -1,10 +1,9 @@
 import axios from 'axios';
 import { getCookie } from '../utils/cookie';
-import { API_CONFIG } from '../utils/apiConfig';
+import { API_CONFIG, buildReportEndpoint } from '../utils/apiConfig';
 
 const token = getCookie("token");
 const apiClient = axios.create({
-    baseURL: API_CONFIG.API_REPORT_URL,
     headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
@@ -15,7 +14,10 @@ const apiClient = axios.create({
 export const reportService = {
     getReports: async () => {
         try {
-            const response = await apiClient.get('/get-reports');
+            const url = buildReportEndpoint("/get-reports");
+            console.log('🔧 Calling API:', url);
+            const response = await apiClient.get(url);
+                  console.log('🔧 Reponse API:', response);
             return response.data;
         } catch (error) {
             console.error('Error fetching reports:', error);
@@ -25,7 +27,7 @@ export const reportService = {
 
     getReportDetail: async (reportId) => {
         try {
-            const response = await apiClient.get(`/report-detail/${reportId}`);
+            const response = await apiClient.get(buildReportEndpoint(`/report-detail/${reportId}`));
             return response.data;
         } catch (error) {
             console.error('Error fetching report detail:', error);
@@ -35,7 +37,7 @@ export const reportService = {
 
     approveReport: async (reportId) => {
         try {
-            const response = await apiClient.post(`/report-approve/${reportId}`);
+            const response = await apiClient.post(buildReportEndpoint(`/report-approve/${reportId}`));
             return response.data;
         } catch (error) {
             console.error('Error approving report:', error);
@@ -44,10 +46,10 @@ export const reportService = {
     },
     declineReport: async (reportId) => {
         try {
-            const response = await apiClient.patch(`/report-decline/${reportId}`);
+            const response = await apiClient.patch(buildReportEndpoint(`/report-decline/${reportId}`));
             return response.data;
         } catch (error) {
-            console.error('Error approving report:', error);
+            console.error('Error declining report:', error);
             throw error;
         }
     }
