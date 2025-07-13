@@ -35,14 +35,14 @@ export const API_CONFIG = {
   API_URL: process.env.REACT_APP_API_URL || currentConfig.API_URL,
   
   // Specific endpoint URLs - Use consistent base URL
-  AUTH_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Auth`,
-  USER_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/User`,
-  CASE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Case`,
-  REPORT_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Report`,
-  EVIDENCE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Evidence`,
-  SUSPECT_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/Suspect`,
-  INITIAL_RESPONSE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/initial-response`,
-  PATROL_OFFICER_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/PatrolOfficerUser`,
+  AUTH_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Auth`,
+  USER_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/User`,
+  CASE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Case`,
+  REPORT_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Report`,
+  EVIDENCE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Evidence`,
+  SUSPECT_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/Suspect`,
+  INITIAL_RESPONSE_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/initial-response`,
+  PATROL_OFFICER_URL: `${process.env.REACT_APP_API_URL || currentConfig.BASE_URL}/api/PatrolOfficerUser`,
   
   TIMEOUT: 50000,
   
@@ -69,9 +69,10 @@ export const logEnvironmentInfo = () => {
   console.log('🔧 API Configuration:');
   console.log('NODE_ENV:', process.env.NODE_ENV);
   console.log('Window location:', window.location.hostname + ':' + window.location.port);
-  console.log('Environment used:', API_CONFIG.ENVIRONMENT);
+  console.log('Environment used:', isDevelopment ? 'development' : isProduction ? 'production' : 'unknown');
   console.log('Base URL:', API_CONFIG.BASE_URL);
   console.log('API URL:', API_CONFIG.API_URL);
+  console.log('AUTH URL:', API_CONFIG.AUTH_URL); // Thêm log cho AUTH URL
 };
 
 // Export specific endpoint builders

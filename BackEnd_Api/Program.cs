@@ -18,11 +18,14 @@ namespace BackEnd_Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Configure Kestrel to listen on all interfaces for Docker
-            builder.WebHost.ConfigureKestrel(options =>
+            // Configure Kestrel for Docker only (not in development)
+            if (!builder.Environment.IsDevelopment())
             {
-                options.ListenAnyIP(5000); // HTTP
-            });
+                builder.WebHost.ConfigureKestrel(options =>
+                {
+                    options.ListenAnyIP(5000); // HTTP for Docker
+                });
+            }
 
             // Add services to the container.
             builder.Services.AddControllers();
