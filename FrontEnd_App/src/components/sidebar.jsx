@@ -1,6 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getUser } from "../services/userService";
+import { removeCookie } from "../utils/cookie";
 
 const Sidebar = ({ hideToggleButton = false }) => {
     const location = useLocation();
@@ -31,7 +32,13 @@ const Sidebar = ({ hideToggleButton = false }) => {
 
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    }, []); 
+
+    const handleLogOut = () => {
+        removeCookie("token");
+        window.location.href = "/login";
+    };
+
 
     const isActive = (path) => location.pathname.startsWith(path);
 
@@ -193,8 +200,7 @@ const Sidebar = ({ hideToggleButton = false }) => {
                         <button
                             className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
                             onClick={() => {
-                                localStorage.removeItem("token");
-                                window.location.href = "/login";
+                                handleLogOut()
                             }}
                         >
                             <i className="bi bi-box-arrow-right fs-4"></i>

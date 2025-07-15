@@ -3,6 +3,7 @@
 // import MedicalSupportForm from "../components/MedicalSupportForm";
 // import "../styles/medical.css";
 
+
 // const Medical = () => {
 //   return (
 //     <div className="medical-container">

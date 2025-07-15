@@ -178,7 +178,7 @@ const ReportPage = () => {
             )}
 
             {/* Desktop Sidebar */}
-            <div className="bg-light border-end min-vh-100" style={{ width: "250px" }}>
+            <div className="bg-light border-end min-vh-100">
                 <Sidebar />
             </div>
 

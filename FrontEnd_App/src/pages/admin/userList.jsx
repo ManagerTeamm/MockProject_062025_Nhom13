@@ -15,8 +15,6 @@ const UserList = () => {
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(users.length / usersPerPage);
 
-
-
     const fetchUsers = async () => {
         try {
             const data = await getAllUsers();
@@ -62,7 +60,7 @@ const UserList = () => {
     return (
             <div className="d-flex">
                 {/* Sidebar cố định 250px */}
-                <div className="bg-light border-end min-vh-100" style={{ width: "250px" }}>
+                <div className="bg-light border-end min-vh-100">
                     <Sidebar />
                 </div>
 
