@@ -840,7 +840,7 @@ export default function MultiStepFormMui() {
 
                             {activeStep !== steps.length - 1 && (
                                 <Button
-                                    // disabled={!isStepValid || !isValidEmail}
+                                    disabled={!isStepValid || !isValidEmail}
                                     variant="contained"
                                     type="button"
                                     onClick={handleNextOrSubmit}

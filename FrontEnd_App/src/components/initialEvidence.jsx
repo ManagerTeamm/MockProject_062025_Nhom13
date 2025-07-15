@@ -41,22 +41,44 @@ const InitialEvidenceForm = ({ initialData, onSubmit, onCancel }) => {
     };
 
     const handleFileUpload = (event) => {
+        const allowedTypes = [
+            'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
+            'application/pdf',
+            'application/msword', // .doc
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+            'application/vnd.ms-powerpoint', // .ppt
+            'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+            'video/mp4',
+            'image/vnd.adobe.photoshop', // .psd
+            'application/postscript' // .ai (có thể khác nhau tùy phần mềm xuất ra)
+        ];
+
         const files = event.target.files;
         if (files.length > 0) {
-            const newFiles = Array.from(files).map(file => ({
-                file: file, // Store the actual File object
-                name: file.name,
-                size: (file.size / 1024).toFixed(0),
-                date: new Date().toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                }),
-                type: file.type
-            }));
+            const newFiles = Array.from(files)
+                .filter(file => {
+                    if (!allowedTypes.includes(file.type)) {
+                        alert(`File "${file.name}" is not in supported format.`);
+                        return false;
+                    }
+                    return true;
+                })
+                .map(file => ({
+                    file: file,
+                    name: file.name,
+                    size: (file.size / 1024).toFixed(0),
+                    date: new Date().toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    }),
+                    type: file.type
+                }));
+
             setAttachments(prev => [...prev, ...newFiles]);
         }
     };
+
 
     const handleRemoveAttachment = (index) => {
         setAttachments(prev => prev.filter((_, i) => i !== index));
@@ -161,8 +183,10 @@ const InitialEvidenceForm = ({ initialData, onSubmit, onCancel }) => {
                             id="fileInput"
                             multiple
                             style={{ display: 'none' }}
+                            accept=".jpg,.jpeg,.png,.gif,.mp4,.pdf,.psd,.ai,.doc,.docx,.ppt,.pptx"
                             onChange={handleFileUpload}
                         />
+
                     </div>
 
                     {attachments.length > 0 && (
