@@ -115,7 +115,9 @@ export default function MultiStepFormMui() {
                 return (
                     formData.typeOfCrime?.trim() !== '' &&
                     formData.severity?.trim() !== '' &&
-                    formData.dateTimeOfOccurrence !== null
+                    formData.dateTimeOfOccurrence !== null &&  // Check for null
+                    formData.dateTimeOfOccurrence !== '' &&    // Check for empty string
+                    formData.dateTimeOfOccurrence !== undefined // Check for undefined
                 );
             case 2:
                 return true;
