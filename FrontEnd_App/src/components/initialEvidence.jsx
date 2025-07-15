@@ -121,103 +121,114 @@ const InitialEvidenceForm = ({ initialData, onSubmit, onCancel }) => {
     };
 
     return (
-        <div className="container" style={{ maxWidth: '760px' }}>
-            <div className="bg-white">
-                <h3 className="text-center mb-1">Initial Evidence</h3>
-                <p className="text-center text-muted mb-4">
-                    This form is used to document the initial evidence connected to the incident.
-                </p>
+        <div className="card shadow-lg p-4 my-4" style={{
+            width: '100%',
+            borderRadius: '15px',
+            backgroundColor: '#ffffff',
 
-                <div className="row mb-3">
-                    <div className="col-md-6">
-                        <label className="form-label">Types of Evidence <span className="text-danger">*</span></label>
-                        <select
-                            className="form-select"
-                            name="typeOfEvidence"
-                            value={typeOfEvidence}
-                            onChange={handleChange}
-                            required
-                        >
-                            {evidenceTypes.map(opt => (
-                                <option key={opt.value} value={opt.value}>{opt.label}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="col-md-6">
-                        <label className="form-label">Evidence Location</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="evidenceLocation"
-                            placeholder="E.g., At the scene, in the car,…"
-                            value={evidenceLocation}
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
+            boxSizing: 'border-box'
+        }}>
+            <div className="card-body">
+                <div className="container" style={{ maxWidth: '760px' }}>
+                    <div className="">
+                        <h3 className="text-center mb-1">Initial Evidence</h3>
+                        <p className="text-center text-muted mb-4">
+                            This form is used to document the initial evidence connected to the incident.
+                        </p>
 
-                <div className="mb-4">
-                    <label className="form-label">Evidence Description</label>
-                    <textarea
-                        className="form-control"
-                        name="evidenceDescription"
-                        rows="4"
-                        placeholder="Provide a clear and detailed description of the evidence (shape, material, identifying features...)"
-                        value={evidenceDescription}
-                        onChange={handleChange}
-                    ></textarea>
-                </div>
-
-                <div className="mb-3">
-                    <h5>Attachments</h5>
-                    <div
-                        className="p-4 border rounded text-center mb-3"
-                        style={{ backgroundColor: '#f7f7f7', borderStyle: 'dashed' }}
-                        onClick={() => document.getElementById('fileInput').click()}
-                    >
-                        <i className="bi bi-cloud-upload fs-1 text-muted"></i>
-                        <p className="my-2">Drag & drop files or <span className="text-primary">Browse</span></p>
-                        <p className="text-muted small">Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT</p>
-                        <input
-                            type="file"
-                            id="fileInput"
-                            multiple
-                            style={{ display: 'none' }}
-                            accept=".jpg,.jpeg,.png,.gif,.mp4,.pdf,.psd,.ai,.doc,.docx,.ppt,.pptx"
-                            onChange={handleFileUpload}
-                        />
-
-                    </div>
-
-                    {attachments.length > 0 && (
-                        <div className="row g-2">
-                            {attachments.map((file, idx) => (
-                                <div className="col-md-6" key={idx}>
-                                    <div className="d-flex align-items-center p-2 border rounded bg-light">
-                                        <span className={`badge ${getFileExtensionBadge(file.name)} me-2`}>
-                                            {file.name.split('.').pop()}
-                                        </span>
-                                        <div className="flex-grow-1">
-                                            <div className="fw-semibold text-truncate">{file.name}</div>
-                                            <small className="text-muted">{file.size} KB · {file.date}</small>
-                                        </div>
-                                        <button
-                                            className="btn-close ms-auto"
-                                            onClick={() => handleRemoveAttachment(idx)}
-                                        ></button>
-                                    </div>
-                                </div>
-                            ))}
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <label className="form-label">Types of Evidence <span className="text-danger">*</span></label>
+                                <select
+                                    className="form-select"
+                                    name="typeOfEvidence"
+                                    value={typeOfEvidence}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    {evidenceTypes.map(opt => (
+                                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label">Evidence Location</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="evidenceLocation"
+                                    placeholder="E.g., At the scene, in the car,…"
+                                    value={evidenceLocation}
+                                    onChange={handleChange}
+                                />
+                            </div>
                         </div>
-                    )}
-                </div>
 
-                <div className="d-flex justify-content-end gap-2 mt-4">
-                    <button className="btn btn-secondary px-4 py-2" onClick={handleCancel}>Cancel</button>
-                    <button className="btn btn-dark px-4 py-2" onClick={handleCreate}>{isEditing ? 'Update' : 'Create'}</button>
+                        <div className="mb-4">
+                            <label className="form-label">Evidence Description</label>
+                            <textarea
+                                className="form-control"
+                                name="evidenceDescription"
+                                rows="4"
+                                placeholder="Provide a clear and detailed description of the evidence (shape, material, identifying features...)"
+                                value={evidenceDescription}
+                                onChange={handleChange}
+                            ></textarea>
+                        </div>
+
+                        <div className="mb-3">
+                            <h5>Attachments</h5>
+                            <div
+                                className="p-4 border rounded text-center mb-3"
+                                style={{ backgroundColor: '#f7f7f7', borderStyle: 'dashed' }}
+                                onClick={() => document.getElementById('fileInput').click()}
+                            >
+                                <i className="bi bi-cloud-upload fs-1 text-muted"></i>
+                                <p className="my-2">Drag & drop files or <span className="text-primary">Browse</span></p>
+                                <p className="text-muted small">Supported formats: JPEG, PNG, GIF, MP4, PDF, PSD, AI, Word, PPT</p>
+                                <input
+                                    type="file"
+                                    id="fileInput"
+                                    multiple
+                                    style={{ display: 'none' }}
+                                    accept=".jpg,.jpeg,.png,.gif,.mp4,.pdf,.psd,.ai,.doc,.docx,.ppt,.pptx"
+                                    onChange={handleFileUpload}
+                                />
+
+                            </div>
+
+                            {attachments.length > 0 && (
+                                <div className="row g-2">
+                                    {attachments.map((file, idx) => (
+                                        <div className="col-md-6" key={idx}>
+                                            <div className="d-flex align-items-center p-2 border rounded bg-light">
+                                                <span className={`badge ${getFileExtensionBadge(file.name)} me-2`}>
+                                                    {file.name.split('.').pop()}
+                                                </span>
+                                                <div className="flex-grow-1">
+                                                    <div className="fw-semibold text-truncate">{file.name}</div>
+                                                    <small className="text-muted">{file.size} KB · {file.date}</small>
+                                                </div>
+                                                <button
+                                                    className="btn-close ms-auto"
+                                                    onClick={() => handleRemoveAttachment(idx)}
+                                                ></button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="d-flex justify-content-end gap-2 mt-4">
+                            <button className="btn btn-secondary px-4 py-2" onClick={handleCancel}>Cancel</button>
+                            <button className="btn btn-dark px-4 py-2" onClick={handleCreate}>{isEditing ? 'Update' : 'Create'}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     );
 };
 
