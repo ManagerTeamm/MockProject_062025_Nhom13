@@ -426,10 +426,9 @@ export default function MultiStepFormMui() {
                                     value={formData.relationToIncident}
                                     onChange={handleChange}
                                 >
+                                    <FormControlLabel value="witness" control={<Radio />} label="Witness" />
                                     <FormControlLabel value="victim" control={<Radio />} label="Victim" />
-                                    <FormControlLabel value="Relevant" control={<Radio />} label="Relevant" />
-                                    <FormControlLabel value="offender" control={<Radio />} label="Offender" />
-                                    <FormControlLabel value="anonymous" control={<Radio />} label="Anonymous" />
+                                    <FormControlLabel value="suspect" control={<Radio />} label="Suspect" />
                                 </RadioGroup>
                             </FormControl>
                         </Box>
