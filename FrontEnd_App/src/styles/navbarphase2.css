@@ -1,0 +1,93 @@
+/* src/css/navbarphase2.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+/*    padding: 20px;*/
+    background-color: #f0f2f5;
+/*    display: flex;*/
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.navbar-container {
+    width: 100%;
+    max-width: 900px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.navbar-header {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+    background-color: #e0e0e0;
+}
+
+.navbar-item {
+    flex: 1;
+    padding: 12px 16px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #ccc;
+}
+
+.navbar-item:last-child {
+    border-right: none;
+}
+
+.navbar-item:hover {
+    background-color: #d1d1d1;
+}
+
+.navbar-item.active {
+    background-color: #bad3ff;
+}
+
+.dropdown-icon {
+    margin-right: 6px;
+    font-size: 0.9em;
+}
+
+.navbar-content {
+    padding: 15px 20px;
+    background-color: #fff;
+    animation: slideDown 0.3s ease-in-out;
+    border-bottom: 1px solid #eee;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.navbar-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar-content ul li {
+    padding: 6px 0;
+    color: #555;
+    font-size: 0.95em;
+    cursor: pointer;
+}
+
+.navbar-content ul li:hover {
+    color: #007bff;
+}

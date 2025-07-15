@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styles from '../css/PatrolOfficerManagement.module.css';
-
 const API_BASE_URL = 'http://localhost:5151/api/PatrolOfficerUser';
 
 const PatrolOfficerManagement = ({ onSelectOfficer }) => {
