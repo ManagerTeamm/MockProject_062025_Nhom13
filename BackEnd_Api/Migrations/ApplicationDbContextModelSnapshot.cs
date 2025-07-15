@@ -323,41 +323,6 @@ namespace BackEnd_Api.Migrations
                     b.ToTable("Indictments");
                 });
 
-            modelBuilder.Entity("BackEnd_Api.Models.InitialResponse", b =>
-                {
-                    b.Property<string>("InitialResponseId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ArrivalTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CaseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DispatchTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PreliminaryAssessment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("InitialResponseId");
-
-                    b.HasIndex("CaseId");
-
-                    b.ToTable("InitialResponses");
-                });
-
             modelBuilder.Entity("BackEnd_Api.Models.Inmate", b =>
                 {
                     b.Property<string>("InmateId")
@@ -504,71 +469,6 @@ namespace BackEnd_Api.Migrations
                     b.HasKey("MeasureSurveyId");
 
                     b.ToTable("MeasureSurveys");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.MedicalRescueSupport", b =>
-                {
-                    b.Property<string>("MedicalRescueSupportId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ArrivalTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InitialResponseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LocationAssigned")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PersonelAssigned")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SupportType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UnitId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("MedicalRescueSupportId");
-
-                    b.HasIndex("InitialResponseId");
-
-                    b.ToTable("MedicalRescueSupports");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.MedicalRescueSupportAttachment", b =>
-                {
-                    b.Property<string>("MedicalRescueSupportAttachmentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MedicalRescueSupportId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("MedicalRescueSupportAttachmentId");
-
-                    b.HasIndex("MedicalRescueSupportId");
-
-                    b.ToTable("MedicalRescueSupportAttachments");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Permission", b =>
@@ -921,72 +821,6 @@ namespace BackEnd_Api.Migrations
                     b.HasIndex("CaseId");
 
                     b.ToTable("SceneMedias");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ScenePreservationMeasure", b =>
-                {
-                    b.Property<string>("ScenePreservationMeasureId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AreaCovered")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InitialResponseId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProtectionMethods")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ResponsibleOfficerUserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdateAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ScenePreservationMeasureId");
-
-                    b.HasIndex("InitialResponseId");
-
-                    b.HasIndex("ResponsibleOfficerUserName");
-
-                    b.ToTable("ScenePreservationMeasures");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ScenePreservationMeasureAttachment", b =>
-                {
-                    b.Property<string>("ScenePreservationMeasureAttachmentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ScenePreservationMeasureId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ScenePreservationMeasureAttachmentId");
-
-                    b.HasIndex("ScenePreservationMeasureId");
-
-                    b.ToTable("ScenePreservationMeasureAttachments");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.SceneProtection", b =>
@@ -1607,17 +1441,6 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("Prosecution");
                 });
 
-            modelBuilder.Entity("BackEnd_Api.Models.InitialResponse", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.Case", "Case")
-                        .WithMany()
-                        .HasForeignKey("CaseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Case");
-                });
-
             modelBuilder.Entity("BackEnd_Api.Models.Inmate", b =>
                 {
                     b.HasOne("BackEnd_Api.Models.Sentence", "Sentence")
@@ -1664,28 +1487,6 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("Case");
 
                     b.Navigation("CreatedOfficer");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.MedicalRescueSupport", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.InitialResponse", "InitialResponse")
-                        .WithMany("MedicalRescueSupports")
-                        .HasForeignKey("InitialResponseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("InitialResponse");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.MedicalRescueSupportAttachment", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.MedicalRescueSupport", "MedicalRescueSupport")
-                        .WithMany("Attachments")
-                        .HasForeignKey("MedicalRescueSupportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MedicalRescueSupport");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.PhysicalInvest", b =>
@@ -1850,36 +1651,6 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("Case");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ScenePreservationMeasure", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.InitialResponse", "InitialResponse")
-                        .WithMany("ScenePreservationMeasures")
-                        .HasForeignKey("InitialResponseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BackEnd_Api.Models.User", "ResponsibleOfficer")
-                        .WithMany()
-                        .HasForeignKey("ResponsibleOfficerUserName")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("InitialResponse");
-
-                    b.Navigation("ResponsibleOfficer");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ScenePreservationMeasureAttachment", b =>
-                {
-                    b.HasOne("BackEnd_Api.Models.ScenePreservationMeasure", "ScenePreservationMeasure")
-                        .WithMany("Attachments")
-                        .HasForeignKey("ScenePreservationMeasureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ScenePreservationMeasure");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.SceneProtection", b =>
@@ -2158,13 +1929,6 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("WarrantEvidences");
                 });
 
-            modelBuilder.Entity("BackEnd_Api.Models.InitialResponse", b =>
-                {
-                    b.Navigation("MedicalRescueSupports");
-
-                    b.Navigation("ScenePreservationMeasures");
-                });
-
             modelBuilder.Entity("BackEnd_Api.Models.Interview", b =>
                 {
                     b.Navigation("Questions");
@@ -2178,11 +1942,6 @@ namespace BackEnd_Api.Migrations
             modelBuilder.Entity("BackEnd_Api.Models.MeasureSurvey", b =>
                 {
                     b.Navigation("Evidences");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.MedicalRescueSupport", b =>
-                {
-                    b.Navigation("Attachments");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Permission", b =>
@@ -2209,11 +1968,6 @@ namespace BackEnd_Api.Migrations
                     b.Navigation("RolePermissions");
 
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("BackEnd_Api.Models.ScenePreservationMeasure", b =>
-                {
-                    b.Navigation("Attachments");
                 });
 
             modelBuilder.Entity("BackEnd_Api.Models.Sentence", b =>
