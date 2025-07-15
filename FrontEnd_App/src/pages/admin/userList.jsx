@@ -15,8 +15,6 @@ const UserList = () => {
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(users.length / usersPerPage);
 
-
-
     const fetchUsers = async () => {
         try {
             const data = await getAllUsers();
