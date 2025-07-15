@@ -120,8 +120,6 @@ namespace BackEnd_Api.Controllers
                 var newCase = await _reportRepository.ApproveReport(id);
 
                 return Ok(ApiResponseHelper<object>.SuccessResult(newCase));
-
-
             }catch(ArgumentException e)
             {
                 return BadRequest(ApiResponseHelper<string>.NotFoundResult(e.Message));
@@ -131,6 +129,7 @@ namespace BackEnd_Api.Controllers
                 return StatusCode(500, ApiResponseHelper<string>.FailureResult("Fail Exception", new[] { e.Message }, 500));
             }
         }
+
         [HttpPatch("report-decline/{id}")]
         public async Task<IActionResult> DeclienReport(string id)
         {

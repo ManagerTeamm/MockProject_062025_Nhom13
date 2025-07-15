@@ -224,7 +224,7 @@ const ReportDetail = () => {
 
             {/* Main Content */}
             <div className="flex-grow-1">
-                <div className="container-fluid px-2 px-md-3 py-3 py-md-4" style={{ marginTop: "60px" }}>
+                <div className="container-fluid px-2 px-md-3 py-3 py-md-4" style={{ marginTop: "30px" }}>
                     {/* Header */}
                     <div className="mb-3 mb-md-4 d-lg-none">
                         <button className="btn btn-link text-decoration-none p-0 mb-2 mb-md-3" onClick={handleBack}>
