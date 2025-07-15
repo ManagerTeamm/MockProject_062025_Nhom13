@@ -448,11 +448,22 @@ export default function MultiStepFormMui() {
                                 <div className='col-6'>
                                     <TextField
                                         select
+                                        displayEmpty
                                         name="typeOfCrime"
                                         label="Type of crime"
                                         variant="outlined"
                                         fullWidth
                                         required
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            displayEmpty: true,               // cho phép show giá trị rỗng
+                                            renderValue: (selected) =>       // custom render: nếu rỗng thì show text
+                                                selected && selected.length > 0
+                                                    ? selected
+                                                    : 'Select an option',
+                                        }}
                                         onChange={handleChange}
                                         value={formData.typeOfCrime || ''}
                                     >
@@ -472,6 +483,16 @@ export default function MultiStepFormMui() {
                                         variant="outlined"
                                         fullWidth
                                         required
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                        SelectProps={{
+                                            displayEmpty: true,               // cho phép show giá trị rỗng
+                                            renderValue: (selected) =>       // custom render: nếu rỗng thì show text
+                                                selected && selected.length > 0
+                                                    ? selected
+                                                    : 'Select an option',
+                                        }}
                                         value={formData.severity || ''}
                                         onChange={handleChange}
                                     >
@@ -497,6 +518,7 @@ export default function MultiStepFormMui() {
 
                             <TextField
                                 fullWidth
+                                placeholder='E.g., 123 Main St, Apt 4C, New York, NY 10001'
                                 name="detailedAddress"
                                 label="Detailed address"
                                 onChange={handleDetailedAddressChange}
@@ -510,7 +532,7 @@ export default function MultiStepFormMui() {
                             <TextField
                                 name="incidentDescription"
                                 label="Description of the incident"
-                                placeholder="Description of the incident"
+                                placeholder="Briefly describe what happened, including key facts such as time, location, and main events."
                                 multiline
                                 rows={4}
                                 fullWidth
