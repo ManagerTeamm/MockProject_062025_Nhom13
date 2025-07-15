@@ -83,6 +83,7 @@ namespace BackEnd_Api
                 .AsImplementedInterfaces()
                 .WithScopedLifetime()
             );
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddAuthentication(options =>
             {

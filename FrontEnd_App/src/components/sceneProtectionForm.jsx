@@ -20,19 +20,22 @@ const SceneProtectionForm = ({ caseId, onSave, onCancel, editData }) => {
         if (files) {
             setForm(prev => ({ ...prev, [name]: files[0] }));
         } else {
-            setForm(prev => ({ ...prev, [name]: value }));  
+            setForm(prev => ({ ...prev, [name]: value }));
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            if (!selectedOfficer) {
+                alert('Please fill in all required fields.');
+                return;
+            }
             const formWithAttachments = {
                 ...form,
                 attachment: attachments
             };
 
-            // Call onSave callback if provided
             if (onSave) {
                 onSave(formWithAttachments);
             }
@@ -55,11 +58,12 @@ const SceneProtectionForm = ({ caseId, onSave, onCancel, editData }) => {
                 endTime: editData.endTime || '',
                 areaCovered: editData.areaCovered || '',
                 specialInstructions: editData.specialInstructions || '',
-                attachment: editData.attachment || null
+                attachment: editData.attachment || null,
+                attachmentFilePaths: editData.attachmentFilePaths || ''
             }));
 
             // Load existing attachments
-            if (editData.attachment) {
+            if (editData.attachment.length) {
                 if (Array.isArray(editData.attachment)) {
                     setAttachments(editData.attachment);
                 } else if (typeof editData.attachment === 'string') {
@@ -117,45 +121,69 @@ const SceneProtectionForm = ({ caseId, onSave, onCancel, editData }) => {
     };
 
     const handleAddOfficerList = async (officerList) => {
+        console.log('Selected officers:', officerList); // Debug
+
         if (officerList.length > 0) {
             const firstOfficer = officerList[0];
+            console.log('First officer:', firstOfficer); // Debug
+
             setForm((prev) => ({
                 ...prev,
                 officerUserName: firstOfficer.userName,
             }));
-            const officer = await getUserFormUserName(firstOfficer.userName);
-            setSelectedOfficer(officer.fullName);
+
+            try {
+                const officer = await getUserFormUserName(firstOfficer.userName);
+                console.log('Officer details:', officer); // Debug
+                setSelectedOfficer(officer.fullName);
+            } catch (error) {
+                console.error('Error getting officer details:', error);
+                setSelectedOfficer(firstOfficer.userName); // Fallback
+            }
+
             setShowOfficerModal(false);
         }
     };
 
     const getFileExtensionBadge = (fileName) => {
-    const ext = fileName.split('.').pop().toLowerCase();
-    const map = {
-        png: 'bg-danger',
-        jpg: 'bg-danger',
-        jpeg: 'bg-danger',
-        gif: 'bg-danger',
-        pdf: 'bg-primary',
-        doc: 'bg-info',
-        docx: 'bg-info',
-        mp4: 'bg-warning text-dark'
+        // Kiểm tra xem fileName có tồn tại và có phải là string không
+        if (!fileName || typeof fileName !== 'string') {
+            return 'bg-secondary'; // Default badge color
+        }
+
+        const ext = fileName.split('.').pop()?.toLowerCase();
+
+        // Kiểm tra xem ext có tồn tại không
+        if (!ext) {
+            return 'bg-secondary';
+        }
+
+        const map = {
+            png: 'bg-danger',
+            jpg: 'bg-danger',
+            jpeg: 'bg-danger',
+            gif: 'bg-danger',
+            pdf: 'bg-primary',
+            doc: 'bg-info',
+            docx: 'bg-info',
+            mp4: 'bg-warning text-dark'
+        };
+        return map[ext] || 'bg-secondary';
     };
-    return map[ext] || 'bg-secondary';
-};
 
     return (
         <Card className="mx-auto" style={{ maxWidth: '900px' }}>
             <Card.Header style={{ backgroundColor: '#C8E3FF' }} className="text-dark">
-                <div className='text-center' style={{fontSize: '24px', fontWeight: 'bold'}}>INFORMATION PROTECTION FIELD</div>
+                <div className='text-center' style={{ fontSize: '24px', fontWeight: 'bold' }}>INFORMATION PROTECTION FIELD</div>
             </Card.Header>
             <Card.Body>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
-                        <Form.Label className="fw-bold">RESPONSIBLE UNIT / OFFICER</Form.Label>
+                        <Form.Label className="fw-bold">RESPONSIBLE UNIT / OFFICER *</Form.Label>
                         <Form.Control
                             name="officerUserName"
                             value={selectedOfficer}
+                            required
                             readOnly
                             placeholder="Click to select officer..."
                             onClick={() => setShowOfficerModal(true)}
@@ -210,11 +238,11 @@ const SceneProtectionForm = ({ caseId, onSave, onCancel, editData }) => {
                         <Form.Control as="textarea" rows={3} name="specialInstructions" value={form.specialInstructions} onChange={handleChange} />
                     </Form.Group>
 
-                     <Form.Group className="mb-4">
+                    <Form.Group className="mb-4">
                         <Form.Label className="fw-bold">SCENE SKETCH / ATTACHMENTS (Optional)</Form.Label>
 
                         {/* File upload area */}
-                        <div 
+                        <div
                             className="border border-dashed p-4 text-center mb-3"
                             style={{ borderColor: '#ddd', borderRadius: '8px', cursor: 'pointer' }}
                             onClick={() => document.getElementById('sceneFileInput').click()}
@@ -237,33 +265,42 @@ const SceneProtectionForm = ({ caseId, onSave, onCancel, editData }) => {
                         </div>
 
                         {/* Attached files list */}
-                        {attachments.length > 0 && (
-                            <div className="mb-3">
-                                <strong>Attached Files:</strong>
-                                <div className="mt-2">
-                                    {attachments.map((attachment, index) => (
-                                        <div key={index} className="d-flex justify-content-between align-items-center p-2 border rounded mb-2">
-                                            <div className="d-flex align-items-center">
-                                                <span className={`badge ${getFileExtensionBadge(attachment.name)} me-2`}>
-                                                    {attachment.name.split('.').pop().toUpperCase()}
-                                                </span>
-                                                <div>
-                                                    <div className="fw-bold">{attachment.name}</div>
-                                                    <small className="text-muted">{attachment.size} KB · {attachment.date}</small>
-                                                </div>
-                                            </div>
-                                            <Button
-                                                variant="outline-danger"
-                                                size="sm"
-                                                onClick={() => handleRemoveFile(index)}
-                                            >
-                                                <i className="bi bi-trash"></i>
-                                            </Button>
-                                        </div>
-                                    ))}
+                        {attachments.map((attachment, index) => (
+                            <div key={index} className="d-flex justify-content-between align-items-center p-2 border rounded mb-2">
+                                <div className="d-flex align-items-center">
+                                    <span className={`badge ${getFileExtensionBadge(attachment.name)} me-2`}>
+                                        {attachment.name ? attachment.name.split('.').pop()?.toUpperCase() || 'FILE' : 'FILE'}
+                                    </span>
+                                    <div>
+                                        <div className="fw-bold">{attachment.name || 'Unknown file'}</div>
+                                        <small className="text-muted">{attachment.size || 0} KB · {attachment.date || 'Unknown date'}</small>
+                                    </div>
                                 </div>
+                                <Button
+                                    variant="outline-danger"
+                                    size="sm"
+                                    onClick={() => handleRemoveFile(index)}
+                                >
+                                    <i className="bi bi-trash"></i>
+                                </Button>
                             </div>
+                        ))}
+
+                        {form.attachmentFilePaths?.length > 0 && (
+                            <>
+                                <h6>Saved files</h6>
+                                {form.attachmentFilePaths.map((file, index) => (
+                                    <div key={index} className="d-flex justify-content-between align-items-center p-2 border rounded mb-2">
+                                        <div className="d-flex align-items-center">
+                                            <a href={file}>{file}</a>
+                                        </div>
+                                    </div>
+                                ))}
+                            </>
                         )}
+
+
+
                     </Form.Group>
 
                     <div className="d-flex justify-content-end gap-2">

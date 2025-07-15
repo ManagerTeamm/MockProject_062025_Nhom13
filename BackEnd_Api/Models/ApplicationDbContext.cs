@@ -49,6 +49,11 @@ namespace BackEnd_Api.Models
         public DbSet<VictimEvidence> VictimEvidences { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ReportParties> ReportParties { get; set; }
+        public DbSet<InitialResponse> InitialResponses { get; set; }
+        public DbSet<ScenePreservationMeasure> ScenePreservationMeasures { get; set; }
+        public DbSet<ScenePreservationMeasureAttachment> ScenePreservationMeasureAttachments { get; set; }
+        public DbSet<MedicalRescueSupport> MedicalRescueSupports { get; set; }
+        public DbSet<MedicalRescueSupportAttachment> MedicalRescueSupportAttachments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -469,6 +474,72 @@ namespace BackEnd_Api.Models
                 .WithMany(c => c.Witnesses)
                 .HasForeignKey(w => w.CaseId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // InitialResponse
+            modelBuilder.Entity<InitialResponse>(entity =>
+            {
+                entity.HasKey(e => e.InitialResponseId);
+                entity.Property(e => e.CaseId).IsRequired();
+                entity.HasOne(e => e.Case)
+                      .WithMany()
+                      .HasForeignKey(e => e.CaseId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.ScenePreservationMeasures)
+                      .WithOne(spm => spm.InitialResponse)
+                      .HasForeignKey(spm => spm.InitialResponseId);
+
+                entity.HasMany(e => e.MedicalRescueSupports)
+                      .WithOne(mrs => mrs.InitialResponse)
+                      .HasForeignKey(mrs => mrs.InitialResponseId);
+            });
+
+            // ScenePreservationMeasure
+            modelBuilder.Entity<ScenePreservationMeasure>(entity =>
+            {
+                entity.HasKey(e => e.ScenePreservationMeasureId);
+                entity.Property(e => e.ResponsibleOfficerUserName).IsRequired();
+                entity.HasOne(e => e.ResponsibleOfficer)
+                      .WithMany()
+                      .HasForeignKey(e => e.ResponsibleOfficerUserName)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.InitialResponse)
+                      .WithMany(ir => ir.ScenePreservationMeasures)
+                      .HasForeignKey(e => e.InitialResponseId);
+
+                entity.HasMany(e => e.Attachments)
+                      .WithOne(att => att.ScenePreservationMeasure)
+                      .HasForeignKey(att => att.ScenePreservationMeasureId);
+            });
+
+            // ScenePreservationMeasureAttachment
+            modelBuilder.Entity<ScenePreservationMeasureAttachment>(entity =>
+            {
+                entity.HasKey(e => e.ScenePreservationMeasureAttachmentId);
+                entity.Property(e => e.FilePath).IsRequired();
+            });
+
+            // MedicalRescueSupport
+            modelBuilder.Entity<MedicalRescueSupport>(entity =>
+            {
+                entity.HasKey(e => e.MedicalRescueSupportId);
+                entity.Property(e => e.SupportType).IsRequired();
+                entity.HasOne(e => e.InitialResponse)
+                      .WithMany(ir => ir.MedicalRescueSupports)
+                      .HasForeignKey(e => e.InitialResponseId);
+
+                entity.HasMany(e => e.Attachments)
+                      .WithOne(att => att.MedicalRescueSupport)
+                      .HasForeignKey(att => att.MedicalRescueSupportId);
+            });
+
+            // MedicalRescueSupportAttachment
+            modelBuilder.Entity<MedicalRescueSupportAttachment>(entity =>
+            {
+                entity.HasKey(e => e.MedicalRescueSupportAttachmentId);
+                entity.Property(e => e.FilePath).IsRequired();
+            });
         }
 
     }
