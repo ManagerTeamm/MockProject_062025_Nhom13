@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import sampleStatement from "../../samples/sameplestatement";
-import "../../styles/initialstatement.css";
+import styles from "../../styles/initialstatement.module.css";
 import { useForm } from "react-hook-form";
 
 const StatementForm = () => {
@@ -35,15 +35,15 @@ const StatementForm = () => {
   };
 
   return (
-    <div className="statement-main">
-      <div className="statement-title">
+    <div className={styles["statement-main"]}>
+      <div className={styles["statement-title"]}>
         VIEW <span>INITIAL STATEMENT</span>
       </div>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <div className="statement-box">
-          <div className="section-title">Initial Information</div>
-          <div className="section-content">
+        <div className={styles["statement-box"]}>
+          <div className={styles["section-title"]}>Initial Information</div>
+          <div className={styles["section-content"]}>
             <Row>
               <Col md={6}>
                 <Form.Group>
@@ -105,7 +105,7 @@ const StatementForm = () => {
               <Col md={6}>
                 <Form.Group>
                   <Form.Label>Role</Form.Label>
-                  <Form.Select defaultValue={data.role} {...register("role")}>
+                  <Form.Select defaultValue={data.role} {...register("role")}> 
                     <option>Witness</option>
                     <option>Victim</option>
                     <option>Suspect</option>
@@ -117,48 +117,24 @@ const StatementForm = () => {
           </div>
         </div>
 
-        <div className="statement-box">
-          <div className="section-title">Detailed Statement</div>
-          <div className="section-content">
-            <Form.Label className="sub-label">
-              Content of the Statement
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={6}
-              defaultValue={data.content}
-              {...register("content", {
-                required: "Statement content is required",
-                minLength: {
-                  value: 20,
-                  message: "Must be at least 20 characters",
-                },
-              })}
-            />
-            {errors.content && (
-              <small className="text-danger">{errors.content.message}</small>
-            )}
-          </div>
-        </div>
-
-        <div className="statement-box">
-          <div className="section-title d-flex justify-content-between">
+        <div className={styles["statement-box"]}>
+          <div className={`${styles["section-title"]} d-flex justify-content-between`}> 
             <span>Evidence Link</span>
             <Form.Group controlId="uploadFile">
               <Form.Label className="mb-0">Upload File</Form.Label>
               <Form.Control
                 type="file"
                 multiple
-                onChange={(e) => handleFileUpload(e)}
+                onChange={handleFileUpload}
               />
             </Form.Group>
           </div>
 
-          <div className="file-grid">
+          <div className={styles["file-grid"]}>
             {[...(data.files || []), ...uploadedFiles].map((file, idx) => (
-              <div key={idx} className="file-box">
-                <div className="file-info">
-                  <div className="file-name">
+              <div key={idx} className={styles["file-box"]}>
+                <div className={styles["file-info"]}>
+                  <div className={styles["file-name"]}>
                     <a
                       href={file.url}
                       download
@@ -168,7 +144,7 @@ const StatementForm = () => {
                       {file.name}
                     </a>
                   </div>
-                  <div className="file-meta">
+                  <div className={styles["file-meta"]}>
                     {file.type} • {file.size} • {file.date}
                   </div>
                 </div>
@@ -177,11 +153,11 @@ const StatementForm = () => {
           </div>
         </div>
 
-        <div className="statement-actions">
+        <div className={styles["statement-actions"]}>
           <Button variant="secondary" type="button">
             Back
           </Button>
-          <Button className="btn-save" type="submit">
+          <Button className={styles["btn-save"]} type="submit">
             Save
           </Button>
           <Button variant="danger" type="button">

@@ -9,27 +9,28 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
     const [gender, setGender] = useState('');
     const [nationality, setNationality] = useState('');
     const [contact, setContact] = useState('');
-    const [statement, setStatement] = useState(''); 
-    const [showSubmitMessage, setShowSubmitMessage] = useState(false); 
-    
+    const [statement, setStatement] = useState('');
+    const [showSubmitMessage, setShowSubmitMessage] = useState(false);
+    const [errors, setErrors] = useState({});
+
     // Populate form với dữ liệu ban đầu khi edit
     useEffect(() => {
         if (initialData) {
-    setFullName(initialData.fullName || '');
-    setRelationship(initialData.role || '');
-    setGender(initialData.gender || '');
-    setNationality(initialData.nationality || '');
-    setContact(initialData.contact || '');
-    setStatement(initialData.statement || '');
-  } else {
-    // Reset form khi thêm mới
-    setFullName('');
-    setRelationship('');
-    setGender('');
-    setNationality('');
-    setContact('');
-    setStatement('');
-  }
+            setFullName(initialData.fullName || '');
+            setRelationship(initialData.role || '');
+            setGender(initialData.gender || '');
+            setNationality(initialData.nationality || '');
+            setContact(initialData.contact || '');
+            setStatement(initialData.statement || '');
+        } else {
+            // Reset form khi thêm mới
+            setFullName('');
+            setRelationship('');
+            setGender('');
+            setNationality('');
+            setContact('');
+            setStatement('');
+        }
     }, [initialData]);
 
     const relationshipOptions = [
@@ -55,6 +56,7 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
                 break;
             case 'relationship':
                 setRelationship(value);
+                setErrors(prev => ({ ...prev, relationship: '' }));
                 break;
             case 'gender':
                 setGender(value);
@@ -73,7 +75,7 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
         }
     };
 
-    
+
     const getFileExtensionBadge = (fileName) => {
         const parts = fileName.split('.');
         if (parts.length > 1) {
@@ -83,19 +85,19 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
                 case 'jpg':
                 case 'jpeg':
                 case 'gif':
-                    return 'bg-danger'; 
+                    return 'bg-danger';
                 case 'pdf':
                     return 'bg-primary';
                 case 'doc':
                 case 'docx':
                 case 'ppt':
                 case 'pptx':
-                    return 'bg-info'; 
+                    return 'bg-info';
                 case 'mp4':
-                    return 'bg-warning text-dark'; 
+                    return 'bg-warning text-dark';
                 case 'ai':
                 case 'psd':
-                    return 'bg-secondary'; 
+                    return 'bg-secondary';
                 default:
                     return 'bg-secondary';
             }
@@ -103,72 +105,78 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
         return 'bg-secondary';
     };
 
-  
+
     const handleCreate = () => {
+        let formErrors = {};
+
         if (!relationship) {
-            alert('Please select a relationship to the incident');
+            formErrors.relationship = 'This field is required.';
+        }
+
+        if (Object.keys(formErrors).length > 0) {
+            setErrors(formErrors);
             return;
         }
 
-         const formData = {
+        const formData = {
             fullName,
             relationship,
             gender,
             nationality,
             contact,
             statement
-            };
-            
-            if (onSubmit) {
+        };
+
+        if (onSubmit) {
             onSubmit(formData);
-            }
+        }
         setShowSubmitMessage(true);
         setTimeout(() => {
             setShowSubmitMessage(false);
         }, 3000);
     };
 
-   
+
     const handleCancel = () => {
         // Reset form về trạng thái ban đầu
         if (initialData) {
-    // Nếu đang edit, reset về dữ liệu ban đầu
-    setFullName(initialData.name || '');
-    setRelationship(initialData.role || '');
-    setGender(initialData.gender || '');
-    setNationality(initialData.nationality || '');
-    setContact(initialData.contact || '');
-    setStatement(initialData.statement || '');
-  } else {
-    // Nếu đang thêm mới, reset về trống
-    setFullName('');
-    setRelationship('');
-    setGender('');
-    setNationality('');
-    setContact('');
-    setStatement('');
-  }
-  setShowSubmitMessage(false);
-  console.log('Form cancelled and reset.');
+            // Nếu đang edit, reset về dữ liệu ban đầu
+            setFullName(initialData.name || '');
+            setRelationship(initialData.role || '');
+            setGender(initialData.gender || '');
+            setNationality(initialData.nationality || '');
+            setContact(initialData.contact || '');
+            setStatement(initialData.statement || '');
+        } else {
+            // Nếu đang thêm mới, reset về trống
+            setFullName('');
+            setRelationship('');
+            setGender('');
+            setNationality('');
+            setContact('');
+            setStatement('');
+        }
+        setShowSubmitMessage(false);
+        console.log('Form cancelled and reset.');
 
-  if (onCancel) {
-    onCancel();
-  }
+        if (onCancel) {
+            onCancel();
+        }
     };
 
     // Kiểm tra xem có phải đang edit hay không
     const isEditing = Boolean(initialData);
 
     return (
-       
-        <div className="container-fluid d-flex justify-content-center align-items-center" style={{ minHeight: '100vh'}}>
-            
-            <div className="card shadow-lg p-4 my-4" style={{ 
-                maxWidth: '600px', 
+
+        <div className="container-fluid d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+
+            <div className="card shadow-lg p-4 my-4" style={{
+                maxWidth: '600px',
                 width: '100%',
                 borderRadius: '15px',
                 backgroundColor: '#ffffff',
-                
+
                 boxSizing: 'border-box'
             }}>
                 <div className="card-body">
@@ -176,7 +184,7 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
                         {isEditing ? 'Edit Relevant Party' : 'Relevant Parties'}
                     </h2>
                     <p className="text-center text-muted mb-4" style={{ fontSize: '0.9rem' }}>
-                        {isEditing 
+                        {isEditing
                             ? 'Update the information for this relevant party.'
                             : 'This form is used to document the roles and identities of all parties connected to the incident.'
                         }
@@ -203,9 +211,11 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
                             />
                         </div>
                         <div className="col-md-6">
-                            <label htmlFor="relationship" className="form-label">Relationship to the incident <span className="text-danger">*</span></label>
+                            <label htmlFor="relationship" className="form-label">
+                                Relationship to the incident <span className="text-danger">*</span>
+                            </label>
                             <select
-                                className="form-select"
+                                className={`form-select ${errors.relationship ? 'is-invalid' : ''}`}
                                 id="relationship"
                                 name="relationship"
                                 value={relationship}
@@ -216,7 +226,9 @@ const RelevantPartiesForm = ({ initialData, onSubmit, onCancel }) => {
                                     <option key={option.value} value={option.value}>{option.label}</option>
                                 ))}
                             </select>
+                            {errors.relationship && <div className="invalid-feedback">{errors.relationship}</div>}
                         </div>
+
                         <div className="col-md-6">
                             <label htmlFor="gender" className="form-label">Gender</label>
                             <select
