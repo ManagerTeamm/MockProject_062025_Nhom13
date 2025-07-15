@@ -405,7 +405,7 @@ export default function MultiStepFormMui() {
                                 value={formData.email}
                                 onChange={handleChange}
                                 error={!isValidEmail(formData.email)}
-                                helperText={!isValidEmail(formData.email) ? "Invalid email format" : ""}
+                                helperText={!isValidEmail(formData.email) ? "This field is required." : ""}
                             />
                             <TextField
                                 required
