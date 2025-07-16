@@ -311,6 +311,8 @@ export default function InitialResponse() {
             }
 
             alert(result.message || 'Saved successfully');
+
+            window.location.href = `/secure/admin/initial-response/${caseId}`;
         } catch (err) {
             console.error('Error saving:', err);
             alert('Save failed: ' + err.message);
@@ -420,18 +422,7 @@ export default function InitialResponse() {
                         <p><strong>Location:</strong> {caseData.location}</p>
                     </div>
                 )}
-                <h3 className="fw-bold fs-4 mb-4">INITIAL RESPONSE</h3>
-
-                {/* Debug info - Remove this in production */}
-                <div className="mb-3 p-3 bg-light border rounded">
-                    <h6>Debug Information:</h6>
-                    <p>Dispatch Time: {formData.dispatchTime || 'Empty'}</p>
-                    <p>Arrival Time: {formData.arrivalTime || 'Empty'}</p>
-                    <p>Scene Assessment: {formData.sceneAssessment || 'Empty'}</p>
-                    <p>Assigned Officers: {formData.assignedOfficers.length} officers</p>
-                    <p>Preservation Measures: {formData.preservationMeasures.length} measures</p>
-                    <p>Medical Rescue Info: {formData.medicalRescueInfo.length} items</p>
-                </div>
+                <h3 className="fw-bold fs-4 mb-4 text-center text-dark">INITIAL RESPONSE</h3>
 
                 {/* Time fields */}
                 <Row className="mb-3">
@@ -461,7 +452,7 @@ export default function InitialResponse() {
                 <div className="mb-4">
                     <label className="form-label fw-semibold text-uppercase small">LIST OF OFFICERS</label>
                     <div className="text-end mb-2">
-                        <Button size="sm" onClick={() => setShowModal(true)}>View</Button>
+                        <Button size="sm" variant="outline-secondary" onClick={() => setShowModal(true)}>View</Button>
                     </div>
                     <table className="table table-bordered">
                         <thead className="table-light text-uppercase small">

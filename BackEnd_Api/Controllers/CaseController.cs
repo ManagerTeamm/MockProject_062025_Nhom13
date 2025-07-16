@@ -107,7 +107,7 @@ namespace BackEnd_Api.Controllers
             var medicalSupports = await _unitOfWork.MedicalRescueSupportRepository.FindWithIncludeAsync(x => x.InitialResponseId == initialResponse.InitialResponseId, x => x.Attachments);
             dto.MedicalRescueInfo = medicalSupports.Select(ms => new InitialResponseDto.SceneMedicalRescueInfoDto
             {
-                medicalRescueSupportId = ms.MedicalRescueSupportId,
+                MedicalRescueSupportId = ms.MedicalRescueSupportId,
                 UnitId = ms.UnitId,
                 SupportType = ms.SupportType,
                 ArrivalTime = ms.ArrivalTime.ToString(),
@@ -250,129 +250,172 @@ namespace BackEnd_Api.Controllers
                 // Handle Preservation Measures
                 if (caseInitialResponse.PreservationMeasures != null && caseInitialResponse.PreservationMeasures.Any())
                 {
-                    // Clear existing preservation measures
-                    await _unitOfWork.ScenePreservationMeasureRepository.DeleteAllByInitialResponseIdAsync(initialResponse.InitialResponseId);
-
-                    var measurePairs = caseInitialResponse.PreservationMeasures
-                        .Select((m, index) =>
+                    foreach(var preservationMeasure in caseInitialResponse.PreservationMeasures)
+                    {
+                        var officer = await _unitOfWork.UserRepository.GetByIdAsync(preservationMeasure.OfficerUserName);
+                        if (officer == null)
                         {
-                            var id = "SPM" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + "_" + index;
-                            var entity = new ScenePreservationMeasure
+                            return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult($"Officer {preservationMeasure.OfficerUserName} not found."));
+                        }
+
+                        if (string.IsNullOrEmpty(preservationMeasure.ScenePreservationMeasureId))
+                        {
+                            var measure = new ScenePreservationMeasure
                             {
-                                ScenePreservationMeasureId = id,
-                                ResponsibleOfficerUserName = m.OfficerUserName,
+                                ScenePreservationMeasureId = preservationMeasure.ScenePreservationMeasureId ?? "SPM" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
                                 InitialResponseId = initialResponse.InitialResponseId,
-                                StartTime = DateTime.Parse(m.StartTime),
-                                EndTime = DateTime.Parse(m.EndTime),
-                                AreaCovered = m.AreaCovered,
-                                ProtectionMethods = m.ProtectionMethods,
-                                Notes = m.SpecialInstructions,
+                                ResponsibleOfficerUserName = preservationMeasure.OfficerUserName,
+                                StartTime = DateTime.Parse(preservationMeasure.StartTime),
+                                EndTime = DateTime.Parse(preservationMeasure.EndTime),
+                                ProtectionMethods = preservationMeasure.ProtectionMethods,
+                                AreaCovered = preservationMeasure.AreaCovered,
+                                Notes = preservationMeasure.SpecialInstructions,
                                 CreateAt = DateTime.Now,
                                 UpdateAt = DateTime.Now,
                                 IsDeleted = false
                             };
-                            return new { Dto = m, Entity = entity };
-                        })
-                        .ToList();
+                            await _unitOfWork.ScenePreservationMeasureRepository.AddAsync(measure);
 
-                    await _unitOfWork.ScenePreservationMeasureRepository
-                        .AddRangeAsync(measurePairs.Select(p => p.Entity));
-
-                    // Handle attachments for preservation measures
-                    var preservationAttachments = new List<ScenePreservationMeasureAttachment>();
-                    foreach (var pair in measurePairs)
-                    {
-                        var dto = pair.Dto;
-                        var entity = pair.Entity;
-
-                        if (dto.Files != null && dto.Files.Any())
-                        {
-                            var validUrls = await SaveFileAsync(
-                                "files", dto.Files, "measure", entity.ScenePreservationMeasureId
-                            );
-                            if (validUrls != null && validUrls.Any())
+                            if (preservationMeasure.Files != null && preservationMeasure.Files.Any())
                             {
-                                foreach (var url in validUrls)
+                                // Clear existing attachments
+                                await _unitOfWork.ScenePreservationMeasureAttachmentRepository
+                                    .DeleteAllByPreservationMeasureIdAsync(measure.ScenePreservationMeasureId);
+                                var attachmentUrls = await SaveFileAsync("files", preservationMeasure.Files, "preservation", measure.ScenePreservationMeasureId);
+                                if (attachmentUrls != null && attachmentUrls.Any())
                                 {
-                                    preservationAttachments.Add(new ScenePreservationMeasureAttachment
+                                    var attachments = attachmentUrls.Select(url => new ScenePreservationMeasureAttachment
                                     {
-                                        ScenePreservationMeasureAttachmentId = "SPMA" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
-                                        FilePath = url,
-                                        ScenePreservationMeasureId = entity.ScenePreservationMeasureId
-                                    });
+                                        ScenePreservationMeasureAttachmentId = "SPMA" + Guid.NewGuid(),
+                                        ScenePreservationMeasureId = measure.ScenePreservationMeasureId,
+                                        FilePath = url
+                                    }).ToList();
+                                    await _unitOfWork.ScenePreservationMeasureAttachmentRepository.AddRangeAsync(attachments);
                                 }
                             }
                         }
-                    }
+                        else
+                        {
+                            var existingMeasure = await _unitOfWork.ScenePreservationMeasureRepository
+                            .GetByIdAsync(preservationMeasure.ScenePreservationMeasureId);
 
-                    if (preservationAttachments.Any())
-                    {
-                        await _unitOfWork.ScenePreservationMeasureAttachmentRepository
-                            .AddRangeAsync(preservationAttachments);
+                            if(existingMeasure == null)
+                            {
+                                return new JsonResult(ApiResponseHelper<InitialResponseDto>.NotFoundResult("Preservation measure not found."));
+                            }
+
+                            existingMeasure.InitialResponseId = initialResponse.InitialResponseId;
+                            existingMeasure.ResponsibleOfficerUserName = preservationMeasure.OfficerUserName;
+                            existingMeasure.StartTime = DateTime.Parse(preservationMeasure.StartTime);
+                            existingMeasure.EndTime = DateTime.Parse(preservationMeasure.EndTime);
+                            existingMeasure.ProtectionMethods = preservationMeasure.ProtectionMethods;
+                            existingMeasure.AreaCovered = preservationMeasure.AreaCovered;
+                            existingMeasure.Notes = preservationMeasure.SpecialInstructions;
+                            existingMeasure.UpdateAt = DateTime.Now;
+
+                            await _unitOfWork.ScenePreservationMeasureRepository.Update(existingMeasure);
+
+                            if (preservationMeasure.Files != null && preservationMeasure.Files.Any())
+                            {
+                                // Clear existing attachments
+                                await _unitOfWork.ScenePreservationMeasureAttachmentRepository
+                                    .DeleteAllByPreservationMeasureIdAsync(existingMeasure.ScenePreservationMeasureId);
+                                var attachmentUrls = await SaveFileAsync("files", preservationMeasure.Files, "preservation", existingMeasure.ScenePreservationMeasureId);
+                                if (attachmentUrls != null && attachmentUrls.Any())
+                                {
+                                    var attachments = attachmentUrls.Select(url => new ScenePreservationMeasureAttachment
+                                    {
+                                        ScenePreservationMeasureAttachmentId = "SPMA" + Guid.NewGuid(),
+                                        ScenePreservationMeasureId = existingMeasure.ScenePreservationMeasureId,
+                                        FilePath = url
+                                    }).ToList();
+                                    await _unitOfWork.ScenePreservationMeasureAttachmentRepository.AddRangeAsync(attachments);
+                                }
+                            }
+                        }
                     }
                 }
 
                 // Handle Medical Rescue Info
                 if (caseInitialResponse.MedicalRescueInfo != null && caseInitialResponse.MedicalRescueInfo.Any())
                 {
-                    // Clear existing medical rescue support
-                    await _unitOfWork.MedicalRescueSupportRepository
-                        .DeleteAllByInitialResponseIdAsync(initialResponse.InitialResponseId);
-
-                    var supportPairs = caseInitialResponse.MedicalRescueInfo
-                        .Select((r, index) =>
+                    foreach (var rescueInfo in caseInitialResponse.MedicalRescueInfo)
+                    {
+                        if (string.IsNullOrEmpty(rescueInfo.MedicalRescueSupportId))
                         {
-                            var id = "MRS" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + "_" + index;
-                            var entity = new MedicalRescueSupport
+                            var newSupport = new MedicalRescueSupport
                             {
-                                MedicalRescueSupportId = id,
+                                MedicalRescueSupportId = "MRS" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + "_" + Guid.NewGuid().ToString("N").Substring(0, 6),
                                 InitialResponseId = initialResponse.InitialResponseId,
-                                UnitId = r.UnitId,
-                                SupportType = r.SupportType,
-                                PersonelAssigned = r.PersonnelAssigned,
-                                LocationAssigned = r.LocationAssigned,
+                                UnitId = rescueInfo.UnitId,
+                                SupportType = rescueInfo.SupportType,
+                                PersonelAssigned = rescueInfo.PersonnelAssigned,
+                                LocationAssigned = rescueInfo.LocationAssigned,
                                 CreateAt = DateTime.Now,
                                 UpdateAt = DateTime.Now,
                                 IsDeleted = false
                             };
-                            return new { Dto = r, Entity = entity };
-                        })
-                        .ToList();
 
-                    await _unitOfWork.MedicalRescueSupportRepository
-                        .AddRangeAsync(supportPairs.Select(p => p.Entity));
+                            await _unitOfWork.MedicalRescueSupportRepository.AddAsync(newSupport);
 
-                    // Handle attachments for medical rescue
-                    var medicalAttachments = new List<MedicalRescueSupportAttachment>();
-                    foreach (var pair in supportPairs)
-                    {
-                        var dto = pair.Dto;
-                        var entity = pair.Entity;
-
-                        if (dto.Files != null && dto.Files.Any())
-                        {
-                            var urls = await SaveFileAsync("files", dto.Files, "rescue", entity.MedicalRescueSupportId);
-                            if (urls != null && urls.Any())
+                            if (rescueInfo.Files != null && rescueInfo.Files.Any())
                             {
-                                foreach (var url in urls)
+                                await _unitOfWork.MedicalRescueSupportAttachmentRepository
+                                    .DeleteAllByRescueSupportIdAsync(newSupport.MedicalRescueSupportId);
+
+                                var attachmentUrls = await SaveFileAsync("files", rescueInfo.Files, "rescue", newSupport.MedicalRescueSupportId);
+                                if (attachmentUrls != null && attachmentUrls.Any())
                                 {
-                                    medicalAttachments.Add(new MedicalRescueSupportAttachment
+                                    var attachments = attachmentUrls.Select(url => new MedicalRescueSupportAttachment
                                     {
-                                        MedicalRescueSupportAttachmentId = "MRSA" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
-                                        MedicalRescueSupportId = entity.MedicalRescueSupportId,
+                                        MedicalRescueSupportAttachmentId = "MRSA" + Guid.NewGuid(),
+                                        MedicalRescueSupportId = newSupport.MedicalRescueSupportId,
                                         FilePath = url
-                                    });
+                                    }).ToList();
+                                    await _unitOfWork.MedicalRescueSupportAttachmentRepository.AddRangeAsync(attachments);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var existingSupport = await _unitOfWork.MedicalRescueSupportRepository
+                                .GetByIdAsync(rescueInfo.MedicalRescueSupportId);
+
+                            if (existingSupport == null)
+                            {
+                                return new JsonResult(ApiResponseHelper<InitialResponseDto>.NotFoundResult("Medical rescue support not found."));
+                            }
+
+                            existingSupport.InitialResponseId = initialResponse.InitialResponseId;
+                            existingSupport.UnitId = rescueInfo.UnitId;
+                            existingSupport.SupportType = rescueInfo.SupportType;
+                            existingSupport.PersonelAssigned = rescueInfo.PersonnelAssigned;
+                            existingSupport.LocationAssigned = rescueInfo.LocationAssigned;
+                            existingSupport.UpdateAt = DateTime.Now;
+
+                            await _unitOfWork.MedicalRescueSupportRepository.Update(existingSupport);
+
+                            if (rescueInfo.Files != null && rescueInfo.Files.Any())
+                            {
+                                await _unitOfWork.MedicalRescueSupportAttachmentRepository
+                                    .DeleteAllByRescueSupportIdAsync(existingSupport.MedicalRescueSupportId);
+
+                                var attachmentUrls = await SaveFileAsync("files", rescueInfo.Files, "rescue", existingSupport.MedicalRescueSupportId);
+                                if (attachmentUrls != null && attachmentUrls.Any())
+                                {
+                                    var attachments = attachmentUrls.Select(url => new MedicalRescueSupportAttachment
+                                    {
+                                        MedicalRescueSupportAttachmentId = "MRSA" + Guid.NewGuid(),
+                                        MedicalRescueSupportId = existingSupport.MedicalRescueSupportId,
+                                        FilePath = url
+                                    }).ToList();
+                                    await _unitOfWork.MedicalRescueSupportAttachmentRepository.AddRangeAsync(attachments);
                                 }
                             }
                         }
                     }
-
-                    if (medicalAttachments.Any())
-                    {
-                        await _unitOfWork.MedicalRescueSupportAttachmentRepository
-                            .AddRangeAsync(medicalAttachments);
-                    }
                 }
+
 
                 await _unitOfWork.SaveChangesAsync();
                 await _unitOfWork.CommitAsync();

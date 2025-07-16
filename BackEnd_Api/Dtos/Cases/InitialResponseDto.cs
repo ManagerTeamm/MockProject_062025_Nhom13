@@ -85,7 +85,7 @@ namespace BackEnd_Api.Dtos.Cases
         public class SceneMedicalRescueInfoDto
         {
             [JsonPropertyName("medicalRescueSupportId")]
-            public string? medicalRescueSupportId { get; set; }
+            public string? MedicalRescueSupportId { get; set; }
 
             [JsonPropertyName("unitId")]
             public string UnitId { get; set; }

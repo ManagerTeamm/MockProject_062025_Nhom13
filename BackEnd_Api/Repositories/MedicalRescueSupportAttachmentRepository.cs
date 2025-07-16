@@ -1,5 +1,6 @@
 ﻿using BackEnd_Api.Models;
 using BackEnd_Api.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEnd_Api.Repositories
 {
@@ -8,6 +9,12 @@ namespace BackEnd_Api.Repositories
         public MedicalRescueSupportAttachmentRepository(ApplicationDbContext context) : base(context)
         {
         }
-        // Additional methods specific to MedicalRescueSupportAttachment can be added here
+
+        public async Task DeleteAllByRescueSupportIdAsync(string medicalRescueSupportId)
+        {
+            var list = await _dbSet.Where(x => x.MedicalRescueSupportId == medicalRescueSupportId).ToListAsync();
+            if (list.Any())
+                _dbSet.RemoveRange(list);
+        }
     }
 }
