@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../components/sidebar";
 import StatementForm from "../components/panel/initialstatement";
-import "../styles/initialstatement.css";
+import "../styles/initialstatement.module.css";
 
 const ViewStatement = () => (
   <div className="statement-container">

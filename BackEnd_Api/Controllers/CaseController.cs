@@ -18,19 +18,13 @@ namespace BackEnd_Api.Controllers
     [ApiController]
     public class CaseController : ControllerBase
     {
-        private readonly ICaseRepository _caseRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly ISceneProtectionRepository _sceneProtectionRepository;
-        private readonly ISceneSupportRepository _sceneSupportRepository;
         private readonly IWebHostEnvironment _env;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CaseController(ICaseRepository caseRepository, IUserRepository userRepository, ISceneProtectionRepository sceneProtectionRepository, ISceneSupportRepository sceneSupportRepository, IWebHostEnvironment env)
+        public CaseController(IWebHostEnvironment env, IUnitOfWork unitOfWork)
         {
-            _caseRepository = caseRepository;
-            _userRepository = userRepository;
-            _sceneProtectionRepository = sceneProtectionRepository;
-            _sceneSupportRepository = sceneSupportRepository;
             _env = env;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -43,29 +37,93 @@ namespace BackEnd_Api.Controllers
         public async Task<ActionResult<PaginatedResultDto<CaseListItemDto>>> GetCases([FromQuery] CaseFilterDto filter)
         {
             // Gọi phương thức trực tiếp từ Repository
-            var result = await _caseRepository.GetCasesAsync(filter);
+            var result = await _unitOfWork.CaseRepository.GetCasesAsync(filter);
             return Ok(result);
         }
 
-        //Tạo mới trường hợp bảo vệ hiện trường
-        [Authorize]
-        [HttpPost("create-protection")]
-        public IActionResult CreateProtectionCase([FromBody] SceneProtection sceneProtection)
+        [HttpGet("/api/initial-response/{caseId}")]
+        [HasPermission("Edit_Case")]
+        public async Task<ActionResult> GetInitialResponse(string caseId)
         {
-            var userPermissions = _userRepository.GetPermissions();
-            if (!userPermissions.Contains("Edit_Case"))
-                return Forbid("You do not have permission to delete users.");
+            if (string.IsNullOrEmpty(caseId))
+            {
+                return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult("CaseId is required."));
+            }
 
-            var res = _caseRepository.CreateProtection(sceneProtection);
+            var caseModel = await _unitOfWork.CaseRepository.GetByIdAsync(caseId);
+            if (caseModel == null)
+            {
+                return new JsonResult(ApiResponseHelper<InitialResponseDto>.NotFoundResult("Case not found."));
+            }
 
-            return Ok(ApiResponseHelper<SceneProtection>.SuccessResult(null, "Protection scene successfully"));
+            var initialResponse = await _unitOfWork.InitialResponseRepository.GetByCaseIdAsync(caseId);
+            if (initialResponse == null)
+            {
+                return new JsonResult(ApiResponseHelper<InitialResponseDto>.NotFoundResult("Initial response not found."));
+            }
+
+            var dto = new InitialResponseDto
+            {
+                InitialResponseId = initialResponse.InitialResponseId,
+                CaseId = initialResponse.CaseId,
+                DispatchTime = initialResponse.DispatchTime != default ? initialResponse.DispatchTime.ToString("yyyy-MM-dd HH:mm:ss") : null,
+                ArrivalTime = initialResponse.ArrivalTime != default ? initialResponse.ArrivalTime.ToString("yyyy-MM-dd HH:mm:ss") : null,
+                SceneAssessment = initialResponse.PreliminaryAssessment
+            };
+
+            // Get assigned officers
+            var userCases = await _unitOfWork.UserCaseRepository.FindWithIncludeAsync(
+                            x => x.CaseId == caseId,
+                            x => x.User,
+                            x => x.User.Role
+                        );
+
+            dto.AssignedOfficers = userCases.Select(uc => new InitialResponseDto.OfficerDto
+            {
+                UserName = uc.OfficerId,
+                FullName = uc.User?.FullName ?? "Unknown",
+                Role = uc.User?.Role.Description ?? "Unknown",
+                PhoneNumber = uc.User?.PhoneNumber ?? "Unknown"
+            }).ToList();
+
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+
+            // Get preservation measures
+            var preservationMeasures = await _unitOfWork.ScenePreservationMeasureRepository.FindWithIncludeAsync(x => x.InitialResponseId == initialResponse.InitialResponseId, x => x.Attachments);
+            dto.PreservationMeasures = preservationMeasures.Select(pm => new InitialResponseDto.ScenePreservationMeasuresDto
+            {
+                ScenePreservationMeasureId = pm.ScenePreservationMeasureId,
+                OfficerUserName = pm.ResponsibleOfficerUserName,
+                CaseId = caseId,
+                StartTime = pm.StartTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                EndTime = pm.EndTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                ProtectionMethods = pm.ProtectionMethods,
+                AreaCovered = pm.AreaCovered,
+                SpecialInstructions = pm.Notes,
+                AttachedFilePaths = pm.Attachments?.Select(a => $"{baseUrl}{a.FilePath}").ToList() ?? new List<string>()
+            }).ToList();
+
+            // Get medical rescue info
+            var medicalSupports = await _unitOfWork.MedicalRescueSupportRepository.FindWithIncludeAsync(x => x.InitialResponseId == initialResponse.InitialResponseId, x => x.Attachments);
+            dto.MedicalRescueInfo = medicalSupports.Select(ms => new InitialResponseDto.SceneMedicalRescueInfoDto
+            {
+                medicalRescueSupportId = ms.MedicalRescueSupportId,
+                UnitId = ms.UnitId,
+                SupportType = ms.SupportType,
+                ArrivalTime = ms.ArrivalTime.ToString(),
+                PersonnelAssigned = ms.PersonelAssigned,
+                LocationAssigned = ms.LocationAssigned,
+                AttachedFilePaths = ms.Attachments?.Select(a => $"{baseUrl}{a.FilePath}").ToList() ?? new List<string>()
+            }).ToList();
+
+            return new JsonResult(ApiResponseHelper<InitialResponseDto>.SuccessResult(dto));
         }
 
         [HttpGet("{caseId}")]
         [HasPermission("Edit_Case")]
         public async Task<ActionResult<CaseDto>> GetCase(string caseId)
         {
-            var caseModel = await _caseRepository.GetByIdAsync(caseId);
+            var caseModel = await _unitOfWork.CaseRepository.GetByIdAsync(caseId);
             if (caseModel != null)
             {
                 var dto = new CaseDto()
@@ -79,361 +137,259 @@ namespace BackEnd_Api.Controllers
             return new JsonResult(ApiResponseHelper<string>.NotFoundResult("Case not found."));
         }
 
-        [HttpGet("/api/initial-response/{caseId}")]
+        [HttpPost("/api/initial-response")]
         [HasPermission("Edit_Case")]
-        public async Task<ActionResult<InitialResponseDto>> GetInitialResponse(string caseId)
+        public async Task<ActionResult> HandleInitialResponse([FromForm] InitialResponseDto caseInitialResponse)
         {
+            await _unitOfWork.BeginTransactionAsync();
             try
             {
-                // Kiểm tra case có tồn tại không
-                var caseModel = await _caseRepository.GetByIdAsync(caseId);
-                if (caseModel == null)
+                if (!ModelState.IsValid)
                 {
-                    return new JsonResult(ApiResponseHelper<string>.NotFoundResult("Case not found."));
+                    return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult(
+                        "Invalid model state.",
+                        ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList(), 400));
                 }
 
-                // Lấy dữ liệu từ các repository
-                var protections = await _sceneProtectionRepository.GetSceneProtectionsByCaseIdAsync(caseId);
-                var supports = await _sceneSupportRepository.GetSceneSupportsByCaseIdAsync(caseId);
-
-                // Khởi tạo InitialResponseDto
-                var initialResponse = new InitialResponseDto()
+                if (string.IsNullOrEmpty(caseInitialResponse.CaseId))
                 {
-                    CaseId = caseId,
-                    DispatchTime = "",
-                    ArrivalTime = "",
-                    SceneAssessment = "",
-                    PreservationMeasures = new List<SceneProtectionDto>(),
-                    MedicalRescueInfo = new List<SceneSupportDto>()
-                };
+                    return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult("CaseId is required."));
+                }
 
-                // Parse thông tin từ Case Summary nếu có
-                if (!string.IsNullOrEmpty(caseModel.Summary))
+                var caseModel = await _unitOfWork.CaseRepository.GetByIdAsync(caseInitialResponse.CaseId);
+                if (caseModel == null)
                 {
-                    var summaryLines = caseModel.Summary.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    return new JsonResult(ApiResponseHelper<InitialResponseDto>.NotFoundResult("Case not found."));
+                }
 
-                    foreach (var line in summaryLines)
+                // Parse datetime values
+                if (!DateTime.TryParse(caseInitialResponse.DispatchTime, out var dispatchTime))
+                    dispatchTime = default;
+                if (!DateTime.TryParse(caseInitialResponse.ArrivalTime, out var arrivalTime))
+                    arrivalTime = default;
+
+                var existingResponse = await _unitOfWork.InitialResponseRepository.GetByCaseIdAsync(caseInitialResponse.CaseId);
+                bool isUpdateMode = !string.IsNullOrEmpty(caseInitialResponse.InitialResponseId) || existingResponse != null;
+
+                InitialResponse initialResponse;
+                string operationMessage;
+
+                if (isUpdateMode)
+                {
+                    // UPDATE MODE - Prioritized logic
+                    if (existingResponse == null)
                     {
-                        if (line.StartsWith("Dispatch time: "))
+                        return new JsonResult(ApiResponseHelper<InitialResponseDto>.NotFoundResult("Initial response does not exist."));
+                    }
+
+                    // Update existing response
+                    existingResponse.DispatchTime = dispatchTime;
+                    existingResponse.ArrivalTime = arrivalTime;
+                    existingResponse.PreliminaryAssessment = caseInitialResponse.SceneAssessment ?? string.Empty;
+                    existingResponse.UpdateAt = DateTime.Now;
+
+                    await _unitOfWork.InitialResponseRepository.Update(existingResponse);
+                    initialResponse = existingResponse;
+                    operationMessage = "Updated successfully.";
+                }
+                else
+                {
+                    // CREATE MODE
+                    if (existingResponse != null)
+                    {
+                        return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult("Initial response already exists for this case."));
+                    }
+
+                    // Create new response
+                    initialResponse = new InitialResponse
+                    {
+                        InitialResponseId = "IR" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
+                        CaseId = caseInitialResponse.CaseId,
+                        DispatchTime = dispatchTime,
+                        ArrivalTime = arrivalTime,
+                        PreliminaryAssessment = caseInitialResponse.SceneAssessment ?? string.Empty,
+                        CreateAt = DateTime.Now,
+                        UpdateAt = DateTime.Now,
+                        IsDeleted = false
+                    };
+
+                    await _unitOfWork.InitialResponseRepository.AddAsync(initialResponse);
+                    operationMessage = "Created successfully.";
+                }
+
+                // Handle Assigned Officers
+                if (caseInitialResponse.AssignedOfficers != null && caseInitialResponse.AssignedOfficers.Any())
+                {
+                    // Clear existing officer assignments
+                    await _unitOfWork.UserCaseRepository.DeleteAllByCaseIdAsync(caseInitialResponse.CaseId);
+
+                    // Validate and add new assignments
+                    foreach (var officer in caseInitialResponse.AssignedOfficers)
+                    {
+                        if (string.IsNullOrEmpty(officer.UserName) || string.IsNullOrEmpty(officer.FullName) ||
+                            string.IsNullOrEmpty(officer.Role) || string.IsNullOrEmpty(officer.PhoneNumber))
                         {
-                            initialResponse.DispatchTime = line.Substring("Dispatch time: ".Length).Trim();
+                            return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult("All officer fields are required."));
                         }
-                        else if (line.StartsWith("Arrival time: "))
+
+                        var user = await _unitOfWork.UserRepository.GetByIdAsync(officer.UserName);
+                        if (user == null)
                         {
-                            initialResponse.ArrivalTime = line.Substring("Arrival time: ".Length).Trim();
+                            return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult($"User {officer.UserName} not found."));
                         }
-                        else if (line.StartsWith("Scene Assessment: "))
+
+                        await _unitOfWork.UserCaseRepository.AddAsync(new UserCase
                         {
-                            initialResponse.SceneAssessment = line.Substring("Scene Assessment: ".Length).Trim();
-                        }
+                            OfficerId = officer.UserName,
+                            Responsible = "Unknown",
+                            CaseId = caseInitialResponse.CaseId
+                        });
                     }
                 }
 
-                // Xử lý Scene Protection data
-                if (protections != null && protections.Any())
+                // Handle Preservation Measures
+                if (caseInitialResponse.PreservationMeasures != null && caseInitialResponse.PreservationMeasures.Any())
                 {
-                    var protectionDtos = new List<SceneProtectionDto>();
+                    // Clear existing preservation measures
+                    await _unitOfWork.ScenePreservationMeasureRepository.DeleteAllByInitialResponseIdAsync(initialResponse.InitialResponseId);
 
-                    foreach (var protection in protections.Where(p => !p.IsDeleted))
-                    {
-                        var protectionDto = new SceneProtectionDto
+                    var measurePairs = caseInitialResponse.PreservationMeasures
+                        .Select((m, index) =>
                         {
-                            SceneProtectionId = protection.SceneProtectionId,
-                            StartTime = protection.TimeStart?.ToString("yyyy-MM-ddTHH:mm:ss") ?? "",
-                            EndTime = protection.TimeEnd?.ToString("yyyy-MM-ddTHH:mm:ss") ?? "",
-                            AreaCovered = protection.LocationCover ?? "",
-                            ProtectionMethods = "",
-                            OfficerUserName = "",
-                            SpecialInstructions = "",
-                            Files = new List<IFormFile>() // Sẽ không có file khi GET, chỉ có đường dẫn
-                        };
-
-                        // Parse Description để lấy thông tin chi tiết
-                        if (!string.IsNullOrEmpty(protection.Description))
-                        {
-                            var descriptionLines = protection.Description.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-                            foreach (var line in descriptionLines)
+                            var id = "SPM" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + "_" + index;
+                            var entity = new ScenePreservationMeasure
                             {
-                                if (line.StartsWith("Protection method: "))
+                                ScenePreservationMeasureId = id,
+                                ResponsibleOfficerUserName = m.OfficerUserName,
+                                InitialResponseId = initialResponse.InitialResponseId,
+                                StartTime = DateTime.Parse(m.StartTime),
+                                EndTime = DateTime.Parse(m.EndTime),
+                                AreaCovered = m.AreaCovered,
+                                ProtectionMethods = m.ProtectionMethods,
+                                Notes = m.SpecialInstructions,
+                                CreateAt = DateTime.Now,
+                                UpdateAt = DateTime.Now,
+                                IsDeleted = false
+                            };
+                            return new { Dto = m, Entity = entity };
+                        })
+                        .ToList();
+
+                    await _unitOfWork.ScenePreservationMeasureRepository
+                        .AddRangeAsync(measurePairs.Select(p => p.Entity));
+
+                    // Handle attachments for preservation measures
+                    var preservationAttachments = new List<ScenePreservationMeasureAttachment>();
+                    foreach (var pair in measurePairs)
+                    {
+                        var dto = pair.Dto;
+                        var entity = pair.Entity;
+
+                        if (dto.Files != null && dto.Files.Any())
+                        {
+                            var validUrls = await SaveFileAsync(
+                                "files", dto.Files, "measure", entity.ScenePreservationMeasureId
+                            );
+                            if (validUrls != null && validUrls.Any())
+                            {
+                                foreach (var url in validUrls)
                                 {
-                                    protectionDto.ProtectionMethods = line.Substring("Protection method: ".Length).Trim();
-                                }
-                                else if (line.StartsWith("Assigned officer: "))
-                                {
-                                    var officerInfo = line.Substring("Assigned officer: ".Length).Trim();
-                                    // Extract username từ format "Full Name (username)"
-                                    var match = System.Text.RegularExpressions.Regex.Match(officerInfo, @"\(([^)]+)\)$");
-                                    if (match.Success)
+                                    preservationAttachments.Add(new ScenePreservationMeasureAttachment
                                     {
-                                        protectionDto.OfficerUserName = match.Groups[1].Value;
-                                    }
-                                }
-                                else if (line.StartsWith("Special instructions: "))
-                                {
-                                    protectionDto.SpecialInstructions = line.Substring("Special instructions: ".Length).Trim();
+                                        ScenePreservationMeasureAttachmentId = "SPMA" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
+                                        FilePath = url,
+                                        ScenePreservationMeasureId = entity.ScenePreservationMeasureId
+                                    });
                                 }
                             }
                         }
-
-                        // Thêm thông tin file paths (nếu có)
-                        if (!string.IsNullOrEmpty(protection.AttachedFiles))
-                        {
-                            protectionDto.AttachedFilePaths = protection.AttachedFiles.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
-                        }
-
-                        protectionDtos.Add(protectionDto);
                     }
 
-                    initialResponse.PreservationMeasures = protectionDtos;
-                }
-
-                // Xử lý Scene Support data
-                if (supports != null && supports.Any())
-                {
-                    var supportDtos = new List<SceneSupportDto>();
-
-                    foreach (var support in supports.Where(s => !s.IsDeleted))
+                    if (preservationAttachments.Any())
                     {
-                        var supportDto = new SceneSupportDto
-                        {
-                            SceneSupportId = support.SceneSuportId,
-                            LocationAssigned = support.LocationAssigned ?? "",
-                            SupportType = support.TypeSuport ?? "Unknown",
-                            Files = new List<IFormFile>() // Sẽ không có file khi GET, chỉ có đường dẫn
-                        };
-
-                        // Thêm thông tin file paths (nếu có)
-                        if (!string.IsNullOrEmpty(support.AttachedFiles))
-                        {
-                            supportDto.AttachedFilePaths = support.AttachedFiles.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
-                        }
-
-                        supportDtos.Add(supportDto);
+                        await _unitOfWork.ScenePreservationMeasureAttachmentRepository
+                            .AddRangeAsync(preservationAttachments);
                     }
-
-                    initialResponse.MedicalRescueInfo = supportDtos;
                 }
 
-                return new JsonResult(ApiResponseHelper<InitialResponseDto>.SuccessResult(initialResponse, "Initial response retrieved successfully."));
+                // Handle Medical Rescue Info
+                if (caseInitialResponse.MedicalRescueInfo != null && caseInitialResponse.MedicalRescueInfo.Any())
+                {
+                    // Clear existing medical rescue support
+                    await _unitOfWork.MedicalRescueSupportRepository
+                        .DeleteAllByInitialResponseIdAsync(initialResponse.InitialResponseId);
+
+                    var supportPairs = caseInitialResponse.MedicalRescueInfo
+                        .Select((r, index) =>
+                        {
+                            var id = "MRS" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + "_" + index;
+                            var entity = new MedicalRescueSupport
+                            {
+                                MedicalRescueSupportId = id,
+                                InitialResponseId = initialResponse.InitialResponseId,
+                                UnitId = r.UnitId,
+                                SupportType = r.SupportType,
+                                PersonelAssigned = r.PersonnelAssigned,
+                                LocationAssigned = r.LocationAssigned,
+                                CreateAt = DateTime.Now,
+                                UpdateAt = DateTime.Now,
+                                IsDeleted = false
+                            };
+                            return new { Dto = r, Entity = entity };
+                        })
+                        .ToList();
+
+                    await _unitOfWork.MedicalRescueSupportRepository
+                        .AddRangeAsync(supportPairs.Select(p => p.Entity));
+
+                    // Handle attachments for medical rescue
+                    var medicalAttachments = new List<MedicalRescueSupportAttachment>();
+                    foreach (var pair in supportPairs)
+                    {
+                        var dto = pair.Dto;
+                        var entity = pair.Entity;
+
+                        if (dto.Files != null && dto.Files.Any())
+                        {
+                            var urls = await SaveFileAsync("files", dto.Files, "rescue", entity.MedicalRescueSupportId);
+                            if (urls != null && urls.Any())
+                            {
+                                foreach (var url in urls)
+                                {
+                                    medicalAttachments.Add(new MedicalRescueSupportAttachment
+                                    {
+                                        MedicalRescueSupportAttachmentId = "MRSA" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
+                                        MedicalRescueSupportId = entity.MedicalRescueSupportId,
+                                        FilePath = url
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    if (medicalAttachments.Any())
+                    {
+                        await _unitOfWork.MedicalRescueSupportAttachmentRepository
+                            .AddRangeAsync(medicalAttachments);
+                    }
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
+
+                return new JsonResult(ApiResponseHelper<InitialResponseDto>.SuccessResult(null, operationMessage));
             }
             catch (Exception ex)
             {
-                // Log error here
-                Console.WriteLine($"Error in GetInitialResponse: {ex.Message}");
-                return new JsonResult(ApiResponseHelper<string>.FailureResult("An error occurred while retrieving initial response.", new List<string> { ex.Message }, 500));
+                await _unitOfWork.RollbackAsync();
+                return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult(
+                    "An error occurred while processing your request.",
+                    new List<string> { ex.Message }, 500));
             }
         }
 
-        [HttpPost("/api/initial-response")]
-        [HasPermission("Edit_Case")]
-        public async Task<ActionResult> PostInitialResponse([FromForm] InitialResponseDto caseInitialResponse)
-        {
-            if (!ModelState.IsValid)
-            {
-                return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult("Invalid model state.", ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)).ToList(), 400));
-            }
 
-            if (string.IsNullOrEmpty(caseInitialResponse.CaseId))
-            {
-                return new JsonResult(ApiResponseHelper<InitialResponseDto>.FailureResult("CaseId is required."));
-            }
-
-            var caseModel = await _caseRepository.GetByIdAsync(caseInitialResponse.CaseId);
-            if (caseModel == null)
-            {
-                return new JsonResult(ApiResponseHelper<InitialResponseDto>.NotFoundResult("Case not found."));
-            }
-
-            // Cập nhật Summary với logic cải tiến
-            await UpdateCaseSummary(caseModel, caseInitialResponse);
-
-            // Cập nhật Case
-            await _caseRepository.Update(caseModel);
-
-            // Xử lý Preservation Measures
-            if (caseInitialResponse.PreservationMeasures != null && caseInitialResponse.PreservationMeasures.Any())
-            {
-                await ProcessPreservationMeasures(caseInitialResponse.CaseId, caseInitialResponse.PreservationMeasures);
-            }
-
-            // Xử lý Medical Rescue Info
-            if (caseInitialResponse.MedicalRescueInfo != null && caseInitialResponse.MedicalRescueInfo.Any())
-            {
-                await ProcessMedicalRescueInfo(caseInitialResponse.CaseId, caseInitialResponse.MedicalRescueInfo);
-            }
-
-            return new JsonResult(ApiResponseHelper<InitialResponseDto>.SuccessResult(null, "Successfully."));
-        }
-
-        private async Task UpdateCaseSummary(Case caseModel, InitialResponseDto caseInitialResponse)
-        {
-            var summaryLines = (caseModel.Summary ?? string.Empty).Split('\n', StringSplitOptions.RemoveEmptyEntries).ToList();
-
-            // Sử dụng helper method để update summary lines
-            UpdateSummaryLine(summaryLines, "Dispatch time: ", caseInitialResponse.DispatchTime);
-            UpdateSummaryLine(summaryLines, "Arrival time: ", caseInitialResponse.ArrivalTime);
-            UpdateSummaryLine(summaryLines, "Scene Assessment: ", caseInitialResponse.SceneAssessment);
-
-            caseModel.Summary = summaryLines.Any() ? string.Join('\n', summaryLines) + "\n" : "";
-        }
-
-        private void UpdateSummaryLine(List<string> summaryLines, string prefix, string value)
-        {
-            if (!string.IsNullOrEmpty(value))
-            {
-                summaryLines.RemoveAll(line => line.StartsWith(prefix));
-                summaryLines.Add(prefix + value);
-            }
-        }
-
-        private async Task ProcessPreservationMeasures(string caseId, IEnumerable<InitialResponseDto.SceneProtectionDto> preservationMeasures)
-        {
-            var existingProtections = await _sceneProtectionRepository.GetSceneProtectionsByCaseIdAsync(caseId);
-
-            foreach (var protection in preservationMeasures)
-            {
-                if (string.IsNullOrEmpty(protection.SceneProtectionId))
-                {
-                    await CreateNewSceneProtection(caseId, protection);
-                }
-                else
-                {
-                    await UpdateExistingSceneProtection(existingProtections, protection);
-                }
-            }
-        }
-
-        private async Task CreateNewSceneProtection(string caseId, InitialResponseDto.SceneProtectionDto protection)
-        {
-            var newProtection = new SceneProtection
-            {
-                SceneProtectionId = "SCENE_PROTECTION_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
-                CaseId = caseId,
-                TimeStart = DateTime.Parse(protection.StartTime),
-                TimeEnd = DateTime.Parse(protection.EndTime),
-                LocationCover = protection.AreaCovered,
-                IsDeleted = false
-            };
-
-            // Xây dựng Description
-            newProtection.Description = await BuildProtectionDescription(protection);
-
-            // Xử lý files
-            if (protection.Files != null && protection.Files.Any())
-            {
-                var filePaths = await SaveFileAsync("files", protection.Files, "preservation_measures", newProtection.SceneProtectionId);
-                newProtection.AttachedFiles = string.Join(",", filePaths);
-            }
-
-            await _sceneProtectionRepository.AddAsync(newProtection);
-        }
-
-        private async Task UpdateExistingSceneProtection(IEnumerable<SceneProtection> existingProtections, InitialResponseDto.SceneProtectionDto protection)
-        {
-            var existingProtection = existingProtections.FirstOrDefault(x => x.SceneProtectionId == protection.SceneProtectionId);
-            if (existingProtection != null)
-            {
-                existingProtection.TimeStart = DateTime.Parse(protection.StartTime);
-                existingProtection.TimeEnd = DateTime.Parse(protection.EndTime);
-                existingProtection.LocationCover = protection.AreaCovered;
-
-                // Xây dựng lại Description
-                existingProtection.Description = await BuildProtectionDescription(protection);
-
-                // Xử lý files
-                if (protection.Files != null && protection.Files.Any())
-                {
-                    var filePaths = await SaveFileAsync("files", protection.Files, "preservation_measures", existingProtection.SceneProtectionId);
-                    existingProtection.AttachedFiles = string.Join(",", filePaths);
-                }
-
-                await _sceneProtectionRepository.Update(existingProtection);
-            }
-        }
-
-        private async Task<string> BuildProtectionDescription(InitialResponseDto.SceneProtectionDto protection)
-        {
-            var descriptionParts = new List<string>();
-
-            if (!string.IsNullOrEmpty(protection.ProtectionMethods))
-            {
-                descriptionParts.Add($"Protection method: {protection.ProtectionMethods}");
-            }
-
-            if (!string.IsNullOrEmpty(protection.OfficerUserName))
-            {
-                var officer = await _userRepository.GetByIdAsync(protection.OfficerUserName);
-                if (officer != null)
-                {
-                    descriptionParts.Add($"Assigned officer: {officer.FullName} ({officer.UserName})");
-                }
-            }
-
-            if (!string.IsNullOrEmpty(protection.SpecialInstructions))
-            {
-                descriptionParts.Add($"Special instructions: {protection.SpecialInstructions}");
-            }
-
-            return string.Join('\n', descriptionParts) + (descriptionParts.Any() ? "\n" : "");
-        }
-
-        private async Task ProcessMedicalRescueInfo(string caseId, IEnumerable<InitialResponseDto.SceneSupportDto> medicalRescueInfo)
-        {
-            var existingSupports = await _sceneSupportRepository.GetSceneSupportsByCaseIdAsync(caseId);
-
-            foreach (var support in medicalRescueInfo)
-            {
-                if (string.IsNullOrEmpty(support.SceneSupportId))
-                {
-                    await CreateNewSceneSupport(caseId, support);
-                }
-                else
-                {
-                    await UpdateExistingSceneSupport(existingSupports, support);
-                }
-            }
-        }
-
-        private async Task CreateNewSceneSupport(string caseId, InitialResponseDto.SceneSupportDto support)
-        {
-            var newSupport = new SceneSuport
-            {
-                SceneSuportId = "SCENE_SUPPORT_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"),
-                CaseId = caseId,
-                LocationAssigned = support.LocationAssigned,
-                TypeSuport = support.SupportType ?? "Unknown",
-                IsDeleted = false
-            };
-
-            // Xử lý files
-            if (support.Files != null && support.Files.Any())
-            {
-                var filePaths = await SaveFileAsync("files", support.Files, "medical_rescue", newSupport.SceneSuportId);
-                newSupport.AttachedFiles = string.Join(",", filePaths);
-            }
-
-            await _sceneSupportRepository.AddAsync(newSupport);
-        }
-
-        private async Task UpdateExistingSceneSupport(IEnumerable<SceneSuport> existingSupports, InitialResponseDto.SceneSupportDto support)
-        {
-            var existingSupport = existingSupports.FirstOrDefault(x => x.SceneSuportId == support.SceneSupportId);
-            if (existingSupport != null)
-            {
-                existingSupport.LocationAssigned = support.LocationAssigned;
-                existingSupport.TypeSuport = support.SupportType ?? "Unknown";
-
-                // Xử lý files
-                if (support.Files != null && support.Files.Any())
-                {
-                    var filePaths = await SaveFileAsync("files", support.Files, "medical_rescue", existingSupport.SceneSuportId);
-                    existingSupport.AttachedFiles = string.Join(",", filePaths);
-                }
-
-                await _sceneSupportRepository.Update(existingSupport);
-            }
-        }
+        #region Private Methods
 
         private async Task<List<string>> SaveFileAsync(string type, List<IFormFile> attachments, string prefix, string id)
         {
@@ -500,5 +456,6 @@ namespace BackEnd_Api.Controllers
 
             return imageUrls;
         }
+        #endregion
     }
 }

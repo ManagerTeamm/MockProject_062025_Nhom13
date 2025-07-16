@@ -8,6 +8,9 @@ namespace BackEnd_Api.Dtos.Cases
 {
     public class InitialResponseDto
     {
+        [JsonPropertyName("initialResponseId")]
+        public string? InitialResponseId { get; set; }
+
         [JsonPropertyName("caseId")]
         public string CaseId { get; set; }
 
@@ -24,10 +27,10 @@ namespace BackEnd_Api.Dtos.Cases
         public List<OfficerDto> AssignedOfficers { get; set; } = new();
 
         [JsonPropertyName("preservationMeasures")]
-        public List<SceneProtectionDto> PreservationMeasures { get; set; } = new();
+        public List<ScenePreservationMeasuresDto> PreservationMeasures { get; set; } = new();
 
         [JsonPropertyName("medicalRescueInfo")]
-        public List<SceneSupportDto> MedicalRescueInfo { get; set; } = new();
+        public List<SceneMedicalRescueInfoDto> MedicalRescueInfo { get; set; } = new();
 
         public class OfficerDto
         {
@@ -44,10 +47,10 @@ namespace BackEnd_Api.Dtos.Cases
             public string PhoneNumber { get; set; }
         }
 
-        public class SceneProtectionDto
+        public class ScenePreservationMeasuresDto
         {
-            [JsonPropertyName("sceneProtectionId")]
-            public string? SceneProtectionId { get; set; }
+            [JsonPropertyName("scenePreservationMeasureId")]
+            public string? ScenePreservationMeasureId { get; set; }
 
             [JsonPropertyName("officerUserName")]
             public string OfficerUserName { get; set; }
@@ -62,16 +65,16 @@ namespace BackEnd_Api.Dtos.Cases
             public string EndTime { get; set; }
 
             [JsonPropertyName("protectionMethods")]
-            public string ProtectionMethods { get; set; }
+            public string? ProtectionMethods { get; set; }
 
             [JsonPropertyName("areaCovered")]
-            public string AreaCovered { get; set; }
+            public string? AreaCovered { get; set; }
 
             [JsonPropertyName("specialInstructions")]
-            public string SpecialInstructions { get; set; }
+            public string? SpecialInstructions { get; set; }
 
             // For form submission (POST/PUT)
-            [JsonIgnore]
+            [JsonPropertyName("preservationMeasuresFiles")]
             public List<IFormFile> Files { get; set; } = new();
 
             // For GET responses - file paths
@@ -79,10 +82,10 @@ namespace BackEnd_Api.Dtos.Cases
             public List<string> AttachedFilePaths { get; set; } = new List<string>();
         }
 
-        public class SceneSupportDto
+        public class SceneMedicalRescueInfoDto
         {
-            [JsonPropertyName("sceneSupportId")]
-            public string? SceneSupportId { get; set; }
+            [JsonPropertyName("medicalRescueSupportId")]
+            public string? medicalRescueSupportId { get; set; }
 
             [JsonPropertyName("unitId")]
             public string UnitId { get; set; }
@@ -103,7 +106,7 @@ namespace BackEnd_Api.Dtos.Cases
             public string? Remarks { get; set; }
 
             // For form submission (POST/PUT)
-            [JsonIgnore]
+            [JsonPropertyName("medicalFiles")]
             public List<IFormFile> Files { get; set; } = new();
 
             // For GET responses - file paths

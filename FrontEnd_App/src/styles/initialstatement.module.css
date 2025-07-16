@@ -1,0 +1,125 @@
+/* initialstatement.module.css */
+.statementContainer {
+  display: flex;
+  background: #667A8A;
+  min-height: 100vh;
+  padding-left: 250px;
+  padding-top: 40px;
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+}
+
+.statementMain {
+  background: #E7E7E7;
+  border: 1px solid #AEAEAE;
+  border-radius: 12px;
+  width: 907px;
+  margin: 0 auto;
+  padding: 0;
+  overflow: hidden;
+}
+
+.statementTitle {
+  background: #C8E3FF;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  padding: 16px;
+  border-radius: 12px 12px 0 0;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.statementBox {
+  background: #fff;
+  padding: 32px 54px;
+  border-bottom: 1px solid #ccc;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 20px;
+}
+
+.subLabel {
+  font-weight: 700;
+  color: #576675;
+  margin-bottom: 8px;
+  display: block;
+  font-size: 16px;
+}
+
+.formControl {
+  padding: 15px 20px;
+  border: 1px solid #000;
+  font-size: 14px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.fileGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.fileBox {
+  background: #EEEEEE;
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 343px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.fileInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.fileName a {
+  font-weight: 600;
+  font-size: 14px;
+  color: #324054;
+  text-decoration: none;
+}
+
+.fileName a:hover {
+  text-decoration: underline;
+}
+
+.fileMeta {
+  font-size: 12px;
+  color: #71839B;
+}
+
+.statementActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  padding: 20px 54px 40px;
+  background: #fff;
+}
+
+.statementActions button {
+  width: 144px;
+  height: 38px;
+  font-size: 20px;
+  font-weight: 500;
+  border: none;
+}
+
+.btnCancel {
+  background: #D9D9D9;
+  color: #000;
+}
+
+.btnSave {
+  background: #D9D9D9;
+  color: #000;
+}
