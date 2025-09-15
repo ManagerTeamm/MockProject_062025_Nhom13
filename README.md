@@ -23,3 +23,4 @@ System.Text.Json - JSON serializer hiệu năng cao của .NET
 Microsoft.Extensions.Configuration - Quản lý cấu hình ứng dụng
 Microsoft.Extensions.Logging - Logging abstraction cho .NET
 
+# Crime_TT
